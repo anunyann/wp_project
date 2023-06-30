@@ -19,7 +19,7 @@ public class StudyProgramSubject {
     private String id;
 
     @ManyToOne
-    private Subject subject;
+    private SubjectDetails subject;
 
     @ManyToOne
     private StudyProgram studyProgram;

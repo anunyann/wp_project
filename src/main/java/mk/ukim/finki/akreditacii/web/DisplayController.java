@@ -1,6 +1,8 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 import mk.ukim.finki.akreditacii.model.subject.Book;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Controller
 public class DisplayController {
@@ -20,6 +25,29 @@ public class DisplayController {
 
     public DisplayController(DisplayService service) {
         this.service = service;
+    }
+
+    @GetMapping("/{accreditation}/{cycle}")
+    public String accreditationPrograms(@PathVariable String accreditation, @PathVariable StudyCycle cycle, Model model) {
+        List<StudyProgramDetails> programs = service.findAccreditationProgramsByCycle(accreditation, cycle);
+
+        model.addAttribute("acc", accreditation);
+        model.addAttribute("cycle", cycle);
+        model.addAttribute("programs", programs);
+        return "accreditation";
+    }
+
+    @GetMapping("/program/{program}")
+    public String programSubjects(@PathVariable String program, Model model) {
+        List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
+
+        Map<Short, Map<Boolean, List<StudyProgramSubject>>> bySemesterAndMandatory = subjects.stream()
+                .collect(groupingBy(StudyProgramSubject::getSemester, groupingBy(StudyProgramSubject::getMandatory)));
+        if (!subjects.isEmpty()) {
+            model.addAttribute("studyProgram", subjects.get(0).getStudyProgram());
+        }
+        model.addAttribute("bySemesterAndMandatory", bySemesterAndMandatory);
+        return "study_program";
     }
 
     @GetMapping("/subject/{subjectId}")

@@ -8,4 +8,5 @@ import java.util.List;
 public interface StudyProgramSubjectRepository extends JpaRepository<StudyProgramSubject, String> {
 
     List<StudyProgramSubject> findAllBySubjectId(String subjectId);
+    List<StudyProgramSubject> findAllByStudyProgramCodeOrderBySemesterAscOrderAscSubjectIdAsc(String programCode);
 }

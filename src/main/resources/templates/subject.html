@@ -2,8 +2,11 @@
 <meta charset="utf-8"/>
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${sd.subject.name}"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
-<table border="1">
+<table class="table table-striped table table-bordered table-sm">
     <tbody>
     <tr>
         <td><p>
@@ -115,7 +118,7 @@
             <span>Предуслови за запишување на предметот</span>
         </p></td>
         <td colspan="9"><p>
-                    <span th:text="${sd.dependencies.dependencies}">
+                    <span th:text="${sd.dependencies?.dependencies}">
                     </span>
         </p>
         </td>
@@ -145,8 +148,8 @@
         </p>
             <hr/>
             <p>
-                    <span th:text="${sd.content}">
-                    Овој модул ги запознава за генералните дисциплини кои се потребни анализи преку потребни модели за да има можност да се валидира, специфицира и да се менаџираат потребите и тие да се применат на проблеми од екосистем домeнот. Овој модул се фокусира на анализата од ризик и падовите на екосистем софтвер проектите во улога на потребната анализа кога успешно се градат екосистеми. Одредени поглавија на модулот 1) Проблеми во барањата и сотверски апликации за екосистеми 2) Анализа на потребите 3) Спецификација и детерминирање на барањата 4) Напредна анализа на барањата 5) Посебни случаи во Екосистемите: од анализа на моделите до системски дизајн</span>
+                    <span style="white-space: pre-line" th:text="${sd.content}">
+                    </span>
             </p>
         </td>
     </tr>
