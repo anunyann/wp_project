@@ -27,7 +27,7 @@ public class DisplayController {
         this.service = service;
     }
 
-    @GetMapping("/{accreditation}/{cycle}")
+    @GetMapping(value = {"/{accreditation}/{cycle}"})
     public String accreditationPrograms(@PathVariable String accreditation, @PathVariable StudyCycle cycle, Model model) {
         List<StudyProgramDetails> programs = service.findAccreditationProgramsByCycle(accreditation, cycle);
 
@@ -43,8 +43,10 @@ public class DisplayController {
 
         Map<Short, Map<Boolean, List<StudyProgramSubject>>> bySemesterAndMandatory = subjects.stream()
                 .collect(groupingBy(StudyProgramSubject::getSemester, groupingBy(StudyProgramSubject::getMandatory)));
+
+        StudyProgramDetails studyProgramDetails = this.service.getStudyProgramDetailsById(program);
         if (!subjects.isEmpty()) {
-            model.addAttribute("studyProgram", subjects.get(0).getStudyProgram());
+            model.addAttribute("studyProgram", studyProgramDetails);
         }
         model.addAttribute("bySemesterAndMandatory", bySemesterAndMandatory);
         return "study_program";

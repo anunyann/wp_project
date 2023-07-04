@@ -4,566 +4,578 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${sd.subject.name}"></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
-<table class="table table-striped table table-bordered table-sm">
-    <tbody>
-    <tr>
-        <td><p>
-            <span>1.</span>
-        </p></td>
-        <td colspan="4"><p>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 th:text="${sd.subject.name}"></h1>
+        </div>
+        <div class="col-12">
+
+
+            <table class="table table-striped table table-bordered table-sm">
+                <tbody>
+                <tr>
+                    <td><p>
+                        <span>1.</span>
+                    </p></td>
+                    <td colspan="4"><p>
                     <span>
                 Наслов на наставниот предмет</span>
-        </p></td>
-        <td colspan="9">
-            <p>
-                <b th:text="${sd.subject.name}">${sd.subject.name}</b>
-            </p>
-            <p>
-                <span th:text="${sd.nameEn}">${sd.nameEn}</span>
-            </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>2.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Код</span>
-        </p></td>
-        <td colspan="9"><p>
-            <span th:text="${sd.subject.id}">sd.subject.id}</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td><p>
+                    </p></td>
+                    <td colspan="9">
+                        <p>
+                            <b th:text="${sd.subject.name}">${sd.subject.name}</b>
+                        </p>
+                        <p>
+                            <span th:text="${sd.nameEn}">${sd.nameEn}</span>
+                        </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>2.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Код</span>
+                    </p></td>
+                    <td colspan="9"><p>
+                        <span th:text="${sd.subject.id}">sd.subject.id}</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td><p>
                     <span>
                 3.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Студиска програма</span>
-        </p></td>
-        <td colspan="9">
-            <p>
-                <th:block style="padding-right: 5px;" th:each="sp: ${subjectStudyPrograms}">
-                    <span th:text="${sp.studyProgram.name}"></span>,
-                </th:block>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>4.</span>
-        </p></td>
-        <td colspan="4"><p>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Студиска програма</span>
+                    </p></td>
+                    <td colspan="9">
+                        <p>
+                            <th:block style="padding-right: 5px;" th:each="sp: ${subjectStudyPrograms}">
+                                <span th:text="${sp.studyProgram.name}"></span>,
+                            </th:block>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>4.</span>
+                    </p></td>
+                    <td colspan="4"><p>
                     <span>
                 Организатор на студиската програма (единица, односно институт, катедра, оддел)</span>
-        </p></td>
-        <td colspan="9">
-            <p>
-                <span>Факултет за информатички науки и компјутерско инженерство</span>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>5.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Степен (прв, втор, трет циклус)</span>
-        </p></td>
-        <td colspan="9"><p>
-            <span th:utext="#{${sd.cycle}}">втор циклус</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>6.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Академска година / семестар</span>
-        </p>
-            <p>
-                <span th:text="${(sd.defaultSemester+1)/2}">1</span> / <span
-                    th:utext="#{${sd.subject.semester}}">зимски</span>
-            </p>
-        </td>
-        <td colspan="9"><p>
-            <span>7. Број на ЕКТС кредити</span>
-        </p>
-            <p>
-                <span th:text="${sd.credits}">6</span>
-            </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>8.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Наставник</span>
-        </p></td>
-        <td colspan="9">
-            <p>
-                <th:block style="padding-right: 5px;" th:each="p: ${subjectProfessors}">
-                    <span th:text="#{${p.title}}"></span> <span th:text="${p.name}"></span>
-                </th:block>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>9.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Предуслови за запишување на предметот</span>
-        </p></td>
-        <td colspan="9"><p>
+                    </p></td>
+                    <td colspan="9">
+                        <p>
+                            <span>Факултет за информатички науки и компјутерско инженерство</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>5.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Степен (прв, втор, трет циклус)</span>
+                    </p></td>
+                    <td colspan="9"><p>
+                        <span th:utext="#{${sd.cycle}}">втор циклус</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>6.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Академска година / семестар</span>
+                    </p>
+                        <p>
+                            <span th:text="${(sd.defaultSemester+1)/2}">1</span> / <span
+                                th:utext="#{${sd.subject.semester}}">зимски</span>
+                        </p>
+                    </td>
+                    <td colspan="9"><p>
+                        <span>7. Број на ЕКТС кредити</span>
+                    </p>
+                        <p>
+                            <span th:text="${sd.credits}">6</span>
+                        </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>8.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Наставник</span>
+                    </p></td>
+                    <td colspan="9">
+                        <p>
+                            <th:block style="padding-right: 5px;" th:each="p: ${subjectProfessors}">
+                                <span th:text="#{${p.title}}"></span> <span th:text="${p.name}"></span>
+                            </th:block>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>9.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Предуслови за запишување на предметот</span>
+                    </p></td>
+                    <td colspan="9"><p>
                     <span th:text="${sd.dependencies?.dependencies}">
                     </span>
-        </p>
-        </td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>10.</span>
-        </p></td>
-        <td colspan="13"><p>
-            <span>Цели на предметната програма (компетенции):</span>
-        </p>
-            <hr/>
-            <p>
+                    </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>10.</span>
+                    </p></td>
+                    <td colspan="13"><p>
+                        <span>Цели на предметната програма (компетенции):</span>
+                    </p>
+                        <hr/>
+                        <p>
                     <span th:text="${sd.goalsDescription}">
                     Студентот ќе се стекне со знаења потребни за анализа на потребите и барањата за информациите на екосистемите
                     </span>
-            </p>
-            <p>
-            </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>11.</span>
-        </p></td>
-        <td colspan="13"><p>
-            <span>Содржина на предметната програма:</span>
-        </p>
-            <hr/>
-            <p>
+                        </p>
+                        <p>
+                        </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>11.</span>
+                    </p></td>
+                    <td colspan="13"><p>
+                        <span>Содржина на предметната програма:</span>
+                    </p>
+                        <hr/>
+                        <p>
                     <span style="white-space: pre-line" th:text="${sd.content}">
                     </span>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>12.</span>
-        </p></td>
-        <td colspan="13"><p>
-            <span>Методи на учење:</span>
-        </p>
-            <hr/>
-            <p>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>12.</span>
+                    </p></td>
+                    <td colspan="13"><p>
+                        <span>Методи на учење:</span>
+                    </p>
+                        <hr/>
+                        <p>
 
                 <span th:text="${sd.learningMethods}">
                     Предавања поддржани со презентации преку слајдови, интерактивни предавања, вежби (користење на опрема и софтверски пакети), тимска работа, пример случаи, поканети гости предавачи, самостојна изработка и одбрана на проектна задача и семинарска работа, учење во електронско опкружување (форуми, консултации).
                 </span>
-            </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>13.</span>
-        </p></td>
-        <td colspan="8"><p>
-            <span>Вкупен расположив фонд на време</span>
-        </p></td>
-        <td colspan="5"><p>
-            <span th:text="${sd.credits}">6</span><span> ЕКТС x 30 часа =</span> <span
-                th:text="${sd.obligationDuration.totalHours}">180</span> <span>часа</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>14.</span>
-        </p></td>
-        <td colspan="8"><p>
-            <span>Распределба на расположивото време</span>
-        </p></td>
-        <td colspan="5"><p>
-            <span th:text="${sd.obligationDuration.lectureHours}">60</span>
-            + <span th:text="${sd.obligationDuration.exerciseHours}">0</span>
-            + <span th:text="${sd.obligationDuration.selfLearningHours}">40</span>
-            + <span th:text="${sd.obligationDuration.projectHours}">60</span>
-            + <span th:text="${sd.obligationDuration.homeworkHours}">20</span>
-            = <span th:text="${sd.obligationDuration.totalHours}">180</span> часа
-        </p>
-            <p>
-            </p></td>
-    </tr>
-    <tr>
-        <td rowspan="2"><p>
-            <span>15.</span>
-        </p></td>
-        <td colspan="4" rowspan="2"><p>
-            <span>Форми на наставните активности</span>
-        </p></td>
-        <td colspan="3"><p>
-            <span>15.1.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Предавања- теоретска настава</span>
-        </p></td>
-        <td colspan="2"><p>
+                        </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>13.</span>
+                    </p></td>
+                    <td colspan="8"><p>
+                        <span>Вкупен расположив фонд на време</span>
+                    </p></td>
+                    <td colspan="5"><p>
+                        <span th:text="${sd.credits}">6</span><span> ЕКТС x 30 часа =</span> <span
+                            th:text="${sd.obligationDuration.totalHours}">180</span> <span>часа</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>14.</span>
+                    </p></td>
+                    <td colspan="8"><p>
+                        <span>Распределба на расположивото време</span>
+                    </p></td>
+                    <td colspan="5"><p>
+                        <span th:text="${sd.obligationDuration.lectureHours}">60</span>
+                        + <span th:text="${sd.obligationDuration.exerciseHours}">0</span>
+                        + <span th:text="${sd.obligationDuration.selfLearningHours}">40</span>
+                        + <span th:text="${sd.obligationDuration.projectHours}">60</span>
+                        + <span th:text="${sd.obligationDuration.homeworkHours}">20</span>
+                        = <span th:text="${sd.obligationDuration.totalHours}">180</span> часа
+                    </p>
+                        <p>
+                        </p></td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><p>
+                        <span>15.</span>
+                    </p></td>
+                    <td colspan="4" rowspan="2"><p>
+                        <span>Форми на наставните активности</span>
+                    </p></td>
+                    <td colspan="3"><p>
+                        <span>15.1.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Предавања- теоретска настава</span>
+                    </p></td>
+                    <td colspan="2"><p>
                 <span>
                     <span th:text="${sd.obligationDuration.lectureHours}">60</span> часови
                 </span>
-        </p></td>
-    </tr>
-    <tr>
-        <td colspan="3"><p>
-            <span>15.2.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Вежби (лабораториски, аудиториски), семинари, тимска работа</span>
-        </p></td>
-        <td colspan="2"><p>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><p>
+                        <span>15.2.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Вежби (лабораториски, аудиториски), семинари, тимска работа</span>
+                    </p></td>
+                    <td colspan="2"><p>
                 <span>
                     <span th:text="${sd.obligationDuration.exerciseHours}">0</span>
                  часови
                 </span>
-        </p>
-        </td>
-    </tr>
-    <tr>
-        <td rowspan="3"><p>
-            <span>16.</span>
-        </p></td>
-        <td colspan="4" rowspan="3"><p>
-            <span>Други форми на активности</span>
-        </p></td>
-        <td colspan="3"><p>
-            <span>16.1.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Проектни задачи</span>
-        </p></td>
-        <td colspan="2"><p>
+                    </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3"><p>
+                        <span>16.</span>
+                    </p></td>
+                    <td colspan="4" rowspan="3"><p>
+                        <span>Други форми на активности</span>
+                    </p></td>
+                    <td colspan="3"><p>
+                        <span>16.1.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Проектни задачи</span>
+                    </p></td>
+                    <td colspan="2"><p>
                 <span>
                 <span th:text="${sd.obligationDuration.projectHours}">0</span>
                  часови</span>
-        </p>
-            <p>
-            </p></td>
-    </tr>
-    <tr>
-        <td colspan="3"><p>
-            <span>16.2.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Самостојни задачи</span>
-        </p></td>
-        <td colspan="2"><p>
+                    </p>
+                        <p>
+                        </p></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><p>
+                        <span>16.2.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Самостојни задачи</span>
+                    </p></td>
+                    <td colspan="2"><p>
                 <span>
                 <span th:text="${sd.obligationDuration.selfLearningHours}">0</span>
                  часови
                 </span>
-        </p></td>
-    </tr>
-    <tr>
-        <td colspan="3"><p>
-            <span>16.3.</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>Домашно учење</span>
-        </p></td>
-        <td colspan="2"><p>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><p>
+                        <span>16.3.</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>Домашно учење</span>
+                    </p></td>
+                    <td colspan="2"><p>
                 <span>
                 <span th:text="${sd.obligationDuration.homeworkHours}">0</span>
                  часови
                 </span>
-        </p></td>
-    </tr>
-    <tr>
-        <td rowspan="5"><p>
-            <span>17.</span>
-        </p></td>
-        <td colspan="13"><p>
-            <span>Начин на оценување</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>17.1.</span>
-        </p></td>
-        <td colspan="8"><p>
-            <span>Тестови</span>
-        </p></td>
-        <td colspan="4"><p>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td rowspan="5"><p>
+                        <span>17.</span>
+                    </p></td>
+                    <td colspan="13"><p>
+                        <span>Начин на оценување</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>17.1.</span>
+                    </p></td>
+                    <td colspan="8"><p>
+                        <span>Тестови</span>
+                    </p></td>
+                    <td colspan="4"><p>
                 <span>
                     <span th:text="${sd.grading.testsPoints}">0</span>
                 бодови
                 </span>
-        </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>17.2.</span>
-        </p></td>
-        <td colspan="8"><p>
-            <span>Семинарска работа/ проект ( презентација: писмена и усна)</span>
-        </p></td>
-        <td colspan="4"><p>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>17.2.</span>
+                    </p></td>
+                    <td colspan="8"><p>
+                        <span>Семинарска работа/ проект ( презентација: писмена и усна)</span>
+                    </p></td>
+                    <td colspan="4"><p>
                 <span>
                     <span th:text="${sd.grading.projectPoints}">0</span>
                 бодови</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>17.3.</span>
-        </p></td>
-        <td colspan="8"><p>
-            <span>Активности и учење</span>
-        </p></td>
-        <td colspan="4"><p>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>17.3.</span>
+                    </p></td>
+                    <td colspan="8"><p>
+                        <span>Активности и учење</span>
+                    </p></td>
+                    <td colspan="4"><p>
                 <span>
                 <span th:text="${sd.grading.activityPoints}">0</span>
                  бодови</span>
-        </p>
-        </td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>17.4.</span>
-        </p></td>
-        <td colspan="8"><p>
-            <span>Завршен испит</span>
-        </p></td>
-        <td colspan="4"><p>
+                    </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>17.4.</span>
+                    </p></td>
+                    <td colspan="8"><p>
+                        <span>Завршен испит</span>
+                    </p></td>
+                    <td colspan="4"><p>
                 <span>
                 <span th:text="${sd.grading.examPoints}">0</span> бодови
                 </span>
-        </p></td>
-    </tr>
-    <tr>
-        <td rowspan="6"><p>
-            <span>18.</span>
-        </p></td>
-        <td colspan="5" rowspan="6"><p>
-            <span>Критериуми за оценување (бодови/ оценка)</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>до 50 бода</span>
-        </p></td>
-        <td colspan="4">
-            <p>
-                <span>5 (пет) (F)</span>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4"><p>
-            <span>од 51 до 60 бода</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>6 (шест) (E)</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td colspan="4"><p>
-            <span>од 61 до 70 бода</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>7 (седум) (D)</span>
-        </p>
-            </p>            </td>
-    </tr>
-    <tr>
-        <td colspan="4"><p>
-            <span>од 71 до 80 бода</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>8 (осум) (C)</span>
-        </p>
-            </p>            </td>
-    </tr>
-    <tr>
-        <td colspan="4"><p>
-            <span>од 81 до 90 бода</span>
-        </p></td>
-        <td colspan="4"><p>
-            <span>9 (девет) (B)</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td colspan="4"><p>
-            <span>од 91 до 100 бода</span>
-        </p></td>
-        <td colspan="4">
-            <p>
-                <span>10 (десет) (A)</span>
-            </p></td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>19.</span>
-        </p></td>
-        <td colspan="5"><p>
-            <span>Услов за потпис и полагање на завршен испит</span>
-        </p></td>
-        <td colspan="8"><p>
-            <span th:text="${sd.grading.signatureCondition}">реализирани активности 15, 16</span>
-        </p>
-        </td>
-    </tr>
-    <tr>
-        <td><p>
-            <span>20.</span>
-        </p></td>
-        <td colspan="5"><p>
-            <span>Јазик на кој се изведува наставата</span>
-        </p></td>
-        <td colspan="8">
-            <p>
-                <span th:text="${sd.language}">0</span>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <p>
-                <span>21.</span>
-            </p>
-        </td>
-        <td colspan="5">
-            <p>
-                <span>Метод на следење на квалитетот на наставата</span>
-            </p></td>
-        <td colspan="8"><p>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td rowspan="6"><p>
+                        <span>18.</span>
+                    </p></td>
+                    <td colspan="5" rowspan="6"><p>
+                        <span>Критериуми за оценување (бодови/ оценка)</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>до 50 бода</span>
+                    </p></td>
+                    <td colspan="4">
+                        <p>
+                            <span>5 (пет) (F)</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><p>
+                        <span>од 51 до 60 бода</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>6 (шест) (E)</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><p>
+                        <span>од 61 до 70 бода</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>7 (седум) (D)</span>
+                    </p>
+                        </p>            </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><p>
+                        <span>од 71 до 80 бода</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>8 (осум) (C)</span>
+                    </p>
+                        </p>            </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><p>
+                        <span>од 81 до 90 бода</span>
+                    </p></td>
+                    <td colspan="4"><p>
+                        <span>9 (девет) (B)</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><p>
+                        <span>од 91 до 100 бода</span>
+                    </p></td>
+                    <td colspan="4">
+                        <p>
+                            <span>10 (десет) (A)</span>
+                        </p></td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>19.</span>
+                    </p></td>
+                    <td colspan="5"><p>
+                        <span>Услов за потпис и полагање на завршен испит</span>
+                    </p></td>
+                    <td colspan="8"><p>
+                        <span th:text="${sd.grading.signatureCondition}">реализирани активности 15, 16</span>
+                    </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p>
+                        <span>20.</span>
+                    </p></td>
+                    <td colspan="5"><p>
+                        <span>Јазик на кој се изведува наставата</span>
+                    </p></td>
+                    <td colspan="8">
+                        <p>
+                            <span th:text="${sd.language}">0</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            <span>21.</span>
+                        </p>
+                    </td>
+                    <td colspan="5">
+                        <p>
+                            <span>Метод на следење на квалитетот на наставата</span>
+                        </p></td>
+                    <td colspan="8"><p>
                     <span th:text="${sd.qualityControl}">
                     механизам на интерна евалуација и анкети
                     </span>
-        </p>
-            <p>
-            </p></td>
-    </tr>
-    <tr>
-        <td rowspan="6"><p>
-            <span>22.</span>
-        </p></td>
-        <td colspan="13"><p>
-            <span>Литература</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td colspan="2" rowspan="2"><p>
-            <span>22.1.</span>
-        </p></td>
-        <td colspan="11"><p>
-            <span>Задолжителна литература</span>
-        </p></td>
-    </tr>
-    <tr>
-        <td colspan="11">
-            <table>
-                <tbody>
+                    </p>
+                        <p>
+                        </p></td>
+                </tr>
                 <tr>
-                    <td>
-                        <p>Ред.бр.</p>
-                    </td>
-                    <td>
-                        <p>Автор</p>
-                    </td>
-                    <td>
-                        <p>Наслов</p>
-                    </td>
-                    <td>
-                        <p>Издавач</p>
-                    </td>
-                    <td>
-                        <p>Година</p>
+                    <td rowspan="6"><p>
+                        <span>22.</span>
+                    </p></td>
+                    <td colspan="13"><p>
+                        <span>Литература</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td colspan="2" rowspan="2"><p>
+                        <span>22.1.</span>
+                    </p></td>
+                    <td colspan="11"><p>
+                        <span>Задолжителна литература</span>
+                    </p></td>
+                </tr>
+                <tr>
+                    <td colspan="11">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <p>Ред.бр.</p>
+                                </td>
+                                <td>
+                                    <p>Автор</p>
+                                </td>
+                                <td>
+                                    <p>Наслов</p>
+                                </td>
+                                <td>
+                                    <p>Издавач</p>
+                                </td>
+                                <td>
+                                    <p>Година</p>
+                                </td>
+                            </tr>
+                            <tr th:each="b: ${mandatoryBooks}">
+                                <td>
+                                    <p th:text="${b.order}">1</p>
+                                </td>
+                                <td>
+                                    <p th:text="${b.author}">
+                                        Sun-Kee Hong, John A. Lee, Byung-Sun Ihm, and Almo Farina</p>
+                                </td>
+                                <td>
+                                    <p th:text="${b.title}">
+                                        Ecological Issues in a Changing World: Status, Response and Strategy</p>
+                                </td>
+                                <td>
+                                    <p th:text="${b.publisher}">
+                                    </p>
+                                </td>
+                                <td>
+                                    <p th:text="${b.year}">
+                                        2005</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
-                <tr th:each="b: ${mandatoryBooks}">
-                    <td>
-                        <p th:text="${b.order}">1</p>
-                    </td>
-                    <td>
-                        <p th:text="${b.author}">
-                            Sun-Kee Hong, John A. Lee, Byung-Sun Ihm, and Almo Farina</p>
-                    </td>
-                    <td>
-                        <p th:text="${b.title}">
-                            Ecological Issues in a Changing World: Status, Response and Strategy</p>
-                    </td>
-                    <td>
-                        <p th:text="${b.publisher}">
+                <tr>
+                    <td colspan="2" rowspan="3">
+                        <p>
+                            <span>22.2.</span>
                         </p>
                     </td>
-                    <td>
-                        <p th:text="${b.year}">
-                            2005</p>
+                    <td colspan="11">
+                        <p>
+                            <span>Дополнителна литература</span>
+                        </p>
                     </td>
+                </tr>
+                <td colspan="11">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <p>Ред.бр.</p>
+                            </td>
+                            <td>
+                                <p>Автор</p>
+                            </td>
+                            <td>
+                                <p>Наслов</p>
+                            </td>
+                            <td>
+                                <p>Издавач</p>
+                            </td>
+                            <td>
+                                <p>Година</p>
+                            </td>
+                        </tr>
+                        <tr th:each="b: ${additionalBooks}">
+                            <td>
+                                <p th:text="${b.order}">1</p>
+                            </td>
+                            <td>
+                                <p th:text="${b.author}">
+                                    Sun-Kee Hong, John A. Lee, Byung-Sun Ihm, and Almo Farina</p>
+                            </td>
+                            <td>
+                                <p th:text="${b.title}">
+                                    Ecological Issues in a Changing World: Status, Response and Strategy</p>
+                            </td>
+                            <td>
+                                <p th:text="${b.publisher}">
+                                </p>
+                            </td>
+                            <td>
+                                <p th:text="${b.year}">
+                                    2005</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
                 </tr>
                 </tbody>
             </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" rowspan="3">
-            <p>
-                <span>22.2.</span>
-            </p>
-        </td>
-        <td colspan="11">
-            <p>
-                <span>Дополнителна литература</span>
-            </p>
-        </td>
-    </tr>
-    <td colspan="11">
-        <table>
-            <tbody>
-            <tr>
-                <td>
-                    <p>Ред.бр.</p>
-                </td>
-                <td>
-                    <p>Автор</p>
-                </td>
-                <td>
-                    <p>Наслов</p>
-                </td>
-                <td>
-                    <p>Издавач</p>
-                </td>
-                <td>
-                    <p>Година</p>
-                </td>
-            </tr>
-            <tr th:each="b: ${additionalBooks}">
-                <td>
-                    <p th:text="${b.order}">1</p>
-                </td>
-                <td>
-                    <p th:text="${b.author}">
-                        Sun-Kee Hong, John A. Lee, Byung-Sun Ihm, and Almo Farina</p>
-                </td>
-                <td>
-                    <p th:text="${b.title}">
-                        Ecological Issues in a Changing World: Status, Response and Strategy</p>
-                </td>
-                <td>
-                    <p th:text="${b.publisher}">
-                    </p>
-                </td>
-                <td>
-                    <p th:text="${b.year}">
-                        2005</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </td>
-    </tr>
-    </tbody>
-</table>
+        </div>
+    </div>
+</div>
 </html>

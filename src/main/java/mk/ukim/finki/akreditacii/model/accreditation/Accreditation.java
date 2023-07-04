@@ -29,6 +29,7 @@ public class Accreditation {
     @ElementCollection
     private List<String> studyProgramFields;
 
+    @Deprecated
     @Lob
     private byte[] accreditationDecisionDocument;
 
