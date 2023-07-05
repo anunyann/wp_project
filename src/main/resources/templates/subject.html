@@ -186,7 +186,7 @@
                     </p></td>
                     <td colspan="5"><p>
                         <span th:text="${sd.credits}">6</span><span> ЕКТС x 30 часа =</span> <span
-                            th:text="${sd.obligationDuration.totalHours}">180</span> <span>часа</span>
+                            th:text="${sd.obligationDuration?.totalHours}">180</span> <span>часа</span>
                     </p></td>
                 </tr>
                 <tr>
@@ -197,12 +197,12 @@
                         <span>Распределба на расположивото време</span>
                     </p></td>
                     <td colspan="5"><p>
-                        <span th:text="${sd.obligationDuration.lectureHours}">60</span>
-                        + <span th:text="${sd.obligationDuration.exerciseHours}">0</span>
-                        + <span th:text="${sd.obligationDuration.selfLearningHours}">40</span>
-                        + <span th:text="${sd.obligationDuration.projectHours}">60</span>
-                        + <span th:text="${sd.obligationDuration.homeworkHours}">20</span>
-                        = <span th:text="${sd.obligationDuration.totalHours}">180</span> часа
+                        <span th:text="${sd.obligationDuration?.lectureHours}">60</span>
+                        + <span th:text="${sd.obligationDuration?.exerciseHours}">0</span>
+                        + <span th:text="${sd.obligationDuration?.selfLearningHours}">40</span>
+                        + <span th:text="${sd.obligationDuration?.projectHours}">60</span>
+                        + <span th:text="${sd.obligationDuration?.homeworkHours}">20</span>
+                        = <span th:text="${sd.obligationDuration?.totalHours}">180</span> часа
                     </p>
                         <p>
                         </p></td>
@@ -222,7 +222,7 @@
                     </p></td>
                     <td colspan="2"><p>
                 <span>
-                    <span th:text="${sd.obligationDuration.lectureHours}">60</span> часови
+                    <span th:text="${sd.obligationDuration?.lectureHours}">60</span> часови
                 </span>
                     </p></td>
                 </tr>
@@ -235,7 +235,7 @@
                     </p></td>
                     <td colspan="2"><p>
                 <span>
-                    <span th:text="${sd.obligationDuration.exerciseHours}">0</span>
+                    <span th:text="${sd.obligationDuration?.exerciseHours}">0</span>
                  часови
                 </span>
                     </p>
@@ -256,7 +256,7 @@
                     </p></td>
                     <td colspan="2"><p>
                 <span>
-                <span th:text="${sd.obligationDuration.projectHours}">0</span>
+                <span th:text="${sd.obligationDuration?.projectHours}">0</span>
                  часови</span>
                     </p>
                         <p>
@@ -271,7 +271,7 @@
                     </p></td>
                     <td colspan="2"><p>
                 <span>
-                <span th:text="${sd.obligationDuration.selfLearningHours}">0</span>
+                <span th:text="${sd.obligationDuration?.selfLearningHours}">0</span>
                  часови
                 </span>
                     </p></td>
@@ -285,7 +285,7 @@
                     </p></td>
                     <td colspan="2"><p>
                 <span>
-                <span th:text="${sd.obligationDuration.homeworkHours}">0</span>
+                <span th:text="${sd.obligationDuration?.homeworkHours}">0</span>
                  часови
                 </span>
                     </p></td>
@@ -307,7 +307,7 @@
                     </p></td>
                     <td colspan="4"><p>
                 <span>
-                    <span th:text="${sd.grading.testsPoints}">0</span>
+                    <span th:text="${sd.grading?.testsPoints}">0</span>
                 бодови
                 </span>
                     </p></td>
@@ -321,7 +321,7 @@
                     </p></td>
                     <td colspan="4"><p>
                 <span>
-                    <span th:text="${sd.grading.projectPoints}">0</span>
+                    <span th:text="${sd.grading?.projectPoints}">0</span>
                 бодови</span>
                     </p></td>
                 </tr>
@@ -334,7 +334,7 @@
                     </p></td>
                     <td colspan="4"><p>
                 <span>
-                <span th:text="${sd.grading.activityPoints}">0</span>
+                <span th:text="${sd.grading?.activityPoints}">0</span>
                  бодови</span>
                     </p>
                     </td>
@@ -348,7 +348,7 @@
                     </p></td>
                     <td colspan="4"><p>
                 <span>
-                <span th:text="${sd.grading.examPoints}">0</span> бодови
+                <span th:text="${sd.grading?.examPoints}">0</span> бодови
                 </span>
                     </p></td>
                 </tr>
@@ -419,7 +419,7 @@
                         <span>Услов за потпис и полагање на завршен испит</span>
                     </p></td>
                     <td colspan="8"><p>
-                        <span th:text="${sd.grading.signatureCondition}">реализирани активности 15, 16</span>
+                        <span th:text="${sd.grading?.signatureCondition}">реализирани активности 15, 16</span>
                     </p>
                     </td>
                 </tr>

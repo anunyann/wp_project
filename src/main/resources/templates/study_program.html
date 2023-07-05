@@ -58,7 +58,7 @@
 
             <table class="table table-striped table table-bordered table-sm">
                 <tr>
-                    <td colspan="4">
+                    <td colspan="3">
                         <h4>Задолжителни предмети</h4>
                     </td>
                 </tr>
@@ -72,24 +72,25 @@
                     <th width="10%">
                         Кредити
                     </th>
-                    <th width="40%">
-                        Предуслови
-                    </th>
+<!--                    <th width="40%">-->
+<!--                        Предуслови-->
+<!--                    </th>-->
                 </tr>
                 <tr th:each="s: ${sem.getValue().get(true)}">
                     <td th:text="${s.subject.id}">
                     </td>
                     <td>
-                        <a th:href="@{/subject/{id}(id=${s.subject.id})}" th:text="${s.subject.subject.name}"></a>
+                        <a th:if="${!s.subject.placeholder}" th:href="@{/subject/{id}(id=${s.subject.id})}" th:text="${s.subject.subject.name}"></a>
+                        <span th:if="${s.subject.placeholder}" th:text="${s.subject.subject.name}"></span>
                     </td>
                     <td th:text="${s.subject.credits}">
                         6.00
                     </td>
-                    <td th:text="${s.subject.dependencies?.getDependencies()}">
-                    </td>
+<!--                    <td th:text="${s.subject.dependencies?.getDependencies()}">-->
+<!--                    </td>-->
                 </tr>
                 <tr th:if="${sem.getValue().get(false)!=null && !sem.getValue().get(false).isEmpty()}">
-                    <td colspan="4">
+                    <td colspan="3">
                         <h4>Изборни предмети</h4>
                     </td>
                 </tr>
@@ -103,9 +104,9 @@
                     <th>
                         Кредити
                     </th>
-                    <th>
-                        Предуслови
-                    </th>
+<!--                    <th>-->
+<!--                        Предуслови-->
+<!--                    </th>-->
                 </tr>
                 <tr th:each="s: ${sem.getValue().get(false)}"
                     th:if="${sem.getValue().get(false)!=null && !sem.getValue().get(false).isEmpty()}">
@@ -117,9 +118,9 @@
                     <td th:text="${s.subject.credits}">
                         6.00
                     </td>
-                    <td th:text="${s.subject.dependencies?.getDependencies()}">
+<!--                    <td th:text="${s.subject.dependencies?.getDependencies()}">-->
 
-                    </td>
+<!--                    </td>-->
                 </tr>
             </table>
         </div>

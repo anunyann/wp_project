@@ -29,6 +29,8 @@ public class SubjectDetails {
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private Subject subject;
 
+    private Boolean placeholder;
+
     private String nameEn;
 
     private Short defaultSemester;
