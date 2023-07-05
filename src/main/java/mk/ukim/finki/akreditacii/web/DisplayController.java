@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Predicate;
 
+import static java.util.function.Predicate.*;
 import static java.util.stream.Collectors.groupingBy;
 
 @Controller
@@ -50,6 +53,30 @@ public class DisplayController {
         }
         model.addAttribute("bySemesterAndMandatory", bySemesterAndMandatory);
         return "study_program";
+    }
+
+
+    @GetMapping("/sp/{program}")
+    public String groupedProgramSubjects(@PathVariable String program, Model model) {
+        List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
+
+        Map<Short, List<StudyProgramSubject>> mandatoryBySemester = subjects.stream()
+                .filter(StudyProgramSubject::getMandatory)
+                .collect(groupingBy(StudyProgramSubject::getSemester));
+
+
+        Map<String, List<StudyProgramSubject>> electiveByGroup = new TreeMap<>(subjects.stream()
+                .filter(not(StudyProgramSubject::getMandatory))
+                .collect(groupingBy(StudyProgramSubject::getSubjectGroup)));
+
+
+        StudyProgramDetails studyProgramDetails = this.service.getStudyProgramDetailsById(program);
+        if (!subjects.isEmpty()) {
+            model.addAttribute("studyProgram", studyProgramDetails);
+        }
+        model.addAttribute("mandatoryBySemester", mandatoryBySemester);
+        model.addAttribute("electiveByGroup", electiveByGroup);
+        return "study_program_grouped";
     }
 
     @GetMapping("/subject/{subjectId}")

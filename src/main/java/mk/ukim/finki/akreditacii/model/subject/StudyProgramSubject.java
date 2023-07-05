@@ -30,6 +30,11 @@ public class StudyProgramSubject {
 
     private Float order;
 
+    private String subjectGroup;
+
+    @Column(length = 5000)
+    private String dependenciesOverride;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
