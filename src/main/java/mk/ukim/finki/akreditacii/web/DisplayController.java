@@ -40,7 +40,7 @@ public class DisplayController {
         return "accreditation";
     }
 
-    @GetMapping("/program/{program}")
+    @GetMapping("/sp/{program}")
     public String programSubjects(@PathVariable String program, Model model) {
         List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
 
@@ -56,7 +56,7 @@ public class DisplayController {
     }
 
 
-    @GetMapping("/sp/{program}")
+    @GetMapping("/program/{program}")
     public String groupedProgramSubjects(@PathVariable String program, Model model) {
         List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
 
