@@ -40,7 +40,7 @@
     </div>
     <div class="col-12">
         <h4>Предмети</h4>
-        <a name="top"></a>
+        <a id="top"></a>
         <span th:each="sem: ${mandatoryBySemester}">
             <a th:href='${"#sem-"+sem.getKey()}'>
                 Семестар: <span th:text="${sem.getKey()}"></span>
@@ -54,8 +54,8 @@
                 <a th:href='${"#top"}' style="float:right"><i class="fa fa-arrow-up">
                 </i></a>
                 <h3>
-                    Семестар: <span th:text="${msem.getKey()}"></span>
                     <a th:id='${"sem-"+msem.getKey()}'></a>
+                    Семестар: <span th:text="${msem.getKey()}"></span>
                 </h3>
 
                 <table class="table table-striped table table-bordered table-sm">
@@ -97,8 +97,8 @@
             <a th:href='${"#top"}' style="float:right"><i class="fa fa-arrow-up">
             </i></a>
             <h3>
-                Изборни предмети од група <span th:text="${gr.getKey()}"></span>
                 <a th:id='${gr.getKey()}'></a>
+                Изборни предмети од група <span th:text="${gr.getKey()}"></span>
             </h3>
 
             <table class="table table-striped table table-bordered table-sm">
@@ -110,7 +110,7 @@
                         Предмет
                     </th>
                     <th width="10%">
-                        Семстар
+                        Препорачан семстар
                     </th>
                     <th width="40%">
                         Зависности
