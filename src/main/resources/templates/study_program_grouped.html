@@ -74,7 +74,8 @@
 
                     </tr>
                     <tr th:each="s: ${msem.getValue()}">
-                        <td th:text="${s.subject.id}">
+                        <td>
+                            <span th:if="${!s.subject.placeholder}" th:text="${s.subject.id}"></span>
                         </td>
                         <td>
                             <a th:if="${!s.subject.placeholder}" th:href="@{/subject/{id}(id=${s.subject.id})}"
@@ -121,12 +122,8 @@
                     <td th:text="${s.subject.id}">
                     </td>
                     <td>
-                        <a th:if="${!s.subject.placeholder}" th:href="@{/subject/{id}(id=${s.subject.id})}"
+                        <a th:href="@{/subject/{id}(id=${s.subject.id})}"
                            th:text="${s.subject.subject.name}"></a>
-                        <span th:if="${s.subject.placeholder}" th:text="${s.subject.subject.name}"></span>
-                        <span class="mr-3" th:if="${s.subject.placeholder}" th:each='g: ${s.subjectGroup?.split(";")}'>
-                            <a th:text='${g}' th:href='${"#"+g}'></a>
-                        </span>
                     </td>
                     <td th:text="${s.semester}">
                     </td>
