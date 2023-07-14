@@ -63,7 +63,7 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Override
     public List<StudyProgramDetails> findAccreditationProgramsByCycle(String accreditation, StudyCycle cycle) {
-        return programDetailsRepository.findAllByAccreditationYearAndStudyCycleOrderByDurationYearsDescOrderAsc(accreditation, cycle);
+        return programDetailsRepository.findAllByAccreditationYearAndStudyCycleOrderByOrderAsc(accreditation, cycle);
     }
 
     @Override

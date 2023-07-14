@@ -26,6 +26,8 @@ public class StudyProgramDetails {
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private StudyProgram studyProgram;
 
+    private String nameEn;
+
     private Float order;
 
     private Short durationYears;
@@ -51,6 +53,8 @@ public class StudyProgramDetails {
 
     @ManyToOne
     private Accreditation accreditation;
+
+    private Boolean bilingual;
 
     @ElementCollection
     private List<AccreditationDescriptiveField> fields;

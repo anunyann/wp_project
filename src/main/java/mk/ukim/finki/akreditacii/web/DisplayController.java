@@ -11,11 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Predicate;
 
 import static java.util.function.Predicate.*;
 import static java.util.stream.Collectors.groupingBy;
@@ -57,7 +57,7 @@ public class DisplayController {
 
 
     @GetMapping("/program/{program}")
-    public String groupedProgramSubjects(@PathVariable String program, Model model) {
+    public String groupedProgramSubjects(@PathVariable String program, @RequestParam(defaultValue = "mk") String lang, Model model) {
         List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
 
         Map<Short, List<StudyProgramSubject>> mandatoryBySemester = subjects.stream()
@@ -73,10 +73,24 @@ public class DisplayController {
         StudyProgramDetails studyProgramDetails = this.service.getStudyProgramDetailsById(program);
         if (!subjects.isEmpty()) {
             model.addAttribute("studyProgram", studyProgramDetails);
+            if(StudyCycle.UNDERGRADUATE.equals(studyProgramDetails.getStudyCycle())) {
+                model.addAttribute("back", "/mk/dodiplomski-studii");
+                model.addAttribute("backTitle", "Додипломски студии");
+            } else if(StudyCycle.MASTER.equals(studyProgramDetails.getStudyCycle())) {
+                model.addAttribute("back", "/mk/magisterski_studii");
+                model.addAttribute("backTitle", "Магистерски студии");
+            } else {
+                model.addAttribute("back", "/mk/doktorski_studii");
+                model.addAttribute("backTitle", "Докторски студии");
+            }
         }
         model.addAttribute("mandatoryBySemester", mandatoryBySemester);
         model.addAttribute("electiveByGroup", electiveByGroup);
-        return "study_program_grouped";
+        if ("en".equals(lang)) {
+            return "study_program_grouped_en";
+        } else {
+            return "study_program_grouped_mk";
+        }
     }
 
     @GetMapping("/subject/{subjectId}")
