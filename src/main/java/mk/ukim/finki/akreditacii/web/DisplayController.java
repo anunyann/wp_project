@@ -56,8 +56,8 @@ public class DisplayController {
     }
 
 
-    @GetMapping("/program/{program}")
-    public String groupedProgramSubjects(@PathVariable String program, @RequestParam(defaultValue = "mk") String lang, Model model) {
+    @GetMapping("/program/{program}/{lang}")
+    public String groupedProgramSubjects(@PathVariable String program, @PathVariable(required = false) String lang, Model model) {
         List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
 
         Map<Short, List<StudyProgramSubject>> mandatoryBySemester = subjects.stream()
