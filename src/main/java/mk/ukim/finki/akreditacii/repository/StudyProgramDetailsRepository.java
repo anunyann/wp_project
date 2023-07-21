@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface StudyProgramDetailsRepository extends JpaRepository<StudyProgramDetails, String> {
 
-    List<StudyProgramDetails> findAllByAccreditationYearAndStudyCycle(String accreditation, StudyCycle cycle);
+    List<StudyProgramDetails> findAllByAccreditationYearAndStudyCycleOrderByOrderAsc(String accreditation, StudyCycle cycle);
 }

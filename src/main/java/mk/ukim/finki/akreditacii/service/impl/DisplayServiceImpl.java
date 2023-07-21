@@ -1,6 +1,7 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import mk.ukim.finki.akreditacii.model.StudyCycle;
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgram;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
@@ -62,6 +63,11 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Override
     public List<StudyProgramDetails> findAccreditationProgramsByCycle(String accreditation, StudyCycle cycle) {
-        return programDetailsRepository.findAllByAccreditationYearAndStudyCycle(accreditation,cycle);
+        return programDetailsRepository.findAllByAccreditationYearAndStudyCycleOrderByOrderAsc(accreditation, cycle);
+    }
+
+    @Override
+    public StudyProgramDetails getStudyProgramDetailsById(String program) {
+        return this.programDetailsRepository.findById(program).orElseThrow(() -> new InvalidStudyProgram(program));
     }
 }

@@ -1,0 +1,150 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8"/>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${studyProgram?.nameEn}"></title>
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"-->
+    <!--          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+</head>
+<body>
+<div class="breadcrumbs">
+    <ul>
+        <li class="abreadcrumb">
+            <a th:href="${back}" class="active">Студии</a><span
+                class="arrow"> &gt; </span>
+        </li>
+        <li class="abreadcrumb">
+            <a th:href="${back}" th:title="${backTitle}" class="active">Додипломски Студии</a>
+            <span class="arrow"> &gt; </span>
+        </li>
+    </ul>
+</div>
+<div>
+    <h2>
+        <span th:text="${studyProgram?.nameEn!=null? studyProgram?.nameEn : studyProgram?.studyProgram?.name }"></span> (<span th:text="${studyProgram?.durationYears}"/>
+        years)
+
+        <hr/>
+    </h2>
+    <div class="col-12">
+        <h3>General information</h3>
+        <p class="ms-4" th:text="${studyProgram?.generalInformation}"></p>
+    </div>
+    <div class="col-12">
+        <h3>The title obtained after completion of the study program</h3>
+
+        <div class="col-12 ms-4">
+            <h5 th:text="${studyProgram?.graduationTitle}"></h5>
+        </div>
+        <div class="col-12 ms-4">
+            <h5 th:text="${studyProgram?.graduationTitleEn}"></h5>
+        </div>
+    </div>
+    <div class="col-12">
+        <h3>Study program</h3>
+        <p class="ms-4" th:text="${studyProgram?.subjectRestrictions}" style="white-space: pre-line"></p>
+    </div>
+    <div class="col-12">
+        <h4>Subjects</h4>
+        <a id="top"></a>
+        <span th:each="sem: ${mandatoryBySemester}">
+            <a th:href='${"#sem-"+sem.getKey()}'>
+                Semester: <span th:text="${sem.getKey()}"></span>
+            </a>
+        </span>
+    </div>
+    <div class="row">
+        <th:block th:each="msem: ${mandatoryBySemester}">
+            <div th:if="${msem.getKey()%2==1}" class="clearfix"></div>
+            <div class="col-md-6 col-sm-12">
+                <a th:href='${"#top"}' style="float:right"><i class="fa fa-arrow-up">
+                </i></a>
+                <h3>
+                    <a th:id='${"sem-"+msem.getKey()}'></a>
+                    Semester: <span th:text="${msem.getKey()}"></span>
+                </h3>
+
+                <table class="table table-striped table table-bordered table-sm">
+                    <tr>
+                        <td colspan="4">
+                            <h4>Compulsory subjects</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="10%">
+                            Code
+                        </th>
+                        <th width="40%">
+                            Subject
+                        </th>
+
+                    </tr>
+                    <tr th:each="s: ${msem.getValue()}">
+                        <td>
+                            <span th:if="${!s.subject.placeholder}" th:text="${s.subject.id}"></span>
+                        </td>
+                        <td>
+                            <a th:if="${!s.subject.placeholder}" th:href="@{/subject/{id}(id=${s.subject.id})}"
+                               th:text="${s.subject.nameEn}"></a>
+                            <span th:if="${s.subject.placeholder}" th:text="${s.subject.nameEn}"></span>
+                            <span class="mr-3" th:if="${s.subject.placeholder}"
+                                  th:each='g: ${s.subjectGroup?.split(";")}'>
+                            <a th:text='${g}' th:href='${"#"+g}'></a>
+                        </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </th:block>
+    </div>
+    <div class="row">
+        <div th:each="gr: ${electiveByGroup}" class="col-md-12 col-sm-12">
+
+
+            <a th:href='${"#top"}' style="float:right"><i class="fa fa-arrow-up">
+            </i></a>
+            <h3>
+                <a th:id='${gr.getKey()}'></a>
+                Elective subjects from group: <span th:text="${gr.getKey()}"></span>
+            </h3>
+
+            <table class="table table-striped table table-bordered table-sm">
+                <tr>
+                    <th width="10%">
+                        Code
+                    </th>
+                    <th width="40%">
+                        Предмет
+                    </th>
+                    <th width="10%">
+                        Suggested semester
+                    </th>
+                    <th width="40%">
+                        Dependencies
+                    </th>
+
+                </tr>
+                <tr th:each="s: ${gr.getValue()}">
+                    <td th:text="${s.subject.id}">
+                    </td>
+                    <td>
+                        <a th:href="@{/subject/{id}(id=${s.subject.id})}"
+                           th:text="${s.subject.nameEn}"></a>
+                    </td>
+                    <td th:text="${s.semester}">
+                    </td>
+                    <td th:text="${s.dependenciesOverride!=null? s.dependenciesOverride : s.subject?.dependencies?.dependencies}">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

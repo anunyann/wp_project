@@ -26,17 +26,35 @@ public class StudyProgramDetails {
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private StudyProgram studyProgram;
 
+    private String nameEn;
+
     private Float order;
 
     private Short durationYears;
 
     private Short durationSemesters;
 
+    @Column(length = 8000)
+    private String generalInformation;
+
+    @Column(length = 3000)
+    private String graduationTitle;
+
+    @Column(length = 3000)
+    private String graduationTitleEn;
+
+    @Column(length = 8000)
+    private String subjectRestrictions;
+
+    private Boolean onEnglish;
+
     @Enumerated(EnumType.STRING)
     private StudyCycle studyCycle;
 
     @ManyToOne
     private Accreditation accreditation;
+
+    private Boolean bilingual;
 
     @ElementCollection
     private List<AccreditationDescriptiveField> fields;

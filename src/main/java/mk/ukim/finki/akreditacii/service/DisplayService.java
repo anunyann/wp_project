@@ -19,4 +19,6 @@ public interface DisplayService {
     List<Professor> getSubjectProfessors(String subjectId);
 
     List<StudyProgramDetails> findAccreditationProgramsByCycle(String accreditation, StudyCycle cycle);
+
+    StudyProgramDetails getStudyProgramDetailsById(String program);
 }
