@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@RequestMapping("accreditations")
+@RequestMapping("admin/accreditations")
 @Controller
 public class AccreditationManagement {
     private final AccreditationService accreditationService;
@@ -23,19 +23,19 @@ public class AccreditationManagement {
     public String allAccreditations(Model model) {
         List<Accreditation> accreditations = accreditationService.findAll();
         model.addAttribute("accreditations", accreditations);
-        return "accreditation_list";
+        return "accreditation/accreditation_list";
     }
 
     @GetMapping("/add-form")
     public String addAccreditation(Model model) {
-        return "add_accreditation";
+        return "accreditation/add_accreditation";
     }
 
     @GetMapping("/edit-form/{id}")
     public String addAccreditation(Model model, @PathVariable String id) {
         Accreditation accreditation = accreditationService.findById(id).orElseThrow(() -> new NoSuchElementException());
         model.addAttribute("accreditation", accreditation);
-        return "add_accreditation";
+        return "accreditation/add_accreditation";
     }
 
     @PostMapping("/add")
