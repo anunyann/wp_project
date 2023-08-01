@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <form action="/accreditations/add" method="POST">
+    <form th:action="@{/admin/accreditations/add}" method="POST">
         <label for="year" th:text="#{YEAR}"></label>
         <input type="text" id="year" class="form-control" name="year" required="required"
                th:value="(${accreditation} != null ? ${accreditation.getYear()} : '')"/>

@@ -45,20 +45,20 @@ public class AccreditationManagement {
                       @RequestParam List<String> studyProgramFields) {
 
         accreditationService.save(year, activeFrom, activeTo, studyProgramFields);
-        return "redirect:/accreditations";
+        return "redirect:/admin/accreditations";
     }
 
 
     @GetMapping("/delete/{id}")
     public String deleteAccreditation(@PathVariable String id) {
         this.accreditationService.deleteById(id);
-        return "redirect:/accreditations";
+        return "redirect:/admin/accreditations";
     }
 
     @GetMapping("/activate/{id}")
     public String activateAccreditation(@PathVariable String id) {
         this.accreditationService.activate(id);
-        return "redirect:/accreditations";
+        return "redirect:/admin/accreditations";
     }
 
 }
