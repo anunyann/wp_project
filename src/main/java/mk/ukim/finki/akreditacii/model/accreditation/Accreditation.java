@@ -33,5 +33,11 @@ public class Accreditation {
     @Lob
     private byte[] accreditationDecisionDocument;
 
-
+    public Accreditation(String year, LocalDate activeFrom, LocalDate activeTo, boolean isActive, List<String> studyProgramFields) {
+        this.year = year;
+        this.activeFrom = activeFrom;
+        this.activeTo = activeTo;
+        this.isActive = isActive;
+        this.studyProgramFields = studyProgramFields;
+    }
 }
