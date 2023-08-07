@@ -1,0 +1,27 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8"/>
+<head>
+  <meta charset="UTF-8"/>
+</head>
+<body>
+
+<div>
+  test
+</div>
+<div th:text="${prof}"></div>
+
+<div>
+  <label for="name">Име</label>
+  <input name="name" id="name" th:value="${professor?.name}">
+  <br>
+  <label for="email">Е-маил</label>
+  <input name="email" id="email" th:value="${professor?.email}">
+  <br>
+  <label for="title">Звање</label>
+  <input name="title" id="title" th:value="${professor?.title}">
+  <br>
+
+</div>
+
+</body>
+</html>
