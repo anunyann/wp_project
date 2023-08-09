@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Getter
@@ -19,10 +20,20 @@ public class ProfessorDetails {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "id", insertable = false,updatable = false)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     private Professor professor;
 
     private Float order;
+
+    @Enumerated(EnumType.STRING)
+    private EducationDegree degree;
+
+    private String degreeTitle;
+
+    private LocalDate birthDay;
+
+    @ManyToOne
+    private ProfessorAcademicTitles currentTitle;
 
 
     @Override

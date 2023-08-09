@@ -3,7 +3,6 @@ package mk.ukim.finki.akreditacii.model.accreditation;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,10 +27,5 @@ public class Accreditation {
 
     @ElementCollection
     private List<String> studyProgramFields;
-
-    @Deprecated
-    @Lob
-    private byte[] accreditationDecisionDocument;
-
 
 }
