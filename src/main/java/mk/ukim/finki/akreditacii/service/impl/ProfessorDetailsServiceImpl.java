@@ -1,8 +1,7 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
-import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorDetails;
-import mk.ukim.finki.akreditacii.repository.ProfessorDetailsRepository;
+import mk.ukim.finki.akreditacii.repository.professor.ProfessorDetailsRepository;
 import mk.ukim.finki.akreditacii.service.ProfessorDetailsService;
 import org.springframework.stereotype.Service;
 

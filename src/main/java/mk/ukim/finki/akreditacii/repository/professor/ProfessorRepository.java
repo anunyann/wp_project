@@ -1,4 +1,4 @@
-package mk.ukim.finki.akreditacii.repository;
+package mk.ukim.finki.akreditacii.repository.professor;
 
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;

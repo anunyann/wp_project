@@ -1,9 +1,8 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidProfessorId;
-import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgram;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
-import mk.ukim.finki.akreditacii.repository.ProfessorRepository;
+import mk.ukim.finki.akreditacii.repository.professor.ProfessorRepository;
 import mk.ukim.finki.akreditacii.service.ProfessorService;
 import org.springframework.stereotype.Service;
 
