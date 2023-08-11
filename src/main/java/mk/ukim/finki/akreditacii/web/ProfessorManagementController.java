@@ -23,16 +23,24 @@ public class ProfessorManagementController {
         this.professorService= professorService;
         this.professorAcademicTitlesService = professorAcademicTitlesService;
     }
+
+
+
     @GetMapping(value = {"/professor/{name}"})
     public String professorDetails(@PathVariable String name, Model model){
         Professor professor = professorService.getProfessorById(name);
         model.addAttribute("professor", professorService.getProfessorById(name));
 
-        System.out.println(professor);
-        System.out.println(professorAcademicTitlesService.listAll());
-        System.out.println(professorAcademicTitlesService.listAllAcademicTitles());
-        System.out.println(professorAcademicTitlesService.listAllEducationDegrees());
         return "professor/professor_details";
+
+    }
+
+    @GetMapping(value = {"/professor"})
+    public String listAllProfessors(Model model){
+
+        model.addAttribute("professors", professorService.listAll());
+
+        return "professor/professor_list";
 
     }
 }

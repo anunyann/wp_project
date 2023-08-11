@@ -25,6 +25,11 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
+    public List<Professor> listAll() {
+        return professorRepository.findAll();
+    }
+
+    @Override
     public List<Professor> getProfessors() {
         return professorRepository.findAllByTitleLike(PROFESSOR);
     }

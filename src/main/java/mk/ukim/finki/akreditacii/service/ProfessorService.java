@@ -7,6 +7,7 @@ import java.util.List;
 public interface ProfessorService {
 
     Professor getProfessorById(String professorId);
+    List<Professor> listAll();
 
     List<Professor> getProfessors();
 }
