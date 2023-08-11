@@ -5,11 +5,15 @@ import mk.ukim.finki.akreditacii.model.exceptions.InvalidAccreditation;
 import mk.ukim.finki.akreditacii.model.exceptions.NoActiveAccreditation;
 import mk.ukim.finki.akreditacii.repository.AccreditationRepository;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccreditationServiceImpl implements AccreditationService {
@@ -22,6 +26,11 @@ public class AccreditationServiceImpl implements AccreditationService {
     @Override
     public List<Accreditation> findAll() {
         return accreditationRepository.findAll();
+    }
+
+    @Override
+    public Page<Accreditation> findAllWithPagination(Pageable pageable) {
+        return accreditationRepository.findAll(pageable);
     }
 
     @Override
@@ -63,8 +72,7 @@ public class AccreditationServiceImpl implements AccreditationService {
             Accreditation inactiveAccreditation = accreditationRepository.findById(year).get();
             inactiveAccreditation.setIsActive(true);
             accreditationRepository.save(inactiveAccreditation);
-        }
-        else throw new InvalidAccreditation(year);
+        } else throw new InvalidAccreditation(year);
 
     }
 
