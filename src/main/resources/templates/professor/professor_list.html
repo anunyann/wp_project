@@ -12,6 +12,16 @@
 
 <div class="container">
     <div class="row justify-content-center" >
+        <div class="col">
+            <a th:href="@{'/professor/add-academic-title'}"
+               class="btn btn-sm btn-primary"><i class="fa fa-trash">Add Academic Title </i></a>
+        </div>
+        <div class="col">
+            <a th:href="@{'/professor/add-education'}"
+               class="btn btn-sm btn-primary"><i class="fa fa-trash">Add Education </i></a>
+        </div>
+    </div>
+    <div class="row justify-content-center" >
         <div class="col" th:text="Име"></div>
         <div class="col" th:text="Е-маил"></div>
         <div class="col" th:text="Звање"></div>

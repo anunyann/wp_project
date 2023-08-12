@@ -11,7 +11,7 @@ public interface ProfessorAcademicTitlesService {
 
     ProfessorAcademicTitles findByProfessor(Professor professor);
     List<ProfessorAcademicTitles> listAll();
-    List<AcademicTitle> listAllAcademicTitles();
+
     List<Education> listAllEducationDegrees();
 
 

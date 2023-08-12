@@ -38,10 +38,6 @@ public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitl
         return professorAcademicTitlesRepository.findAll();
     }
 
-    @Override
-    public List<AcademicTitle> listAllAcademicTitles() {
-        return academicTitleRepository.findAll();
-    }
 
     @Override
     public List<Education> listAllEducationDegrees() {
