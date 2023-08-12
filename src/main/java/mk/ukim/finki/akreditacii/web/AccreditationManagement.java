@@ -2,6 +2,9 @@ package mk.ukim.finki.akreditacii.web;
 
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RequestMapping("admin/accreditations")
 @Controller
@@ -20,10 +25,22 @@ public class AccreditationManagement {
     }
 
     @GetMapping
-    public String allAccreditations(Model model) {
-        List<Accreditation> accreditations = accreditationService.findAll();
-        model.addAttribute("accreditations", accreditations);
+    public String pageableAccreditations(@RequestParam(name = "page", defaultValue = "1") int page,
+                                         @RequestParam(name = "size", defaultValue = "4") int size,
+                                         Model model) {
+        Page<Accreditation> accreditationsPage = accreditationService
+                .findAllWithPagination(PageRequest.of(page - 1, size));
+        model.addAttribute("accreditationsPage", accreditationsPage);
+
+        int totalPages = accreditationsPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
         return "accreditation/accreditation_list";
+
     }
 
     @GetMapping("/add-form")
