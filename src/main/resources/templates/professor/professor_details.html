@@ -42,7 +42,7 @@
 
 <h4 class="text-center">Образование</h4>
 <div class="col">
-  <a th:href="@{'/professor/{id}/education' (id=${professor.getId()})}"
+  <a th:href="@{'/professor/{id}/education/add' (id=${professor.getId()})}"
      class="btn btn-sm btn-primary"><i class="fa fa-trash">Add Education </i></a>
 </div>
 <div class="container">
@@ -70,7 +70,8 @@
             class="btn btn-sm btn-danger m-1">Delete
           <i class="fa fa-trash"></i>
         </a>
-        <a th:href="@{'/professor/{id}/education/edit' (id=${professor.getId()})}"
+        <a th:href="@{'/professor/{professorId}/education/{educationId}/edit'
+                (professorId=${professor.getId()}, educationId=${education.getId()})}"
            class="btn btn-sm btn-info"><i class="fa fa-trash">Edit</i></a>
       </div>
     </div>

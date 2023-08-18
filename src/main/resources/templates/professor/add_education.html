@@ -8,7 +8,7 @@
 
 
 
-<form method="POST"   >
+<form method="POST" th:action="@{/professor/{professorId}/education(professorId=${professorId})}"  >
 
     <div class="container">
         <div class="row justify-content-start">
@@ -17,34 +17,35 @@
                 <option
                         th:each="degree : ${educationDegrees}"
                         th:value="${degree}"
-                        th:text="${degree}">
+                        th:text="${degree}"
+                        th:selected="${education!=null ? education.getDegree().equals(degree):false}">
                 </option>
             </select>
         </div>
 
         <div class="row justify-content-start">
             <label class="col-2" for="finishingYear">Година</label>
-            <input class="col-3" name="finishingYear" id="finishingYear" type="number" >
+            <input class="col-3" name="finishingYear" id="finishingYear" type="number" th:value="${education?.finishingYear}" >
         </div>
 
         <div class="row justify-content-start">
             <label class="col-2" for="institution">Институција</label>
-            <input class="col-3" name="institution" id="institution" >
+            <input class="col-3" name="institution" id="institution" th:value="${education?.institution}" >
         </div>
 
         <div class="row justify-content-start">
             <label class="col-2" for="discipline">Подрачје</label>
-            <input class="col-3" name="discipline" id="discipline" >
+            <input class="col-3" name="discipline" id="discipline" th:value="${education?.discipline}"  >
         </div>
 
         <div class="row justify-content-start">
             <label class="col-2" for="field">Поле</label>
-            <input class="col-3" name="field" id="field" >
+            <input class="col-3" name="field" id="field"  th:value="${education?.field}"  >
         </div>
 
         <div class="row justify-content-start">
             <label class="col-2" for="area">Област</label>
-            <input class="col-3" name="area" id="area" >
+            <input class="col-3" name="area" id="area" th:value="${education?.area}" >
         </div>
 
         <button type="submit" class="btn btn-primary " th:text="#{SUBMIT}"></button>

@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidId;
 import mk.ukim.finki.akreditacii.model.professor.Education;
 import mk.ukim.finki.akreditacii.model.professor.EducationDegree;
 import mk.ukim.finki.akreditacii.repository.professor.EducationRepository;
@@ -28,6 +29,11 @@ public class EducationServiceImpl implements EducationService {
     @Override
     public void deleteById(String id) {
         educationRepository.deleteById(id);
+    }
+
+    @Override
+    public Education findById(String id) {
+        return educationRepository.findById(id).orElseThrow(()-> new InvalidId(id));
     }
 
     @Override
