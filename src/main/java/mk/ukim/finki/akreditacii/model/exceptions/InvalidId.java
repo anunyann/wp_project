@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class InvalidProfessorId extends RuntimeException{
-    public InvalidProfessorId(String professorId){
-        super("Invalid professor id: "+professorId);
+public class InvalidId extends RuntimeException{
+    public InvalidId(String id){
+        super("Invalid id: "+ id);
     }
 }

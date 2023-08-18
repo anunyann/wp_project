@@ -19,13 +19,15 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
-    public Optional<Education> save(String id, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area) {
-        if(educationRepository.findById(id).isPresent()){
-            return Optional.of(educationRepository.findById(id).get());
-        }
-        Education education = new Education(id, degree,finishingYear,institution,discipline,field,area);
+    public Education save(String professorIdValue,EducationDegree degree,Short finishingYear,String institution,String  discipline,String  field,String area) {
+        Education education = new Education(professorIdValue+finishingYear, degree,finishingYear,institution, discipline, field,area);
 
-        return Optional.of(educationRepository.save(education));
+        return educationRepository.save(education);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        educationRepository.deleteById(id);
     }
 
     @Override

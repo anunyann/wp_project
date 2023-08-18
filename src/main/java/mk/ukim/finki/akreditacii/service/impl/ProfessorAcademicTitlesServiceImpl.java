@@ -22,6 +22,7 @@ public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitl
     private final AcademicTitleRepository academicTitleRepository;
     private final EducationRepository educationRepository;
 
+
     public ProfessorAcademicTitlesServiceImpl(ProfessorAcademicTitlesRepository professorAcademicTitlesRepository,
                                               ProfessorRepository professorRepository,
                                               AcademicTitleRepository academicTitleRepository,
@@ -37,7 +38,16 @@ public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitl
     public List<ProfessorAcademicTitles> listAll() {
         return professorAcademicTitlesRepository.findAll();
     }
+    @Override
+    public void deleteByProfessor(Professor professor) {
+        professorAcademicTitlesRepository.deleteByProfessor(professor);
+    }
 
+    @Override
+    public ProfessorAcademicTitles save(ProfessorAcademicTitles professorAcademicTitles) {
+
+        return professorAcademicTitlesRepository.save(professorAcademicTitles);
+    }
 
     @Override
     public List<Education> listAllEducationDegrees() {

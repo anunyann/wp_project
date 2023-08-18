@@ -10,22 +10,71 @@
 </head>
 <body>
 
-<div>
-  Професори
+<h2 class="text-center">
+  Податоци за професор
+</h2>
+
+<div class="container">
+  <div class="row justify-content-start">
+    <label class="col-1" for="name">Име</label>
+    <input class="col-3" name="name" id="name" th:value="${professor?.name}">
+  </div>
+
+  <div class="row justify-content-start">
+    <label class="col-1" for="email">Е-маил</label>
+    <input class="col-3" name="email" id="email" th:value="${professor?.email}">
+  </div>
+  <div class="row justify-content-start">
+    <label class="col-1" for="title">Звање</label>
+    <input class="col-3" name="title" id="title" th:value="${professor?.title}">
+  </div>
+  <div class="row justify-content-start">
+    <label class="col-1" for="birthDay">Датум на раѓање</label>
+    <input class="col-3" name="birthDay" id="birthDay" th:value="${professorDetails?.birthDay}">
+  </div>
+  <div class="row justify-content-start">
+    <label class="col-1" for="degree">Степен на образование</label>
+    <input class="col-3" name="degree" id="degree" th:value="${professorDetails?.degree}">
+  </div>
+
+
 </div>
-<div th:text="${prof}"></div>
 
-<div>
-  <label for="name">Име</label>
-  <input name="name" id="name" th:value="${professor?.name}">
-  <br>
-  <label for="email">Е-маил</label>
-  <input name="email" id="email" th:value="${professor?.email}">
-  <br>
-  <label for="title">Звање</label>
-  <input name="title" id="title" th:value="${professor?.title}">
-  <br>
+<h4 class="text-center">Образование</h4>
+<div class="col">
+  <a th:href="@{'/professor/{id}/education' (id=${professor.getId()})}"
+     class="btn btn-sm btn-primary"><i class="fa fa-trash">Add Education </i></a>
+</div>
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col">Образование</div>
+    <div class="col">Година</div>
+    <div class="col">Институција</div>
+    <div class="col">Подрачје</div>
+    <div class="col">Поле</div>
+    <div class="col">Област</div>
+    <div class="col"></div>
+  </div>
 
+  <div th:each="education: ${educations}" class="row justify-content-between">
+    <div class="col" th:text="${education.getEducation().getInstitution()}">Образование</div>
+    <div class="col" th:text="${education.getEducation().getFinishingYear()}">Година</div>
+    <div class="col" th:text="${education.getEducation().getInstitution()}">Институција</div>
+    <div class="col" th:text="${education.getEducation().getDiscipline()}">Подрачје</div>
+    <div class="col" th:text="${education.getEducation().getField()}">Поле</div>
+    <div class="col" th:text="${education.getEducation().getArea()}">Област</div>
+    <div class="col">
+      <div class="col-3 d-flex">
+        <a  th:href="@{'/professor/{professorId}/education/{educationId}/delete'
+                (professorId=${professor.getId()}, educationId=${education.getId()})}"
+            class="btn btn-sm btn-danger m-1">Delete
+          <i class="fa fa-trash"></i>
+        </a>
+        <a th:href="@{'/professor/{id}/education/edit' (id=${professor.getId()})}"
+           class="btn btn-sm btn-info"><i class="fa fa-trash">Edit</i></a>
+      </div>
+    </div>
+  </div>
 </div>
 
 </body>

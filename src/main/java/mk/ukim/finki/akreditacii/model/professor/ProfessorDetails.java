@@ -3,6 +3,8 @@ package mk.ukim.finki.akreditacii.model.professor;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -19,10 +21,12 @@ public class ProfessorDetails {
     @Column(name = "id")
     private String id;
 
-    @ManyToOne
+    @ManyToOne//(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private Professor professor;
 
+    @Column(name = "\"order\"")
     private Float order;
 
     @Enumerated(EnumType.STRING)
@@ -32,7 +36,8 @@ public class ProfessorDetails {
 
     private LocalDate birthDay;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ProfessorAcademicTitles currentTitle;
 
 

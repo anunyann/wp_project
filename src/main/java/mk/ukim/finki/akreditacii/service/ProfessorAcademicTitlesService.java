@@ -11,8 +11,9 @@ public interface ProfessorAcademicTitlesService {
 
     ProfessorAcademicTitles findByProfessor(Professor professor);
     List<ProfessorAcademicTitles> listAll();
-
+    ProfessorAcademicTitles save(ProfessorAcademicTitles professorAcademicTitles);
     List<Education> listAllEducationDegrees();
+    void deleteByProfessor(Professor professor);
 
 
 }
