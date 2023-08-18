@@ -31,6 +31,11 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
+    public void deleteProfessorEducations(List<String> educationIds) {
+        educationRepository.deleteAllByIdIn(educationIds);
+    }
+
+    @Override
     public List<Education> listAll() {
         return educationRepository.findAll();
     }

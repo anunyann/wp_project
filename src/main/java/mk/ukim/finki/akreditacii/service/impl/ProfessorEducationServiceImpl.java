@@ -28,6 +28,11 @@ public class ProfessorEducationServiceImpl implements ProfessorEducationService 
     }
 
     @Override
+    public void deleteAllByProfessor(Professor professor) {
+        professorEducationRepository.deleteAllByProfessor(professor);
+    }
+
+    @Override
     public void deleteByEducationId(String id) {
         professorEducationRepository.deleteByEducationId(id);
     }

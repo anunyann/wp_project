@@ -12,6 +12,7 @@ public interface ProfessorEducationService {
     List<ProfessorEducation> listAll();
     void deleteByEducationId(String id);
     void deleteById(String id);
+    void deleteAllByProfessor(Professor professor);
 
     ProfessorEducation findByEducationId(String id);
 }

@@ -12,4 +12,6 @@ public interface EducationService {
     List<Education> listAll();
     void deleteById(String id);
 
+    void deleteProfessorEducations(List<String> educationIds);
+
 }

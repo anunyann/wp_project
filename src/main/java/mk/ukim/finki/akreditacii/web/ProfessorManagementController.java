@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProfessorManagementController {
@@ -145,11 +146,23 @@ public class ProfessorManagementController {
     public String deleteProfessor(@PathVariable String id) {
 
         Professor professor = professorService.getProfessorById(id);
+        List<String> educationIds = getAllEducationIdsForProfessor(professor);
         professorAcademicTitlesService.deleteByProfessor(professor);
+
+        professorEducationService.deleteAllByProfessor(professor);
+        educationService.deleteProfessorEducations(educationIds);
+
 
         this.professorDetailsService.deleteById(id);
         this.professorService.deleteById(id);
 
         return "redirect:/professor";
+    }
+
+    public List<String> getAllEducationIdsForProfessor(Professor professor) {
+        List<ProfessorEducation> professorEducations = professorEducationService.listEducationByProfessor(professor);
+        return professorEducations.stream()
+                .map(ProfessorEducation::getId)
+                .collect(Collectors.toList());
     }
 }

@@ -11,4 +11,6 @@ public interface ProfessorEducationRepository extends JpaRepository<ProfessorEdu
     List<ProfessorEducation> findAllByProfessor(Professor professor);
     void deleteByEducationId (String id);
     ProfessorEducation findByEducationId(String id);
+
+    void deleteAllByProfessor(Professor professor);
 }
