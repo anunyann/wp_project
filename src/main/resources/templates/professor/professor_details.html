@@ -39,12 +39,20 @@
 
 
 </div>
+<br>
 
-<h4 class="text-center">Образование</h4>
-<div class="col">
+<div class="text-center">
+  <a class=" text-decoration-none text-reset d-inline-block" th:href="@{'/professor/{id}/titles' (id=${professor.getId()})}">
+    <h2>Академски титули</h2>
+  </a>
+</div>
+<div class="d-flex container justify-content-evenly" style="margin-top: 50px">
+  <h4 class="text-center">Образование</h4>
   <a th:href="@{'/professor/{id}/education/add' (id=${professor.getId()})}"
      class="btn btn-sm btn-primary"><i class="fa fa-trash">Add Education </i></a>
 </div>
+
+
 <div class="container">
   <div class="row justify-content-between">
     <div class="col">Образование</div>
@@ -57,7 +65,7 @@
   </div>
 
   <div th:each="education: ${educations}" class="row justify-content-between">
-    <div class="col" th:text="${education.getEducation().getInstitution()}">Образование</div>
+    <div class="col" th:text="${education.getEducation().getDegree()}">Образование</div>
     <div class="col" th:text="${education.getEducation().getFinishingYear()}">Година</div>
     <div class="col" th:text="${education.getEducation().getInstitution()}">Институција</div>
     <div class="col" th:text="${education.getEducation().getDiscipline()}">Подрачје</div>

@@ -36,7 +36,6 @@ public class ProfessorManagementController {
         this.educationService = educationService;
         this.professorEducationService = professorEducationService;
         this.professorDetailsService = professorDetailsService;
-
     }
 
     @GetMapping(value = {"/professor/{name}"})
@@ -56,8 +55,6 @@ public class ProfessorManagementController {
         model.addAttribute("professors", professorService.listAll());
         return "professor/professor_list";
     }
-
-
 
     @GetMapping(value = {"/professor/add-professor"})
     public String addProfessor (Model model){
@@ -80,7 +77,7 @@ public class ProfessorManagementController {
         LocalDate dateOfBirthParsed = LocalDate.parse(dateOfBirth);
         Professor professor = new Professor(id, firstName + " "+ lastName, email, title);
         professorService.save(id, firstName, lastName, email, title);
-        ProfessorDetails professorDetails = new ProfessorDetails(id, professor,12F,degree,title.toString(),dateOfBirthParsed,null);
+        ProfessorDetails professorDetails = new ProfessorDetails(id, professor,1F,degree,title.toString(),dateOfBirthParsed,null);
         professorDetailsService.save(professorDetails);
 
 
@@ -151,8 +148,6 @@ public class ProfessorManagementController {
         return "redirect:/professor/"+professorId;
     }
 
-
-
     public List<String> getAllEducationIdsForProfessor(Professor professor) {
         List<ProfessorEducation> professorEducations = professorEducationService.listEducationByProfessor(professor);
         return professorEducations.stream()
@@ -162,15 +157,21 @@ public class ProfessorManagementController {
 
     /*ACADEMIC TITTLE*/
 
-    @GetMapping(value = {"/professor/add-academic-title"})
-    public String addAcademicTitle(Model model){
+    @GetMapping(value = {"/professor/{professorId}/titles"})
+    public String listAcademicTitle(@PathVariable String professorId,Model model){
         model.addAttribute("professorTitles", ProfessorTitle.values());
+        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.getProfessorById(professorId));
+        if(professorAcademicTitles== null)
+            return "professor/add_academic_title";
+
+        model.addAttribute("academicTitle", professorAcademicTitles.getAcademicTitle());
+
         return "professor/add_academic_title";
 
     }
-    @PostMapping("/professor/add-academic-title")
+    @PostMapping("/professor/{professorId}/titles")
     public String saveAcademicTitle(
-            @RequestParam("id") String id,
+            @PathVariable String professorId,
             @RequestParam("institution") String institution,
             @RequestParam("title") ProfessorTitle title,
             @RequestParam("area") String area,
@@ -178,7 +179,12 @@ public class ProfessorManagementController {
             @RequestParam("decisionDocumentNumber") Short decisionDocumentNumber,
             Model model) {
 
-        return "redirect:/professor";
+        AcademicTitle academicTitle = academicTitleService.save(professorId+decisionDocumentNumber, institution, title, area, electionYear, decisionDocumentNumber);
+        Professor professor = professorService.getProfessorById(professorId);
+        professorAcademicTitlesService.save(professorId, professor, academicTitle);
+
+
+        return "redirect:/professor/"+ professorId;
     }
 
 

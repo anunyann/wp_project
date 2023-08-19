@@ -44,8 +44,8 @@ public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitl
     }
 
     @Override
-    public ProfessorAcademicTitles save(ProfessorAcademicTitles professorAcademicTitles) {
-
+    public ProfessorAcademicTitles save(String id, Professor professor, AcademicTitle academicTitle) {
+        ProfessorAcademicTitles professorAcademicTitles = new ProfessorAcademicTitles(id, professor, academicTitle);
         return professorAcademicTitlesRepository.save(professorAcademicTitles);
     }
 
