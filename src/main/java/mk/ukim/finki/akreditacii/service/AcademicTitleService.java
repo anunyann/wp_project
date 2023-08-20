@@ -12,4 +12,5 @@ public interface AcademicTitleService  {
     List<AcademicTitle> listAll();
 
     AcademicTitle findById(String id);
+    void deleteById(String id);
 }

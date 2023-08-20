@@ -9,4 +9,5 @@ public interface ProfessorAcademicTitlesRepository extends JpaRepository<Profess
 
     ProfessorAcademicTitles findByProfessor(Professor professor);
     void deleteByProfessor(Professor professor);
+    ProfessorAcademicTitles findByAcademicTitleId(String id);
 }

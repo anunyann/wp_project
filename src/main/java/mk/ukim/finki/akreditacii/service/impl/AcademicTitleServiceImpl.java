@@ -29,6 +29,11 @@ public class AcademicTitleServiceImpl implements AcademicTitleService {
     }
 
     @Override
+    public void deleteById(String id) {
+        academicTitleRepository.deleteById(id);
+    }
+
+    @Override
     public List<AcademicTitle> listAll() {
         return academicTitleRepository.findAll();
     }

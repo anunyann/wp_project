@@ -26,8 +26,8 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Professor save(String id, String firstName, String lastName,String email, ProfessorTitle title) {
-        Professor professor = new Professor(id, firstName + " "+ lastName, email, title);
+    public Professor save(String id, String name,String email, ProfessorTitle title) {
+        Professor professor = new Professor(id, name, email, title);
         return professorRepository.save(professor);
     }
 

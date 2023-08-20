@@ -58,4 +58,14 @@ public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitl
     public ProfessorAcademicTitles findByProfessor(Professor professor) {
         return professorAcademicTitlesRepository.findByProfessor(professor);
     }
+
+    @Override
+    public ProfessorAcademicTitles findByTitleId(String id) {
+        return professorAcademicTitlesRepository.findByAcademicTitleId(id);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        professorAcademicTitlesRepository.deleteById(id);
+    }
 }

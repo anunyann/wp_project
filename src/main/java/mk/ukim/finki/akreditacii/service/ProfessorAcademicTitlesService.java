@@ -14,6 +14,7 @@ public interface ProfessorAcademicTitlesService {
     ProfessorAcademicTitles save(String id, Professor professor, AcademicTitle academicTitle);
     List<Education> listAllEducationDegrees();
     void deleteByProfessor(Professor professor);
-
+    ProfessorAcademicTitles findByTitleId(String id);
+    void deleteById(String id);
 
 }

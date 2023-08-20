@@ -41,15 +41,42 @@
 </div>
 <br>
 
-<div class="text-center">
-  <a class=" text-decoration-none text-reset d-inline-block" th:href="@{'/professor/{id}/titles' (id=${professor.getId()})}">
-    <h2>Академски титули</h2>
-  </a>
+<div class="d-flex container justify-content-evenly" style="margin-top: 50px">
+  <h4 class="text-center">Академски титули</h4>
+  <div>
+    <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-primary"
+       th:text="${academicTitle== null ? 'Додади': 'Измени'}"
+       th:href="@{'/professor/{id}/titles' (id=${professor.getId()})}"></a>
+    <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-danger"
+       th:if="${academicTitle!= null}"
+       th:href="@{'/professor/{professorId}/titles/{titleId}/delete'(professorId=${professor.getId()}, titleId=${academicTitle?.getId()})}">Избриши</a>
+
+  </div>
 </div>
+
+<div class="container" th:if="${academicTitle != null}">
+  <div class="row justify-content-between">
+    <div class="col">Институција</div>
+    <div class="col">Наслов</div>
+    <div class="col">Област</div>
+    <div class="col">Година на избор</div>
+    <div class="col">Број на документ</div>
+  </div>
+
+  <div class="row justify-content-between">
+    <div class="col" th:text="${academicTitle?.institution}"></div>
+    <div class="col" th:text="${academicTitle?.title}"></div>
+    <div class="col" th:text="${academicTitle?.area}"></div>
+    <div class="col" th:text="${academicTitle?.electionYear}"></div>
+    <div class="col" th:text="${academicTitle?.decisionDocumentNumber}"></div>
+  </div>
+</div>
+
+
 <div class="d-flex container justify-content-evenly" style="margin-top: 50px">
   <h4 class="text-center">Образование</h4>
   <a th:href="@{'/professor/{id}/education/add' (id=${professor.getId()})}"
-     class="btn btn-sm btn-primary"><i class="fa fa-trash">Add Education </i></a>
+     class="btn btn-sm btn-primary">Додади</a>
 </div>
 
 
@@ -64,6 +91,12 @@
     <div class="col"></div>
   </div>
 
+  <div th:if="${educations== null || educations.isEmpty()}" class="row text-center">
+    <div class="col">
+      Нема внесени податоци
+    </div>
+
+  </div>
   <div th:each="education: ${educations}" class="row justify-content-between">
     <div class="col" th:text="${education.getEducation().getDegree()}">Образование</div>
     <div class="col" th:text="${education.getEducation().getFinishingYear()}">Година</div>
@@ -75,12 +108,11 @@
       <div class="col-3 d-flex">
         <a  th:href="@{'/professor/{professorId}/education/{educationId}/delete'
                 (professorId=${professor.getId()}, educationId=${education.getId()})}"
-            class="btn btn-sm btn-danger m-1">Delete
-          <i class="fa fa-trash"></i>
+            class="btn btn-sm btn-danger">Избриши
         </a>
         <a th:href="@{'/professor/{professorId}/education/{educationId}/edit'
                 (professorId=${professor.getId()}, educationId=${education.getId()})}"
-           class="btn btn-sm btn-info"><i class="fa fa-trash">Edit</i></a>
+           class="btn btn-sm btn-info">Промени</a>
       </div>
     </div>
   </div>

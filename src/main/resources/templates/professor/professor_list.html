@@ -17,11 +17,11 @@
         <div class="col" th:text="Звање"></div>
         <div class="col">
             <a th:href="@{'/professor/add-professor'}"
-               class="btn btn-sm btn-primary"><i class="fa fa-trash">Add Professor </i></a>
+               class="btn btn-sm btn-primary">Додади професор</a>
         </div>
     </div>
     <div class="row justify-content-center" th:each="professor: ${professors}">
-        <a class="col-9 text-decoration-none text-reset" th:href="@{'/professor/{id}' (id=${professor.getId()})}" style="text-decoration: none;">
+        <a class="col-9 text-decoration-none text-reset" th:href="@{'/professor/{id}' (id=${professor.getId()})}" >
             <div class="row justify-content-around">
                 <div class="col-4"  th:text="${professor.getName()}"></div>
                 <div class="col-4" th:text="${professor.getEmail()}"></div>
@@ -30,12 +30,12 @@
 
         </a>
         <div class="col-3 d-flex">
-            <a th:href="@{'/professor/delete/{id}' (id=${professor.getId()})}"
-               class="btn btn-sm btn-danger m-1">Delete
-                <i class="fa fa-trash"></i>
+            <a th:href="@{'/professor/{id}/delete' (id=${professor.getId()})}"
+               class="btn btn-sm btn-danger m-1">Избриши
+
             </a>
-            <a th:href="@{'/professor/edit/{id}' (id=${professor.getId()})}"
-               class="btn btn-sm btn-info"><i class="fa fa-trash">Edit</i></a>
+            <a th:href="@{'/professor/{id}/edit' (id=${professor.getId()})}"
+               class="btn btn-sm btn-info">Измени</a>
         </div>
     </div>
 </div>

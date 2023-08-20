@@ -38,14 +38,24 @@ public class ProfessorManagementController {
         this.professorDetailsService = professorDetailsService;
     }
 
-    @GetMapping(value = {"/professor/{name}"})
-    public String professorDetails(@PathVariable String name, Model model){
-        Professor professor = professorService.getProfessorById(name);
-        ProfessorDetails professorDetails =  professorDetailsService.findById(name);
+    @GetMapping(value = {"/professor/{professorId}"})
+    public String professorDetails(@PathVariable String professorId, Model model){
+        Professor professor = professorService.getProfessorById(professorId);
+        ProfessorDetails professorDetails =  professorDetailsService.findById(professorId);
         model.addAttribute("professorDetails", professorDetails);
-
         model.addAttribute("professor", professor);
         model.addAttribute("educations", professorEducationService.listEducationByProfessor(professor));
+
+        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.getProfessorById(professorId));
+        if(professorAcademicTitles== null ) {
+            model.addAttribute("academicTitle", null);
+
+        }else  {
+            model.addAttribute("academicTitle", professorAcademicTitles.getAcademicTitle());
+
+        }
+
+
         return "professor/professor_details";
 
     }
@@ -64,10 +74,21 @@ public class ProfessorManagementController {
         return "professor/add_professor";
     }
 
+    @GetMapping(value = {"/professor/{id}/edit"})
+    public String editProfessor (@PathVariable String id, Model model){
+
+        Professor professor = professorService.getProfessorById(id);
+        ProfessorDetails professorDetails = professorDetailsService.findById(id);
+        model.addAttribute("professor", professor);
+        model.addAttribute("professorDetails", professorDetails);
+        model.addAttribute("professorTitles", ProfessorTitle.values());
+        model.addAttribute("educationDegrees", EducationDegree.values());
+
+        return "professor/add_professor";
+    }
     @PostMapping("/professor/add-professor")
     public String addProfessor(
-            @RequestParam String firstName,
-            @RequestParam String lastName,
+            @RequestParam String name,
             @RequestParam String id,
             @RequestParam String dateOfBirth,
             @RequestParam String email,
@@ -75,9 +96,8 @@ public class ProfessorManagementController {
             @RequestParam EducationDegree degree) {
 
         LocalDate dateOfBirthParsed = LocalDate.parse(dateOfBirth);
-        Professor professor = new Professor(id, firstName + " "+ lastName, email, title);
-        professorService.save(id, firstName, lastName, email, title);
-        ProfessorDetails professorDetails = new ProfessorDetails(id, professor,1F,degree,title.toString(),dateOfBirthParsed,null);
+        professorService.save(id, name, email, title);
+        ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.getProfessorById(id),1F,degree,title.toString(),dateOfBirthParsed,null);
         professorDetailsService.save(professorDetails);
 
 
@@ -85,19 +105,23 @@ public class ProfessorManagementController {
     }
 
     @Transactional
-    @GetMapping("/professor/delete/{id}")
+    @GetMapping("/professor/{id}/delete")
     public String deleteProfessor(@PathVariable String id) {
 
         Professor professor = professorService.getProfessorById(id);
-        List<String> educationIds = getAllEducationIdsForProfessor(professor);
-        professorAcademicTitlesService.deleteByProfessor(professor);
 
+        List<String> educationIds = getAllEducationIdsForProfessor(professor);
         professorEducationService.deleteAllByProfessor(professor);
         educationService.deleteProfessorEducations(educationIds);
 
+        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professor);
+        if( professorAcademicTitles != null){
+            professorAcademicTitlesService.deleteById(professorAcademicTitles.getId());
+            academicTitleService.deleteById(professorAcademicTitles.getId());
+        }
 
-        this.professorDetailsService.deleteById(id);
-        this.professorService.deleteById(id);
+        professorDetailsService.deleteById(id);
+        professorService.deleteById(id);
 
         return "redirect:/professor";
     }
@@ -185,6 +209,15 @@ public class ProfessorManagementController {
 
 
         return "redirect:/professor/"+ professorId;
+    }
+
+    @GetMapping("/professor/{professorId}/titles/{titleId}/delete")
+    public String deleteTitle(@PathVariable String professorId, @PathVariable String titleId) {
+        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByTitleId(titleId);;
+        professorAcademicTitlesService.deleteById(professorAcademicTitles.getId());
+        academicTitleService.deleteById(titleId);
+
+        return "redirect:/professor/"+professorId;
     }
 
 

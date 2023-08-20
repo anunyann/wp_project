@@ -9,7 +9,7 @@ public interface ProfessorService {
 
     Professor getProfessorById(String professorId);
     List<Professor> listAll();
-    Professor save(String id, String firstName, String lastName,String email, ProfessorTitle title);
+    Professor save(String id, String name,String email, ProfessorTitle title);
     List<Professor> getProfessors();
 
     void deleteById(String id);
