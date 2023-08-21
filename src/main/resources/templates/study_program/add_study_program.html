@@ -1,0 +1,227 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="bg-light p-3 rounded-bottom">
+        <h5
+          th:text="${studyProgramDetails} ? #{CHANGE_PROGRAM} + ': ' + ${studyProgramDetails.getStudyProgram().getName()} : #{ADD_STUDY_PROGRAM}"
+        ></h5>
+      </div>
+      <form th:action="@{/admin/study-programs/add}" method="POST">
+        <div class="d-flex flex-wrap justify-content-between">
+          <div class="form-group col-3 m-2 my-3">
+            <label for="code" th:text="#{CODE} +  ':'"></label>
+            <input
+              type="text"
+              id="code"
+              class="form-control"
+              name="code"
+              required="required"
+              th:value="(${studyProgramDetails} != null ? ${studyProgramDetails.getStudyProgram().getCode()} : '')"
+            />
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label for="name" th:text="#{STUDY_PROGRAM_NAME_2} +  ':'"></label>
+            <textarea
+              id="name"
+              class="form-control"
+              name="name"
+              required="required"
+              th:text="(${studyProgramDetails} != null ? ${studyProgramDetails.getStudyProgram().getName()} : '')"
+            ></textarea>
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label
+              for="nameEn"
+              th:text="#{STUDY_PROGRAM_NAME_3} +  ':'"
+            ></label>
+            <textarea
+              id="nameEn"
+              class="form-control"
+              name="nameEn"
+              required="required"
+              th:text="(${studyProgramDetails} != null ? ${studyProgramDetails.getNameEn()} : '')"
+            ></textarea>
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label
+              for="accreditation"
+              th:text="#{ACCREDITATION} +  ':'"
+            ></label>
+            <select
+              class="form-control"
+              id="accreditation"
+              name="accreditationId"
+              required="required"
+            >
+              <option
+                th:each="acc : ${accreditations}"
+                th:value="${acc.getYear()}"
+                th:text="${acc.getYear()}"
+              ></option>
+            </select>
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label for="studyCycle" th:text="#{STUDY_CYCLE} +  ':'"></label>
+            <select
+              class="form-control"
+              id="studyCycle"
+              name="studyCycle"
+              required="required"
+            >
+              <option
+                th:each="sc : ${studyCycles}"
+                th:value="${sc}"
+                th:text="${sc}"
+              ></option>
+            </select>
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label for="order" th:text="#{ORDER} +  ':'"></label>
+            <input
+              type="number"
+              id="order"
+              class="form-control"
+              name="order"
+              step="0.1"
+              th:value="(${studyProgramDetails} != null ? ${studyProgramDetails.getOrder()} : '')"
+            />
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label
+              for="durationYears"
+              th:text="#{DURATION_YEARS} +  ':'"
+            ></label>
+            <input
+              type="number"
+              id="durationYears"
+              class="form-control"
+              name="durationYears"
+              th:value="(${studyProgramDetails} != null ? ${studyProgramDetails.getDurationYears()} : '')"
+            />
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label
+              for="durationSemesters"
+              th:text="#{DURATION_SEMESTERS} +  ':'"
+            ></label>
+            <input
+              type="number"
+              id="durationSemesters"
+              class="form-control"
+              name="durationSemesters"
+              th:value="(${studyProgramDetails} != null ? ${studyProgramDetails.getDurationSemesters()} : '')"
+            />
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label for="generalInfo" th:text="#{GENERAL_INFO} +  ':'"></label>
+            <textarea
+              id="generalInfo"
+              class="form-control"
+              name="generalInformation"
+              th:text="(${studyProgramDetails} != null ? ${studyProgramDetails.getGeneralInformation()} : '')"
+            ></textarea>
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label
+              for="graduationTitle"
+              th:text="#{GRADUATION_TITLE} +  ':'"
+            ></label>
+            <textarea
+              id="graduationTitle"
+              class="form-control"
+              name="graduationTitle"
+              th:text="(${studyProgramDetails} != null ? ${studyProgramDetails.getGraduationTitle()} : '')"
+            ></textarea>
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label
+              for="graduationTitleEn"
+              th:text="#{GRADUATION_TITLE_EN}"
+            ></label>
+            <textarea
+              id="graduationTitleEn"
+              class="form-control"
+              name="graduationTitleEn"
+              th:text="(${studyProgramDetails} != null ? ${studyProgramDetails.getGraduationTitleEn()} : '')"
+            ></textarea>
+          </div>
+
+          <div class="form-group col-3 m-2 my-3">
+            <label
+              for="restrictions"
+              th:text="#{SUBJECT_RESTRICTIONS} +  ':'"
+            ></label>
+            <textarea
+              id="restrictions"
+              class="form-control"
+              name="subjectRestrictions"
+              th:text="(${studyProgramDetails} != null ? ${studyProgramDetails.getSubjectRestrictions()} : '')"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-check col-3 m-2 my-3">
+          <label
+            for="onEnglish"
+            class="form-check-label"
+            th:text="#{ON_ENGLISH}"
+          ></label>
+          <input
+            type="checkbox"
+            id="onEnglish"
+            class="form-check-input"
+            name="onEnglish"
+            th:checked="(${studyProgramDetails} != null ? ${studyProgramDetails.getOnEnglish()} : false)"
+          />
+        </div>
+
+        <div class="form-check col-3 m-2 my-3">
+          <label
+            for="bilingual"
+            class="form-check-label"
+            th:text="#{BILINGUAL}"
+          ></label>
+          <input
+            type="checkbox"
+            id="bilingual"
+            class="form-check-input"
+            name="bilingual"
+            th:checked="(${studyProgramDetails} != null ? ${studyProgramDetails.getBilingual()} : false)"
+          />
+        </div>
+
+        <div class="col-4 m-auto p-2">
+          <button
+            type="submit"
+            class="btn btn-primary col-12"
+            th:text="#{SUBMIT}"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

@@ -28,6 +28,7 @@ public class StudyProgramDetails {
 
     private String nameEn;
 
+    @Column(name = "\"order\"")
     private Float order;
 
     private Short durationYears;
