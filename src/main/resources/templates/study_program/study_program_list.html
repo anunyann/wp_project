@@ -17,54 +17,29 @@
             window.location = "?";
         }
 
-        function toggleFilters() {
-            /*<![CDATA[*/
-
-            var showFilters = /*[[#{SHOW_FILTERS}]]*/ '';
-            var hideFilters = /*[[#{HIDE_FILTERS}]]*/ '';
-
-            /*]]>*/
-
-            var filters = document.getElementById("filters");
-            var filtersBtn = document.getElementById("toggleFiltersBtn");
-
-            if (filters.style.display === "none") {
-                filters.style.display = "block";
-                filtersBtn.textContent = hideFilters;
-            } else {
-                filters.style.display = "none";
-                filtersBtn.textContent = showFilters;
-            }
-        }
     </script>
 </head>
 <body class="bg-light">
 <div class="view-content my-5" layout:fragment="content">
     <h3 th:text="#{STUDY_PROGRAMS}"></h3>
-    <h4 th:text="#{UNDERGRADUATE}"></h4>
-    <div id="filters" style="display: none">
+    <div id="filters">
         <form th:action="@{/admin/study-programs}" method="GET">
             <div class="d-flex flex-wrap justify-content-between">
-                <div class="col-12 m-2 my-3">
-                    <div class="col-4">
-                        <label for="nameSearch" class="mr-2 mb-0" th:text="#{SEARCH_BY_NAME}"></label>
-                        <input
-                                type="text"
-                                id="nameSearch"
-                                class="form-control"
-                                name="nameSearch"
-                                th:placeholder="#{SEARCH}"
-                                th:value="${text}"
-                        />
-                    </div>
+                <div class="col-md-3 col-sm-6 p-1">
+                    <label for="nameSearch" class="mr-2 mb-0" th:text="#{SEARCH_BY_NAME}"></label>
+                    <input type="text"
+                           id="nameSearch"
+                           class="form-control"
+                           name="nameSearch"
+                           th:placeholder="#{SEARCH}"
+                           th:value="${text}"/>
                 </div>
 
-                <div class="col-3 m-2 my-3">
+                <div class="col-md-3 col-sm-6  p-1">
                     <label for="accreditationFilter" class="mr-2 mb-0" th:text="#{FILTER_BY_ACCREDITATION}"></label>
                     <select id="accreditationFilter"
                             class="form-control custom-select"
-                            name="filteredAccreditation"
-                    >
+                            name="filteredAccreditation">
                         <option value="" th:text="#{SELECT}"></option>
                         <option th:each="acc : ${accreditations}"
                                 th:value="${acc.getYear()}"
@@ -74,12 +49,11 @@
                     </select>
                 </div>
 
-                <div class="col-3 m-2 my-3">
+                <div class="col-md-3 col-sm-6  p-1">
                     <label for="studyCycleFilter" class="mr-2 mb-0" th:text="#{FILTER_BY_STUDY_CYCLE}"></label>
                     <select id="studyCycleFilter"
                             class="form-control custom-select"
-                            name="filteredStudyCycle"
-                    >
+                            name="filteredStudyCycle">
                         <option value="" th:text="#{SELECT}"></option>
                         <option th:each="sc : ${studyCycles}"
                                 th:value="${sc}"
@@ -89,12 +63,11 @@
                     </select>
                 </div>
 
-                <div class="col-3 m-2 my-3">
+                <div class="col-md-3 col-sm-6  p-1">
                     <label for="durationYearsFilter" class="mr-2 mb-0" th:text="#{FILTER_BY_DURATION_YEARS}"></label>
                     <select id="durationYearsFilter"
                             class="form-control custom-select"
-                            name="filteredDurationInYears"
-                    >
+                            name="filteredDurationInYears">
                         <option value="" th:text="#{SELECT}"></option>
                         <option value="1" th:selected="${durationInYears == '1'}">1</option>
                         <option value="2" th:selected="${durationInYears == '2'}">2</option>
@@ -103,38 +76,38 @@
                     </select>
                 </div>
 
-                <div class="col-3 m-2 my-3">
+                <div class="col-md-3 col-sm-6  p-1">
                     <label for="onEnglishFilter" class="mr-2 mb-0" th:text="#{FILTER_BY_ONENGLISH}"></label>
-                    <input
-                            type="checkbox"
-                            id="onEnglishFilter"
-                            class="form-check-input"
-                            name="filteredOnEnglish"
-                            th:checked="${onEnglish}"
-                    />
+                    <input type="checkbox"
+                           id="onEnglishFilter"
+                           class="form-check-input"
+                           name="filteredOnEnglish"
+                           th:checked="${onEnglish}"/>
                 </div>
-            </div>
-            <div class="col mb-3">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 text-center">
-                        <button
-                                type="submit"
-                                class="btn btn-outline-dark col-3"
-                                th:text="#{APPLY_FILTERS}"
-                        ></button>
-                        <button
-                                id="resetFiltersBtn"
-                                type="reset"
-                                class="btn btn-outline-dark col-3"
-                                th:text="#{RESET_FILTERS}"
-                                th:onclick="cleanQueryFilters()"
-                        ></button>
-                    </div>
+                <div class="col-md-6 col-sm-6  p-1 text-end">
+                    <button
+                            type="submit"
+                            class="btn btn-primary col-3"
+                            th:text="#{APPLY_FILTERS}"></button>
+                    <button
+                            id="resetFiltersBtn"
+                            type="reset"
+                            class="btn btn-outline-dark col-3"
+                            th:text="#{RESET_FILTERS}"
+                            th:onclick="cleanQueryFilters()"
+                    ></button>
                 </div>
             </div>
         </form>
     </div>
-    <button id="toggleFiltersBtn" class="btn btn-light" th:onclick="toggleFilters()" th:text="#{SHOW_FILTERS}"></button>
+
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <a href="/admin/study-programs/add-form" class="btn btn-block btn-success"
+               th:text="#{ADD_STUDY_PROGRAM}"></a>
+
+        </div>
+    </div>
 
     <div class="item-list mt-4">
         <table class="table table-striped table-bordered">
@@ -177,18 +150,6 @@
         <div th:include="fragments/paging :: pageSection(${studyProgramDetailsPage})"></div>
     </div>
 
-    <div class="col mb-3">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 text-center">
-                <a href="/admin/study-programs/add-form" class="btn btn-block btn-primary"
-                   th:text="#{ADD_STUDY_PROGRAM}"></a>
-            </div>
-        </div>
-    </div>
 </div>
-<script th:inline="javascript">
-    var showFilters = /*[[#{SHOW_FILTERS}]]*/ '';
-    var hideFilters = /*[[#{HIDE_FILTERS}]]*/ '';
-</script>
 </body>
 </html>
