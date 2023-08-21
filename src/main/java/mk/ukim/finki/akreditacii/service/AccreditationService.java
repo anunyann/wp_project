@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AccreditationService {
     List<Accreditation> findAll();
 
-    Page<Accreditation> findAllWithPagination(Pageable pageable);
+    Page<Accreditation> findAllWithPagination(int pageNum, int pageSize);
 
     Optional<Accreditation> findById(String year);
 
