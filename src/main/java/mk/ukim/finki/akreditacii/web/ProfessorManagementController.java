@@ -49,12 +49,9 @@ public class ProfessorManagementController {
         ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.getProfessorById(professorId));
         if(professorAcademicTitles== null ) {
             model.addAttribute("academicTitle", null);
-
         }else  {
             model.addAttribute("academicTitle", professorAcademicTitles.getAcademicTitle());
-
         }
-
 
         return "professor/professor_details";
 

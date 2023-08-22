@@ -33,11 +33,6 @@ public class ProfessorEducationServiceImpl implements ProfessorEducationService 
     }
 
     @Override
-    public void deleteByEducationId(String id) {
-        professorEducationRepository.deleteByEducationId(id);
-    }
-
-    @Override
     public void deleteById(String id) {
         professorEducationRepository.deleteById(id);
     }

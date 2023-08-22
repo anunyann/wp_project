@@ -8,10 +8,13 @@ import java.util.List;
 
 public interface ProfessorEducationService {
     List<ProfessorEducation> listEducationByProfessor(Professor professor);
+
     ProfessorEducation save( Professor professor, Education education, Float order);
+
     List<ProfessorEducation> listAll();
-    void deleteByEducationId(String id);
+
     void deleteById(String id);
+
     void deleteAllByProfessor(Professor professor);
 
     ProfessorEducation findByEducationId(String id);

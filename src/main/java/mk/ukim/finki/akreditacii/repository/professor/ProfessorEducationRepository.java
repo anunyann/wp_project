@@ -9,7 +9,7 @@ import java.util.List;
 public interface ProfessorEducationRepository extends JpaRepository<ProfessorEducation, String> {
 
     List<ProfessorEducation> findAllByProfessor(Professor professor);
-    void deleteByEducationId (String id);
+
     ProfessorEducation findByEducationId(String id);
 
     void deleteAllByProfessor(Professor professor);

@@ -21,8 +21,7 @@ public class ProfessorDetails {
     @Column(name = "id")
     private String id;
 
-    @ManyToOne//(cascade = CascadeType.REMOVE)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private Professor professor;
 
@@ -36,8 +35,7 @@ public class ProfessorDetails {
 
     private LocalDate birthDay;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     private ProfessorAcademicTitles currentTitle;
 
 

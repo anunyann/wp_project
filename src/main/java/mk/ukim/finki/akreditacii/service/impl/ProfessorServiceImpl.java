@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static mk.ukim.finki.akreditacii.model.professor.ProfessorTitle.PROFESSOR;
-
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
 
@@ -34,11 +32,6 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public List<Professor> listAll() {
         return professorRepository.findAll();
-    }
-
-    @Override
-    public List<Professor> getProfessors() {
-        return professorRepository.findAllByTitleLike(PROFESSOR);
     }
 
     @Override
