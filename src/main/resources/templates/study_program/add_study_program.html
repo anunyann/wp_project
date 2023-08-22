@@ -11,9 +11,9 @@
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
             crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="bg-light">
 <div class="container" layout:fragment="content">
-    <div class="bg-light p-3 rounded-bottom">
+    <div class="p-3">
         <h5 th:text="${studyProgramDetails} ? #{CHANGE_PROGRAM} + ': '
         + ${studyProgramDetails.getStudyProgram().getName()} : #{ADD_STUDY_PROGRAM}"
         ></h5>
@@ -67,6 +67,7 @@
                             th:each="acc : ${accreditations}"
                             th:value="${acc.getYear()}"
                             th:text="${acc.getYear()}"
+                            th:selected="${studyProgramDetails != null ? studyProgramDetails.getAccreditation().getYear() == acc.getYear() : false}"
                     ></option>
                 </select>
             </div>
@@ -81,7 +82,9 @@
                     <option
                             th:each="sc : ${studyCycles}"
                             th:value="${sc}"
-                            th:text="${sc}"></option>
+                            th:text="${sc}"
+                            th:selected="${studyProgramDetails != null ? studyProgramDetails.getStudyCycle() == sc : false}"
+                    ></option>
                 </select>
             </div>
 
