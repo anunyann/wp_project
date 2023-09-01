@@ -3,15 +3,12 @@ package mk.ukim.finki.akreditacii.web;
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RequestMapping("admin/accreditations")
 @Controller
