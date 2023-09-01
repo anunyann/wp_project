@@ -5,6 +5,7 @@ import lombok.*;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.accreditation.AccreditationDescriptiveField;
+import mk.ukim.finki.akreditacii.model.accreditation.AccreditationDocumentTypes;
 import org.hibernate.Hibernate;
 
 import java.util.List;
