@@ -3,10 +3,7 @@ package mk.ukim.finki.akreditacii.service.impl;
 import mk.ukim.finki.akreditacii.model.professor.AcademicTitle;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorAcademicTitles;
-import mk.ukim.finki.akreditacii.repository.professor.AcademicTitleRepository;
-import mk.ukim.finki.akreditacii.repository.professor.EducationRepository;
 import mk.ukim.finki.akreditacii.repository.professor.ProfessorAcademicTitlesRepository;
-import mk.ukim.finki.akreditacii.repository.professor.ProfessorRepository;
 import mk.ukim.finki.akreditacii.service.ProfessorAcademicTitlesService;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +15,8 @@ public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitl
     private final ProfessorAcademicTitlesRepository professorAcademicTitlesRepository;
 
 
-    public ProfessorAcademicTitlesServiceImpl(ProfessorAcademicTitlesRepository professorAcademicTitlesRepository){
-        this.professorAcademicTitlesRepository= professorAcademicTitlesRepository;
+    public ProfessorAcademicTitlesServiceImpl(ProfessorAcademicTitlesRepository professorAcademicTitlesRepository) {
+        this.professorAcademicTitlesRepository = professorAcademicTitlesRepository;
     }
 
     @Override

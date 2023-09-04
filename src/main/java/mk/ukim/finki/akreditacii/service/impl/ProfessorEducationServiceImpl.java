@@ -8,12 +8,13 @@ import mk.ukim.finki.akreditacii.service.ProfessorEducationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class ProfessorEducationServiceImpl implements ProfessorEducationService {
 
     private final ProfessorEducationRepository professorEducationRepository;
 
-    public ProfessorEducationServiceImpl( ProfessorEducationRepository professorEducationRepository){
+    public ProfessorEducationServiceImpl(ProfessorEducationRepository professorEducationRepository) {
         this.professorEducationRepository = professorEducationRepository;
     }
 
@@ -44,8 +45,8 @@ public class ProfessorEducationServiceImpl implements ProfessorEducationService 
 
 
     @Override
-    public ProfessorEducation save( Professor professor, Education education, Float order){
-        ProfessorEducation professorEducation = new ProfessorEducation(education.getId(),professor, education, order );
+    public ProfessorEducation save(Professor professor, Education education, Float order) {
+        ProfessorEducation professorEducation = new ProfessorEducation(education.getId(), professor, education, order);
 
         return professorEducationRepository.save(professorEducation);
     }

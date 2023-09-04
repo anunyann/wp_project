@@ -12,7 +12,7 @@ public class ProfessorDetailsServiceImpl implements ProfessorDetailsService {
 
     private final ProfessorDetailsRepository professorDetailsRepository;
 
-    public ProfessorDetailsServiceImpl(ProfessorDetailsRepository professorDetailsRepository){
+    public ProfessorDetailsServiceImpl(ProfessorDetailsRepository professorDetailsRepository) {
         this.professorDetailsRepository = professorDetailsRepository;
     }
 

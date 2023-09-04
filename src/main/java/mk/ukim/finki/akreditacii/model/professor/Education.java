@@ -4,7 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -31,7 +34,7 @@ public class Education {
 
 
     public Education(String professorId, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area) {
-        this.id = professorId+degree.toString()+finishingYear+ (int)(Math.random() * 1000);
+        this.id = professorId + degree.toString() + finishingYear + (int) (Math.random() * 1000);
         this.degree = degree;
         this.finishingYear = finishingYear;
         this.institution = institution;

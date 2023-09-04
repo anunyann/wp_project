@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ProfessorAcademicTitlesRepository extends JpaRepository<ProfessorAcademicTitles, String> {
 
     ProfessorAcademicTitles findByProfessor(Professor professor);
+
     ProfessorAcademicTitles findByAcademicTitleId(String id);
 }

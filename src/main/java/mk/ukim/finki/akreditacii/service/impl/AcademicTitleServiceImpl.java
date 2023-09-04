@@ -13,7 +13,8 @@ import java.util.List;
 public class AcademicTitleServiceImpl implements AcademicTitleService {
 
     private final AcademicTitleRepository academicTitleRepository;
-    public AcademicTitleServiceImpl (AcademicTitleRepository academicTitleRepository){
+
+    public AcademicTitleServiceImpl(AcademicTitleRepository academicTitleRepository) {
         this.academicTitleRepository = academicTitleRepository;
     }
 
@@ -24,7 +25,7 @@ public class AcademicTitleServiceImpl implements AcademicTitleService {
 
     @Override
     public AcademicTitle save(String id, String institution, ProfessorTitle title, String area, Short electionYear, Short decisionDocumentNumber) {
-       AcademicTitle academicTitle = new AcademicTitle(id, institution, title, area, electionYear,decisionDocumentNumber);
+        AcademicTitle academicTitle = new AcademicTitle(id, institution, title, area, electionYear, decisionDocumentNumber);
         return academicTitleRepository.save(academicTitle);
     }
 

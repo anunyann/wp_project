@@ -9,7 +9,7 @@ import java.util.List;
 public interface ProfessorEducationService {
     List<ProfessorEducation> listEducationByProfessor(Professor professor);
 
-    ProfessorEducation save( Professor professor, Education education, Float order);
+    ProfessorEducation save(Professor professor, Education education, Float order);
 
     List<ProfessorEducation> listAll();
 

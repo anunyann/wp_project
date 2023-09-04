@@ -1,4 +1,6 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <meta charset="utf-8"/>
 <head>
     <meta charset="UTF-8"/>
@@ -10,32 +12,56 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="row justify-content-center" >
-        <div class="col" th:text="Име"></div>
-        <div class="col" th:text="Е-маил"></div>
-        <div class="col" th:text="Звање"></div>
-        <div class="col">
-            <a th:href="@{'/professor/add-professor'}"
-               class="btn btn-sm btn-primary">Додади професор</a>
-        </div>
+
+<h3 th:text="#{PROFESSORS}"></h3>
+
+<div class="view-content my-5" layout:fragment="content">
+    <div class="item-list">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th class="text-primary" th:text="#{PROFESSOR_NAME}"></th>
+                <th class="text-primary" th:text="#{PROFESSOR_EMAIL}"></th>
+                <th class="text-primary" th:text="#{PROFESSOR_TITLE}"></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="professor: ${professorPage.getContent()}">
+                <td th:text="${professor.getName()}"/></td>
+                <td th:text="${professor.getEmail()}"></td>
+                <td th:text="${professor.getTitle()}"></td>
+                <td class="text-right d-flex flex-wrap justify-content-end">
+                    <div class="col-3">
+                        <a th:href="@{'/professor/{id}' (id=${professor.getId()})}"
+                           class="btn btn-sm btn-info m-1">
+                            <i class="fa fa-trash" th:text="#{DETAILS}"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a  th:href="@{'/professor/{id}/edit' (id=${professor.getId()})}"
+                           class="btn btn-sm btn-info m-1">
+                            <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a th:href="@{'/professor/{id}/delete' (id=${professor.getId()})}"
+                           class="btn btn-sm btn-danger m-1">
+                            <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:include="fragments/paging :: pageSection(${professorPage})"></div>
     </div>
-    <div class="row justify-content-center" th:each="professor: ${professors}">
-        <a class="col-9 text-decoration-none text-reset" th:href="@{'/professor/{id}' (id=${professor.getId()})}" >
-            <div class="row justify-content-around">
-                <div class="col-4"  th:text="${professor.getName()}"></div>
-                <div class="col-4" th:text="${professor.getEmail()}"></div>
-                <div class="col-4" th:text="${professor.getTitle()}"></div>
+    <div class="col mb-3">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 text-center">
+                <a href="/professor/add-professor" class="btn btn-block btn-primary"
+                   th:text="#{ADD_PROFESSOR}"></a>
             </div>
-
-        </a>
-        <div class="col-3 d-flex">
-            <a th:href="@{'/professor/{id}/delete' (id=${professor.getId()})}"
-               class="btn btn-sm btn-danger m-1">Избриши
-
-            </a>
-            <a th:href="@{'/professor/{id}/edit' (id=${professor.getId()})}"
-               class="btn btn-sm btn-info">Измени</a>
         </div>
     </div>
 </div>

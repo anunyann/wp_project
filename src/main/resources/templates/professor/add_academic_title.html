@@ -1,27 +1,23 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
           crossorigin="anonymous"></script>
-  <title>Add Academic Title</title>
 </head>
 <body>
-
-
+<div class="container">
   <form method="POST">
-    <div class="container">
-      <div class="row justify-content-start">
-        <label class="col-2" for="institution" >Институција</label>
-        <input class="col-3" type="text" id="institution" name="institution" required="required" th:value="${academicTitle?.institution}"/>
-      </div>
 
-      <div class="row justify-content-start">
-        <label class="col-2" for="title">Наслов</label>
-        <select class="col-3" name="title" id="title">
+        <label th:text="#{INSTITUTION}" for="institution"></label>
+        <input class="form-control" type="text" id="institution" name="institution" required="required"
+               th:value="${academicTitle?.institution}"/>
+
+
+        <label  for="title" th:text="#{TITLE}"></label>
+        <select class="form-control" name="title" id="title">
           <option
                   th:each="title : ${professorTitles}"
                   th:value="${title}"
@@ -29,26 +25,25 @@
                   th:selected="${academicTitle!=null ? academicTitle.getTitle().equals(title):false}">
           </option>
         </select>
-      </div>
 
-      <div class="row justify-content-start">
-        <label class="col-2" for="area">Област</label>
-        <input class="col-3" type="text" id="area" name="area" required="required" th:value="${academicTitle?.area}"/>
-      </div>
 
-      <div class="row justify-content-start">
-        <label class="col-2" for="electionYear">Година на избор</label>
-        <input class="col-3" type="number" id="electionYear" name="electionYear" required="required" th:value="${academicTitle?.electionYear}"/>
-      </div>
+        <label for="area" th:text="#{AREA}"></label>
+        <input class="form-control" type="text" id="area" name="area" required="required"
+               th:value="${academicTitle?.area}"/>
 
-      <div class="row justify-content-start">
-        <label class="col-2" for="decisionDocumentNumber">Број на документ</label>
-        <input class="col-3"  type="number" id="decisionDocumentNumber" name="decisionDocumentNumber" required="required" th:value="${academicTitle?.decisionDocumentNumber}"/>
-      </div>
+
+        <label  for="electionYear" th:text="#{ELECTION_YEAR}"></label>
+        <input class="form-control" type="number" id="electionYear" name="electionYear" required="required"
+               th:value="${academicTitle?.electionYear}"/>
+
+        <label  for="decisionDocumentNumber" th:text="#{DECISION_DOCUMENT_NUMBER}"></label>
+        <input class="form-control" type="number" id="decisionDocumentNumber" name="decisionDocumentNumber" required="required"
+               th:value="${academicTitle?.decisionDocumentNumber}"/>
+
 
       <button type="submit" class="btn btn-primary" th:text="#{SUBMIT}"></button>
-    </div>
-  </form>
 
+  </form>
+</div>
 </body>
 </html>

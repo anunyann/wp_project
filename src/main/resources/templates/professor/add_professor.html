@@ -10,48 +10,47 @@
     <title>Add Professor</title>
 </head>
 <body>
-
+<div class="container">
 
     <form method="POST" th:action="@{/professor/add-professor}">
 
-        <div class="container">
-            <div class="row justify-content-start">
-                <label class="col-2" for="name">Име</label>
-                <input class="col-3" name="name" id="name" required="required"
-                th:value="${professor?.name}">
-            </div>
-            <div class="row justify-content-start">
-                <label class="col-2" for="id">Ид</label>
-                <input class="col-3" name="id" id="id" required="required"
-                       th:value="${professor?.id}">
-            </div>
 
-            <div class="row justify-content-start">
-                <label class="col-2" for="dateOfBirth">Датум на раѓање</label>
-                <input class="col-3" type="date" id="dateOfBirth" name="dateOfBirth" required="required"
+                <label for="name" th:text="#{PROFESSOR_NAME}"></label>
+                <input class="form-control" name="name" id="name" required="required"
+                th:value="${professor?.name}">
+
+
+                <label  for="id" th:text="#{ID}"></label>
+                <input class="form-control" name="id" id="id" required="required"
+                       th:value="${professor?.id}">
+
+
+
+                <label for="dateOfBirth" th:text="#{DATE_OF_BIRTH}"></label>
+                <input class="form-control" type="date" id="dateOfBirth" name="dateOfBirth" required="required"
                        th:value="${professorDetails?.birthDay}"
                 />
-            </div>
 
-            <div class="row justify-content-start">
-                <label class="col-2" for="email">Е-маил</label>
-                <input class="col-3" name="email" id="email" required="required"
+
+
+                <label for="email" th:text="#{PROFESSOR_EMAIL}">Е-маил</label>
+                <input class="form-control" name="email" id="email" required="required"
                        th:value="${professor?.email}">
-            </div>
 
-            <div class="row justify-content-start">
-                <label class="col-2" for="title">Наслов на научниот степен</label>
-                <select name="title" class="col-3" id="title">
+
+
+                <label  for="title" th:text="#{DEGREE_TITLE}"></label>
+                <select name="title" class="form-control" id="title">
                     <option
                             th:each="title : ${professorTitles}"
                             th:value="${title}"
                             th:text="${title}">
                     </option>
                 </select>
-            </div>
-            <div class="row justify-content-start">
-                <label class="col-2" for="degree">Степен на образование</label>
-                <select name="degree" class="col-3" id="degree">
+
+
+                <label  for="degree" th:text="#{EDUCATION_DEGREE}"></label>
+                <select name="degree" class="form-control" id="degree">
                     <option
                             th:each="degree : ${educationDegrees}"
                             th:value="${degree}"
@@ -59,15 +58,10 @@
                             th:selected="${professorDetails!=null ? professorDetails.getDegree().equals(degree):false}">
                     </option>
                 </select>
-            </div>
+
 
             <button type="submit" class="btn btn-primary " th:text="#{SUBMIT}"></button>
-
-
-
-        </div>
-
          </form>
-
+</div>
 </body>
 </html>

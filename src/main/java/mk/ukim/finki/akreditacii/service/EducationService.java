@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface EducationService {
 
-    Education save(String professorId,EducationDegree degree,Short finishingYear,String institution,String  discipline,String  field,String area);
+    Education save(String professorId, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area);
 
-    Education update(String educationId,EducationDegree degree,Short finishingYear,String institution,String  discipline,String  field,String area);
+    Education update(String educationId, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area);
+
     List<Education> listAll();
 
     void deleteById(String id);

@@ -8,35 +8,35 @@ import mk.ukim.finki.akreditacii.service.EducationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class EducationServiceImpl implements EducationService {
 
     private final EducationRepository educationRepository;
 
-    public EducationServiceImpl (EducationRepository educationRepository){
+    public EducationServiceImpl(EducationRepository educationRepository) {
         this.educationRepository = educationRepository;
     }
 
     @Override
     public Education update(String educationId, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area) {
         Education education = educationRepository.findById(educationId).orElse(null);
-            education.setDegree(degree);
-            education.setFinishingYear(finishingYear);
-            education.setInstitution(institution);
-            education.setDiscipline(discipline);
-            education.setField(field);
-            education.setArea(area);
+        education.setDegree(degree);
+        education.setFinishingYear(finishingYear);
+        education.setInstitution(institution);
+        education.setDiscipline(discipline);
+        education.setField(field);
+        education.setArea(area);
 
         return educationRepository.save(education);
     }
 
     @Override
-    public Education save(String professorIdValue,EducationDegree degree,Short finishingYear,String institution,String  discipline,String  field,String area) {
-        Education education = new Education(professorIdValue, degree,finishingYear,institution, discipline, field,area);
+    public Education save(String professorIdValue, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area) {
+        Education education = new Education(professorIdValue, degree, finishingYear, institution, discipline, field, area);
         return educationRepository.save(education);
     }
+
     @Override
     public void deleteById(String id) {
         educationRepository.deleteById(id);
@@ -44,7 +44,7 @@ public class EducationServiceImpl implements EducationService {
 
     @Override
     public Education findById(String id) {
-        return educationRepository.findById(id).orElseThrow(()-> new InvalidId(id));
+        return educationRepository.findById(id).orElseThrow(() -> new InvalidId(id));
     }
 
     @Override
