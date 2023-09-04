@@ -29,6 +29,5 @@ public class StudyProgramAccreditationDocument {
     @Lob
     private byte[] document;
 
-    private LocalDateTime creationDate= LocalDateTime.now();
-
+    private LocalDateTime creationDate = LocalDateTime.now();
 }

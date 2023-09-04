@@ -3,17 +3,12 @@ package mk.ukim.finki.akreditacii.web;
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RequestMapping("admin/accreditations")
 @Controller
@@ -25,20 +20,12 @@ public class AccreditationManagement {
     }
 
     @GetMapping
-    public String pageableAccreditations(@RequestParam(name = "page", defaultValue = "1") int page,
-                                         @RequestParam(name = "size", defaultValue = "4") int size,
-                                         Model model) {
+    public String pageableAccreditations(Model model,
+                                         @RequestParam(defaultValue = "1") Integer pageNum,
+                                         @RequestParam(defaultValue = "10") Integer results) {
         Page<Accreditation> accreditationsPage = accreditationService
-                .findAllWithPagination(PageRequest.of(page - 1, size));
+                .findAllWithPagination(pageNum, results);
         model.addAttribute("accreditationsPage", accreditationsPage);
-
-        int totalPages = accreditationsPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
         return "accreditation/accreditation_list";
 
     }
@@ -50,7 +37,7 @@ public class AccreditationManagement {
 
     @GetMapping("/edit-form/{id}")
     public String addAccreditation(Model model, @PathVariable String id) {
-        Accreditation accreditation = accreditationService.findById(id).orElseThrow(() -> new NoSuchElementException());
+        Accreditation accreditation = accreditationService.findById(id).get();
         model.addAttribute("accreditation", accreditation);
         return "accreditation/add_accreditation";
     }

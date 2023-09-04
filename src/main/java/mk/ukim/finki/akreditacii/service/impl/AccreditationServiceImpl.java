@@ -6,6 +6,7 @@ import mk.ukim.finki.akreditacii.model.exceptions.NoActiveAccreditation;
 import mk.ukim.finki.akreditacii.repository.AccreditationRepository;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,9 @@ public class AccreditationServiceImpl implements AccreditationService {
     }
 
     @Override
-    public Page<Accreditation> findAllWithPagination(Pageable pageable) {
-        return accreditationRepository.findAll(pageable);
+    public Page<Accreditation> findAllWithPagination(int pageNum, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize);
+        return accreditationRepository.findAll(pageRequest);
     }
 
     @Override
