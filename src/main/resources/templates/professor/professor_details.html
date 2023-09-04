@@ -104,8 +104,7 @@
     <div class="col" th:text="${education.getEducation().getDiscipline()}">Подрачје</div>
     <div class="col" th:text="${education.getEducation().getField()}">Поле</div>
     <div class="col" th:text="${education.getEducation().getArea()}">Област</div>
-    <div class="col">
-      <div class="col-3 d-flex">
+    <div class="col d-flex">
         <a  th:href="@{'/professor/{professorId}/education/{educationId}/delete'
                 (professorId=${professor.getId()}, educationId=${education.getId()})}"
             class="btn btn-sm btn-danger">Избриши
@@ -114,7 +113,7 @@
                 (professorId=${professor.getId()}, educationId=${education.getId()})}"
            class="btn btn-sm btn-info">Измени</a>
       </div>
-    </div>
+
   </div>
 </div>
 

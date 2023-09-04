@@ -8,6 +8,7 @@ import mk.ukim.finki.akreditacii.service.EducationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class EducationServiceImpl implements EducationService {
@@ -19,12 +20,23 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
-    public Education save(String professorIdValue,EducationDegree degree,Short finishingYear,String institution,String  discipline,String  field,String area) {
-        Education education = new Education(professorIdValue+finishingYear, degree,finishingYear,institution, discipline, field,area);
+    public Education update(String educationId, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area) {
+        Education education = educationRepository.findById(educationId).orElse(null);
+            education.setDegree(degree);
+            education.setFinishingYear(finishingYear);
+            education.setInstitution(institution);
+            education.setDiscipline(discipline);
+            education.setField(field);
+            education.setArea(area);
 
         return educationRepository.save(education);
     }
 
+    @Override
+    public Education save(String professorIdValue,EducationDegree degree,Short finishingYear,String institution,String  discipline,String  field,String area) {
+        Education education = new Education(professorIdValue, degree,finishingYear,institution, discipline, field,area);
+        return educationRepository.save(education);
+    }
     @Override
     public void deleteById(String id) {
         educationRepository.deleteById(id);
@@ -37,6 +49,7 @@ public class EducationServiceImpl implements EducationService {
 
     @Override
     public void deleteProfessorEducations(List<String> educationIds) {
+
         educationRepository.deleteAllByIdIn(educationIds);
     }
 
@@ -44,4 +57,5 @@ public class EducationServiceImpl implements EducationService {
     public List<Education> listAll() {
         return educationRepository.findAll();
     }
+
 }

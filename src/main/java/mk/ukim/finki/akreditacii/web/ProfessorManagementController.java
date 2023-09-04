@@ -144,8 +144,9 @@ public class ProfessorManagementController {
         return "professor/add_education";
     }
     @PostMapping("/professor/{professorId}/education")
-    public String saveEducation(
+    public String saveOrUpdateEducation(
             @PathVariable String professorId,
+            @RequestParam("educationId") String educationId,
             @RequestParam("degree") EducationDegree degree,
             @RequestParam("finishingYear") Short finishingYear,
             @RequestParam("institution") String institution,
@@ -153,15 +154,20 @@ public class ProfessorManagementController {
             @RequestParam("field") String field,
             @RequestParam("area") String area) {
 
-        Education education = educationService.save(professorId, degree,finishingYear,institution, discipline, field,area);
-        Professor professor = professorService.getProfessorById(professorId);
-        professorEducationService.save(professor, education, 1F);
+        if (educationId=="") {
+            Education education = educationService.save(professorId, degree, finishingYear, institution, discipline, field, area);
+            Professor professor = professorService.getProfessorById(professorId);
+            professorEducationService.save(professor, education, 1F);
+        } else {
+            educationService.update(educationId,degree,finishingYear,institution,discipline,field,area);
+        }
 
         return "redirect:/professor/" + professorId;
     }
 
     @GetMapping("/professor/{professorId}/education/{educationId}/delete")
     public String deleteEducation(@PathVariable String professorId, @PathVariable String educationId) {
+
         ProfessorEducation professorEducation = professorEducationService.findByEducationId(educationId);;
         professorEducationService.deleteById(professorEducation.getId());
         educationService.deleteById(educationId);

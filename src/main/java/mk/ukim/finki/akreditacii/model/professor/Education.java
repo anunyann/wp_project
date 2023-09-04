@@ -10,7 +10,6 @@ import lombok.*;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Education {
 
@@ -30,4 +29,14 @@ public class Education {
 
     private String area; // oblast
 
+
+    public Education(String professorId, EducationDegree degree, Short finishingYear, String institution, String discipline, String field, String area) {
+        this.id = professorId+degree.toString()+finishingYear+ (int)(Math.random() * 1000);
+        this.degree = degree;
+        this.finishingYear = finishingYear;
+        this.institution = institution;
+        this.discipline = discipline;
+        this.field = field;
+        this.area = area;
+    }
 }

@@ -45,7 +45,7 @@ public class ProfessorEducationServiceImpl implements ProfessorEducationService 
 
     @Override
     public ProfessorEducation save( Professor professor, Education education, Float order){
-        ProfessorEducation professorEducation = new ProfessorEducation(professor.getId()+education.getFinishingYear(),professor, education, order );
+        ProfessorEducation professorEducation = new ProfessorEducation(education.getId(),professor, education, order );
 
         return professorEducationRepository.save(professorEducation);
     }
