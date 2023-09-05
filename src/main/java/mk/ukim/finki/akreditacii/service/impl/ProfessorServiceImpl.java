@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
 
@@ -36,11 +34,6 @@ public class ProfessorServiceImpl implements ProfessorService {
     public Professor save(String id, String name, String email, ProfessorTitle title) {
         Professor professor = new Professor(id, name, email, title);
         return professorRepository.save(professor);
-    }
-
-    @Override
-    public List<Professor> listAll() {
-        return professorRepository.findAll();
     }
 
     @Override

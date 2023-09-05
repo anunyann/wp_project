@@ -53,9 +53,4 @@ public class EducationServiceImpl implements EducationService {
         educationRepository.deleteAllByIdIn(educationIds);
     }
 
-    @Override
-    public List<Education> listAll() {
-        return educationRepository.findAll();
-    }
-
 }

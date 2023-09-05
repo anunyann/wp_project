@@ -7,8 +7,6 @@ import mk.ukim.finki.akreditacii.repository.professor.AcademicTitleRepository;
 import mk.ukim.finki.akreditacii.service.AcademicTitleService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class AcademicTitleServiceImpl implements AcademicTitleService {
 
@@ -32,11 +30,6 @@ public class AcademicTitleServiceImpl implements AcademicTitleService {
     @Override
     public void deleteById(String id) {
         academicTitleRepository.deleteById(id);
-    }
-
-    @Override
-    public List<AcademicTitle> listAll() {
-        return academicTitleRepository.findAll();
     }
 
 }

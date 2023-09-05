@@ -11,8 +11,6 @@ public interface ProfessorEducationService {
 
     ProfessorEducation save(Professor professor, Education education, Float order);
 
-    List<ProfessorEducation> listAll();
-
     void deleteById(String id);
 
     void deleteAllByProfessor(Professor professor);

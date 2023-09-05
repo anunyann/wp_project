@@ -24,11 +24,6 @@ public class ProfessorEducationServiceImpl implements ProfessorEducationService 
     }
 
     @Override
-    public List<ProfessorEducation> listAll() {
-        return professorEducationRepository.findAll();
-    }
-
-    @Override
     public void deleteAllByProfessor(Professor professor) {
         professorEducationRepository.deleteAllByProfessor(professor);
     }

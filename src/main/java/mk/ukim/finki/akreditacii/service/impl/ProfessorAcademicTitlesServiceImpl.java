@@ -7,8 +7,6 @@ import mk.ukim.finki.akreditacii.repository.professor.ProfessorAcademicTitlesRep
 import mk.ukim.finki.akreditacii.service.ProfessorAcademicTitlesService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitlesService {
 
@@ -17,11 +15,6 @@ public class ProfessorAcademicTitlesServiceImpl implements ProfessorAcademicTitl
 
     public ProfessorAcademicTitlesServiceImpl(ProfessorAcademicTitlesRepository professorAcademicTitlesRepository) {
         this.professorAcademicTitlesRepository = professorAcademicTitlesRepository;
-    }
-
-    @Override
-    public List<ProfessorAcademicTitles> listAll() {
-        return professorAcademicTitlesRepository.findAll();
     }
 
     @Override

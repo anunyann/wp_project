@@ -11,20 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProfessorManagementController {
-
     private final AcademicTitleService academicTitleService;
     private final EducationService educationService;
     private final ProfessorEducationService professorEducationService;
     private final ProfessorAcademicTitlesService professorAcademicTitlesService;
     private final ProfessorService professorService;
     private final ProfessorDetailsService professorDetailsService;
+    private final ProfessorDeleteService professorDeleteService;
 
-    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService) {
+    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService) {
 
         this.professorService = professorService;
         this.professorAcademicTitlesService = professorAcademicTitlesService;
@@ -32,6 +30,7 @@ public class ProfessorManagementController {
         this.educationService = educationService;
         this.professorEducationService = professorEducationService;
         this.professorDetailsService = professorDetailsService;
+        this.professorDeleteService = professorDeleteService;
     }
 
     @GetMapping(value = {"/professor/{professorId}"})
@@ -54,11 +53,8 @@ public class ProfessorManagementController {
     }
 
     @GetMapping(value = {"/professor"})
-    public String pageableProfessor(Model model,
-                                    @RequestParam(defaultValue = "1") Integer pageNum,
-                                    @RequestParam(defaultValue = "10") Integer results) {
-        Page<Professor> professorPage = professorService
-                .findAllWithPagination(pageNum, results);
+    public String pageableProfessor(Model model, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer results) {
+        Page<Professor> professorPage = professorService.findAllWithPagination(pageNum, results);
         model.addAttribute("professorPage", professorPage);
 
         return "professor/professor_list";
@@ -101,20 +97,7 @@ public class ProfessorManagementController {
     @GetMapping("/professor/{id}/delete")
     public String deleteProfessor(@PathVariable String id) {
 
-        Professor professor = professorService.getProfessorById(id);
-
-        List<String> educationIds = getAllEducationIdsForProfessor(professor);
-        professorEducationService.deleteAllByProfessor(professor);
-        educationService.deleteProfessorEducations(educationIds);
-
-        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professor);
-        if (professorAcademicTitles != null) {
-            professorAcademicTitlesService.deleteById(professorAcademicTitles.getId());
-            academicTitleService.deleteById(professorAcademicTitles.getId());
-        }
-
-        professorDetailsService.deleteById(id);
-        professorService.deleteById(id);
+        professorDeleteService.deleteProfessor(id);
 
         return "redirect:/professor";
     }
@@ -165,10 +148,6 @@ public class ProfessorManagementController {
         return "redirect:/professor/" + professorId;
     }
 
-    public List<String> getAllEducationIdsForProfessor(Professor professor) {
-        List<ProfessorEducation> professorEducations = professorEducationService.listEducationByProfessor(professor);
-        return professorEducations.stream().map(ProfessorEducation::getId).collect(Collectors.toList());
-    }
 
     /*ACADEMIC TITTLE*/
 
