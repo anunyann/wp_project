@@ -3,6 +3,8 @@ package mk.ukim.finki.akreditacii.model.professor;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -23,6 +25,7 @@ public class ProfessorDetails {
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private Professor professor;
 
+    @Column(name = "\"order\"")
     private Float order;
 
     @Enumerated(EnumType.STRING)

@@ -1,0 +1,70 @@
+<html lang="en" layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8"/>
+<head>
+    <meta charset="UTF-8"/>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<h3 th:text="#{PROFESSORS}"></h3>
+
+<div class="view-content my-5" layout:fragment="content">
+    <div class="item-list">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th class="text-primary" th:text="#{PROFESSOR_NAME}"></th>
+                <th class="text-primary" th:text="#{PROFESSOR_EMAIL}"></th>
+                <th class="text-primary" th:text="#{PROFESSOR_TITLE}"></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="professor: ${professorPage.getContent()}">
+                <td th:text="${professor.getName()}"/>
+                </td>
+                <td th:text="${professor.getEmail()}"></td>
+                <td th:text="${professor.getTitle()}"></td>
+                <td class="text-right d-flex flex-wrap justify-content-end">
+                    <div class="col-3">
+                        <a class="btn btn-sm btn-info m-1"
+                           th:href="@{'/professor/{id}' (id=${professor.getId()})}">
+                            <i class="fa fa-trash" th:text="#{DETAILS}"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-sm btn-info m-1"
+                           th:href="@{'/professor/{id}/edit' (id=${professor.getId()})}">
+                            <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-sm btn-danger m-1"
+                           th:href="@{'/professor/{id}/delete' (id=${professor.getId()})}">
+                            <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:include="fragments/paging :: pageSection(${professorPage})"></div>
+    </div>
+    <div class="col mb-3">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 text-center">
+                <a class="btn btn-block btn-primary" href="/professor/add-professor"
+                   th:text="#{ADD_PROFESSOR}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

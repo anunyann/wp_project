@@ -1,0 +1,49 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+  <form method="POST">
+
+        <label th:text="#{INSTITUTION}" for="institution"></label>
+        <input class="form-control" type="text" id="institution" name="institution" required="required"
+               th:value="${academicTitle?.institution}"/>
+
+
+        <label  for="title" th:text="#{TITLE}"></label>
+        <select class="form-control" name="title" id="title">
+          <option
+                  th:each="title : ${professorTitles}"
+                  th:value="${title}"
+                  th:text="${title}"
+                  th:selected="${academicTitle!=null ? academicTitle.getTitle().equals(title):false}">
+          </option>
+        </select>
+
+
+        <label for="area" th:text="#{AREA}"></label>
+        <input class="form-control" type="text" id="area" name="area" required="required"
+               th:value="${academicTitle?.area}"/>
+
+
+        <label  for="electionYear" th:text="#{ELECTION_YEAR}"></label>
+        <input class="form-control" type="number" id="electionYear" name="electionYear" required="required"
+               th:value="${academicTitle?.electionYear}"/>
+
+        <label  for="decisionDocumentNumber" th:text="#{DECISION_DOCUMENT_NUMBER}"></label>
+        <input class="form-control" type="number" id="decisionDocumentNumber" name="decisionDocumentNumber" required="required"
+               th:value="${academicTitle?.decisionDocumentNumber}"/>
+
+
+      <button type="submit" class="btn btn-primary" th:text="#{SUBMIT}"></button>
+
+  </form>
+</div>
+</body>
+</html>
