@@ -53,9 +53,29 @@ public class ProfessorManagementController {
     }
 
     @GetMapping(value = {"/professor"})
-    public String pageableProfessor(Model model, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer results) {
-        Page<Professor> professorPage = professorService.findAllWithPagination(pageNum, results);
+    public String pageableProfessor(Model model,
+                                    @RequestParam(defaultValue = "1") Integer pageNum,
+                                    @RequestParam(defaultValue = "10") Integer results,
+                                    @RequestParam(required = false) String searchString,
+                                    @RequestParam(required = false) String titleFilter
+    ) {
+        Page<Professor> professorPage;
+
+
+        if (searchString == null && titleFilter == null) {
+            professorPage = professorService
+                    .findAllWithPagination(pageNum, results);
+        } else {
+            professorPage = professorService
+                    .findAllWithPaginationFiltered(pageNum, results,
+                            searchString, titleFilter);
+
+            model.addAttribute("searchString", searchString);
+            model.addAttribute("titleFilter", titleFilter);
+
+        }
         model.addAttribute("professorPage", professorPage);
+        model.addAttribute("professorTitles", ProfessorTitle.values());
 
         return "professor/professor_list";
     }

@@ -24,6 +24,15 @@ public class ProfessorServiceImpl implements ProfessorService {
         return professorRepository.findAll(pageRequest);
     }
 
+    @Override
+    public Page<Professor> findAllWithPaginationFiltered(Integer pageNum, Integer results, String stringSearch, String filteredTitle) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
+
+        return professorRepository.findAllFiltered(stringSearch,
+                !filteredTitle.equals("") ? ProfessorTitle.valueOf(filteredTitle) : null,
+                pageRequest);
+    }
+
 
     @Override
     public Professor getProfessorById(String professorId) {

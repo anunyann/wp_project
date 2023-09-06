@@ -10,6 +10,8 @@ public interface ProfessorService {
 
     Page<Professor> findAllWithPagination(int pageNum, int pageSize);
 
+    Page<Professor> findAllWithPaginationFiltered(Integer pageNum, Integer results, String stringSearch, String filteredTitle);
+
     Professor save(String id, String name, String email, ProfessorTitle title);
 
     void deleteById(String id);
