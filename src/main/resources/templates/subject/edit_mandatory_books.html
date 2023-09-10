@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
 <head>
     <title>Edit Books</title>
     <meta charset="UTF-8"/>
@@ -8,11 +10,11 @@
               integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body>
+<div class="container" layout:fragment="content">
+
 <h1>Edit Books</h1>
 <div class="table-responsive">
-    <div class="text-center mt-3">
-        <button type="submit" class="btn btn-primary">Update Subject Books</button>
-    </div>
+
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -24,6 +26,7 @@
         </tr>
         </thead>
         <tbody>
+
         <tr th:each="b, rowStat : ${books}">
             <td th:text="${rowStat.count}"></td>
             <td th:text="${b.author}"></td>
@@ -31,7 +34,7 @@
             <td th:text="${b.publisher}"></td>
             <td th:text="${b.year}">2005</td>
             <td>
-                <form th:action="@{/remove-book}" method="post">
+                <form th:action="@{'/remove-book/'+ ${subjectId} + '/' + ${rowStat.count}} " method="post">
                     <button type="submit" class="btn btn-danger">Remove</button>
                 </form>
             </td>
@@ -40,20 +43,20 @@
             <td colspan="5" class="text-center"><strong>Add new book</strong></td>
         </tr>
         <tr>
-            <td></td>
-            <td><input type="text" class="form-control" th:field="${newBook.author}" placeholder="Author"></td>
+            <form th:action="@{'/add-new-book/' + ${subjectId}}" method="post">
+                <td></td>
+                <td><input type="text" class="form-control" th:field="${newBook.author}" placeholder="Author"></td>
             <td><input type="text" class="form-control" th:field="${newBook.title}" placeholder="Title"></td>
             <td><input type="text" class="form-control" th:field="${newBook.publisher}" placeholder="Publisher"></td>
             <td><input type="text" class="form-control" th:field="${newBook.year}" placeholder="Year"></td>
-
+                <td>  <button type="submit" class="btn btn-success">Add Book</button></td>
+            </form>
             <td>
-                <form th:action="@{/add-new-book}" method="post">
-                    <button type="submit" class="btn btn-success">Add Book</button>
-                </form>
-            </td>
+
         </tr>
         </tbody>
     </table>
+</div>
 </div>
 
 </body>

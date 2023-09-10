@@ -1,6 +1,7 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
@@ -10,6 +11,9 @@ import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorReposito
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
 import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
 import mk.ukim.finki.akreditacii.service.SubjectService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,6 +70,23 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Optional<SubjectDetails> findSubjectById(String id) {
         return subjectDetailsRepository.findById(id);
+    }
+
+    @Override
+    public Page<SubjectDetails> findAllWithPagination(Integer pageNum, Integer results) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
+        return subjectDetailsRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public Page<SubjectDetails> findAllWithPaginationFiltered(Integer pageNum, Integer results,
+                                                              String nameSearch,
+                                                              String filteredAccreditation) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
+
+
+        return subjectDetailsRepository.findAllFiltered(nameSearch,filteredAccreditation,pageRequest);
+
     }
 
     @Override
