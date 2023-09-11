@@ -93,6 +93,26 @@ public class DisplayController {
         }
     }
 
+    @PostMapping("/program/{program}/edit-subjects")
+    public String programSubjectManagement(@PathVariable String program, @RequestParam(defaultValue = "mk") String lang, Model model){
+
+        List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
+
+        Map<Short, Map<Boolean, List<StudyProgramSubject>>> bySemesterAndMandatory = subjects.stream()
+                .collect(groupingBy(StudyProgramSubject::getSemester, groupingBy(StudyProgramSubject::getMandatory)));
+
+        Map<StudyProgramSubject,List<StudyProgram>> subjectStudyProgramMap = new HashMap<StudyProgramSubject,List<StudyProgram>>();
+
+
+        StudyProgramDetails studyProgramDetails = this.service.getStudyProgramDetailsById(program);
+        if (!subjects.isEmpty()) {
+            model.addAttribute("studyProgram", studyProgramDetails);
+        }
+        model.addAttribute("bySemesterAndMandatory", bySemesterAndMandatory);
+        return "study_program_edit";
+    }
+
+
     @GetMapping("/subject/{subjectId}")
     public String subjectDetails(@PathVariable String subjectId, Model model) {
         SubjectDetails sd = service.getSubjectDetailsById(subjectId);
