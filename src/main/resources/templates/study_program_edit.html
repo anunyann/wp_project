@@ -80,6 +80,9 @@
             Семестар
           </th>
           <th>
+            Тип
+          </th>
+          <th>
             Предметна група
           </th>
           <th>
@@ -110,8 +113,8 @@
 
           <!-- Број на кредити за предметот -->
           <td>
-            <label th:text="${s.subject.credits}">
-              <input type="number" th:field="${s.subject.credits}" form="edit-form">
+            <label>
+              <input type="number" th:text="${s.subject.getCredits()}" th:field="${s.subject.credits}" form="edit-form">
             </label>
           </td>
 
@@ -137,6 +140,16 @@
             </label>
           </td>
 
+          <!-- Дали предметот е задолжителен или изборен -->
+          <td>
+            <label th:for="${s.mandatory}">
+              <select th:field="${s.mandatory}" form="edit-form">
+                <option th:value="1">Задолжителен</option>
+                <option th:value="0">Изборен</option>
+              </select>
+            </label>
+          </td>
+
           <!-- Предметна група на која припаѓа предметот -->
           <td>
             <label>
@@ -147,7 +160,7 @@
           <!-- Копче за зачувување на измени на предметот -->
           <td>
             <form id="edit-form" th:action="/program/${program}/edit-subjects" method="post">
-            <button type="submit">Save</button>
+            <button type="submit" form="edit-form">Save</button>
             </form>
           </td>
 
@@ -161,18 +174,37 @@
           </td>
         </tr>
         <tr th:if="${sem.getValue().get(false)!=null && !sem.getValue().get(false).isEmpty()}">
-          <!-- Код на предметот -->
-          <th width="10%">
+
+          <th></th>
+
+          <th>
             Код
           </th>
 
-          <!-- Име на предметот -->
           <th>
             Предмет
           </th>
-          <!-- Број на кредити за предметот -->
+
           <th>
             Кредити
+          </th>
+
+          <th>
+            Студиска програма
+          </th>
+
+          <th>
+            Семестар
+          </th>
+
+          <th>
+            Тип
+          </th>
+
+          <th>
+            Предметна група
+          </th>
+          <th>
           </th>
           <!--                    <th>-->
           <!--                        Предуслови-->
@@ -180,14 +212,73 @@
         </tr>
         <tr th:each="s: ${sem.getValue().get(false)}"
             th:if="${sem.getValue().get(false)!=null && !sem.getValue().get(false).isEmpty()}">
+
+          <!-- Копче за бришење на ред (предмет од семестар) -->
+          <td style="white-space: nowrap;max-width:100%;">
+            <label style="display: flex; align-items: center; justify-content: center; white-space: nowrap;">
+              <button th:action="/program/${studyProgram}/delete/${s.subject.getId()}" style="display: flex; align-items: center; justify-content: center;">Х</button>
+            </label>
+          </td>
+
+          <!-- Код на предметот -->
           <td th:text="${s.subject.id}">
           </td>
+
+          <!-- Име на предметот -->
           <td>
             <a th:href="@{/subject/{id}(id=${s.subject.id})}" th:text="${s.subject.subject.name}"></a>
           </td>
-          <td th:text="${s.subject.credits}">
-            6.00
+
+          <!-- Број на кредити за предметот -->
+          <td>
+            <label th:for="${s.subject.credits}">
+              <input type="number" th:text="${s.subject.getCredits()}" th:field="${s.subject.credits}" form="edit-form-elective">
+            </label>
           </td>
+
+          <!-- Промена на студиска програма -->
+          <td>
+            <label th:for="${s.studyProgram}">
+              <select th:field="${s.studyProgram}" form="edit-form-elective">
+                <option th:each="program:${@displayServiceImpl.getSubjectPrograms(${s.getId()})}"
+                        th:value="${program}"
+                        th:text="${program.toString()}"
+                ></option>
+              </select>
+            </label>
+          </td>
+
+          <!-- Семестар во кој се изучува предметот -->
+          <td>
+            <label th:for="${s.semester}">
+              <input th:text="${s.semester.toString()}" th:field="${s.semester}" type="text" form="edit-form-elective">
+            </label>
+          </td>
+
+          <!-- Дали предметот е задолжителен или изборен -->
+          <td>
+            <label th:for="${s.mandatory}">
+              <select th:field="${s.mandatory}" form="edit-form-elective">
+                <option th:value="1">Задолжителен</option>
+                <option th:value="0">Изборен</option>
+              </select>
+            </label>
+          </td>
+
+          <!-- Предметна група на која припаѓа предметот -->
+          <td>
+            <label th:for="${s.subjectGroup}">
+              <input th:text="${s.subjectGroup.toString()}" th:field="${s.subjectGroup}" form="edit-form-elective">
+            </label>
+          </td>
+
+          <!-- Копче за зачувување на измени на предметот -->
+          <td>
+            <form id="edit-form-elective" th:action="/program/${program}/edit-subjects" method="post">
+              <button type="submit" form="edit-form-elective">Save</button>
+            </form>
+          </td>
+
           <!--                    <td th:text="${s.subject.dependencies?.getDependencies()}">-->
 
           <!--                    </td>-->

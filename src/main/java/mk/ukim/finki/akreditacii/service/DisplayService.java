@@ -21,4 +21,7 @@ public interface DisplayService {
     List<StudyProgramDetails> findAccreditationProgramsByCycle(String accreditation, StudyCycle cycle);
 
     StudyProgramDetails getStudyProgramDetailsById(String program);
+
+    StudyProgramSubject save(String program, String code, Float credits, Short semester, Boolean mandatory, StudyProgram studyProgram, String subjectGroup);
+
 }

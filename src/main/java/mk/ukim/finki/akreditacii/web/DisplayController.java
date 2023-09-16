@@ -123,8 +123,11 @@ public class DisplayController {
                                      @PathVariable String code,
                                      @RequestParam Float credits,
                                      @RequestParam Short semester,
+                                     @RequestParam Boolean mandatory,
                                      @RequestParam StudyProgram studyProgram,
                                      @RequestParam String subjectGroup){
+
+        this.service.save(program,code,credits,semester,mandatory,studyProgram,subjectGroup);
 
         return "redirect:study_program_edit";
     }
@@ -144,8 +147,7 @@ public class DisplayController {
     @PostMapping("/program/{program}/delete/{code}")
     public String programSubjectDelete (@PathVariable String program, @PathVariable String code){
         List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
-
-        subjects.remove(subjects.stream().filter(i->i.getId().equals(code)).findFirst().get());
+        service.getProgramSubjects(program).remove(subjects.stream().filter(i->i.getId().equals(code)).findFirst().get());
         return "redirect:/study_program_edit";
     }
 
