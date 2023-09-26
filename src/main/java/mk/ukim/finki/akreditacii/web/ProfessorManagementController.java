@@ -5,14 +5,12 @@ import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
 @Controller
+@RequestMapping("admin/professor")
 public class ProfessorManagementController {
     private final AcademicTitleService academicTitleService;
     private final EducationService educationService;
@@ -33,7 +31,7 @@ public class ProfessorManagementController {
         this.professorDeleteService = professorDeleteService;
     }
 
-    @GetMapping(value = {"/professor/{professorId}"})
+    @GetMapping(value = {"/{professorId}"})
     public String professorDetails(@PathVariable String professorId, Model model) {
         Professor professor = professorService.getProfessorById(professorId);
         ProfessorDetails professorDetails = professorDetailsService.findById(professorId);
@@ -52,7 +50,7 @@ public class ProfessorManagementController {
 
     }
 
-    @GetMapping(value = {"/professor"})
+    @GetMapping
     public String pageableProfessor(Model model,
                                     @RequestParam(defaultValue = "1") Integer pageNum,
                                     @RequestParam(defaultValue = "10") Integer results,
@@ -81,7 +79,7 @@ public class ProfessorManagementController {
     }
 
 
-    @GetMapping(value = {"/professor/add-professor"})
+    @GetMapping(value = {"/add-professor"})
     public String addProfessor(Model model) {
         model.addAttribute("professorTitles", ProfessorTitle.values());
         model.addAttribute("educationDegrees", EducationDegree.values());
@@ -89,7 +87,7 @@ public class ProfessorManagementController {
         return "professor/add_professor";
     }
 
-    @GetMapping(value = {"/professor/{id}/edit"})
+    @GetMapping(value = {"/{id}/edit"})
     public String editProfessor(@PathVariable String id, Model model) {
 
         Professor professor = professorService.getProfessorById(id);
@@ -102,7 +100,7 @@ public class ProfessorManagementController {
         return "professor/add_professor";
     }
 
-    @PostMapping("/professor/add-professor")
+    @PostMapping("/add-professor")
     public String addProfessor(@RequestParam String name, @RequestParam String id, @RequestParam String dateOfBirth, @RequestParam String email, @RequestParam ProfessorTitle title, @RequestParam EducationDegree degree) {
 
         LocalDate dateOfBirthParsed = LocalDate.parse(dateOfBirth);
@@ -111,20 +109,20 @@ public class ProfessorManagementController {
         professorDetailsService.save(professorDetails);
 
 
-        return "redirect:/professor";
+        return "redirect:/admin/professor";
     }
 
-    @GetMapping("/professor/{id}/delete")
+    @GetMapping("/{id}/delete")
     public String deleteProfessor(@PathVariable String id) {
 
         professorDeleteService.deleteProfessor(id);
 
-        return "redirect:/professor";
+        return "redirect:/admin/professor";
     }
 
     /* EDUCATIONS*/
 
-    @GetMapping("/professor/{professorId}/education/add")
+    @GetMapping("/{professorId}/education/add")
     public String addEducation(@PathVariable String professorId, Model model) {
         model.addAttribute("professorId", professorId);
         model.addAttribute("educationDegrees", EducationDegree.values());
@@ -132,7 +130,7 @@ public class ProfessorManagementController {
         return "professor/add_education";
     }
 
-    @GetMapping("/professor/{professorId}/education/{educationId}/edit")
+    @GetMapping("/{professorId}/education/{educationId}/edit")
     public String editEducation(@PathVariable String professorId, @PathVariable String educationId, Model model) {
 
         Education education = educationService.findById(educationId);
@@ -144,7 +142,7 @@ public class ProfessorManagementController {
         return "professor/add_education";
     }
 
-    @PostMapping("/professor/{professorId}/education")
+    @PostMapping("/{professorId}/education")
     public String saveOrUpdateEducation(@PathVariable String professorId, @RequestParam("educationId") String educationId, @RequestParam("degree") EducationDegree degree, @RequestParam("finishingYear") Short finishingYear, @RequestParam("institution") String institution, @RequestParam("discipline") String discipline, @RequestParam("field") String field, @RequestParam("area") String area) {
 
         if (educationId == "") {
@@ -155,23 +153,23 @@ public class ProfessorManagementController {
             educationService.update(educationId, degree, finishingYear, institution, discipline, field, area);
         }
 
-        return "redirect:/professor/" + professorId;
+        return "redirect:/admin/professor/" + professorId;
     }
 
-    @GetMapping("/professor/{professorId}/education/{educationId}/delete")
+    @GetMapping("/{professorId}/education/{educationId}/delete")
     public String deleteEducation(@PathVariable String professorId, @PathVariable String educationId) {
 
         ProfessorEducation professorEducation = professorEducationService.findByEducationId(educationId);
         professorEducationService.deleteById(professorEducation.getId());
         educationService.deleteById(educationId);
 
-        return "redirect:/professor/" + professorId;
+        return "redirect:/admin/professor/" + professorId;
     }
 
 
     /*ACADEMIC TITTLE*/
 
-    @GetMapping(value = {"/professor/{professorId}/titles"})
+    @GetMapping(value = {"/{professorId}/titles"})
     public String listAcademicTitle(@PathVariable String professorId, Model model) {
         model.addAttribute("professorTitles", ProfessorTitle.values());
         ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.getProfessorById(professorId));
@@ -183,7 +181,7 @@ public class ProfessorManagementController {
 
     }
 
-    @PostMapping("/professor/{professorId}/titles")
+    @PostMapping("/{professorId}/titles")
     public String saveAcademicTitle(@PathVariable String professorId, @RequestParam("institution") String institution, @RequestParam("title") ProfessorTitle title, @RequestParam("area") String area, @RequestParam("electionYear") Short electionYear, @RequestParam("decisionDocumentNumber") Short decisionDocumentNumber, Model model) {
 
         AcademicTitle academicTitle = academicTitleService.save(professorId + decisionDocumentNumber, institution, title, area, electionYear, decisionDocumentNumber);
@@ -191,16 +189,16 @@ public class ProfessorManagementController {
         professorAcademicTitlesService.save(professorId, professor, academicTitle);
 
 
-        return "redirect:/professor/" + professorId;
+        return "redirect:/admin/professor/" + professorId;
     }
 
-    @GetMapping("/professor/{professorId}/titles/{titleId}/delete")
+    @GetMapping("/{professorId}/titles/{titleId}/delete")
     public String deleteTitle(@PathVariable String professorId, @PathVariable String titleId) {
         ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByTitleId(titleId);
         professorAcademicTitlesService.deleteById(professorAcademicTitles.getId());
         academicTitleService.deleteById(titleId);
 
-        return "redirect:/professor/" + professorId;
+        return "redirect:/admin/professor/" + professorId;
     }
 
 

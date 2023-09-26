@@ -24,7 +24,7 @@
     <h3 th:text="#{PROFESSORS}"></h3>
 
     <div id="filters">
-        <form method="GET" th:action="@{/professor}">
+        <form method="GET" th:action="@{/admin/professor}">
             <div class="d-flex flex-wrap justify-content-between">
                 <div class="col-md-3 col-sm-6 p-1">
                     <label class="mr-2 mb-0" for="searchString" th:text="#{SEARCH_BY_STRING}"></label>
@@ -86,19 +86,19 @@
                 <td class="text-right d-flex flex-wrap justify-content-end">
                     <div class="col-3">
                         <a class="btn btn-sm btn-info m-1"
-                           th:href="@{'/professor/{id}' (id=${professor.getId()})}">
+                           th:href="@{'/admin/professor/{id}' (id=${professor.getId()})}">
                             <i class="fa fa-trash" th:text="#{DETAILS}"></i>
                         </a>
                     </div>
                     <div class="col-3">
                         <a class="btn btn-sm btn-info m-1"
-                           th:href="@{'/professor/{id}/edit' (id=${professor.getId()})}">
+                           th:href="@{'/admin/professor/{id}/edit' (id=${professor.getId()})}">
                             <i class="fa fa-trash" th:text="#{EDIT}"></i>
                         </a>
                     </div>
                     <div class="col-3">
                         <a class="btn btn-sm btn-danger m-1"
-                           th:href="@{'/professor/{id}/delete' (id=${professor.getId()})}">
+                           th:href="@{'/admin/professor/{id}/delete' (id=${professor.getId()})}">
                             <i class="fa fa-trash" th:text="#{DELETE}"></i>
                         </a>
                     </div>
@@ -111,7 +111,7 @@
     <div class="col mb-3">
         <div class="row">
             <div class="col-sm-12 col-md-12 text-center">
-                <a class="btn btn-block btn-primary" href="/professor/add-professor"
+                <a class="btn btn-block btn-primary" href="/admin/professor/add-professor"
                    th:text="#{ADD_PROFESSOR}"></a>
             </div>
         </div>

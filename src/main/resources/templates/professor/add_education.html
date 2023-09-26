@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="container" layout:fragment="content">
-    <form method="POST" th:action="@{/professor/{professorId}/education(professorId=${professorId})}">
+    <form method="POST" th:action="@{/admin/professor/{professorId}/education(professorId=${professorId})}">
         <input name="educationId" th:value="${education?.getId()}" type="hidden"/>
 
         <label for="educationDegree" th:text="#{EDUCATION_DEGREE}"></label>

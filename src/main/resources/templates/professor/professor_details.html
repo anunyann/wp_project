@@ -35,10 +35,10 @@
         <h4 class="text-center" th:text="#{ACADEMIC_TITLE}"></h4>
         <div>
             <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-primary"
-               th:href="@{'/professor/{id}/titles' (id=${professor.getId()})}"
+               th:href="@{'/admin/professor/{id}/titles' (id=${professor.getId()})}"
                th:text="${academicTitle== null ? 'Додади': 'Измени'}"></a>
             <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-danger"
-               th:href="@{'/professor/{professorId}/titles/{titleId}/delete'(professorId=${professor.getId()}, titleId=${academicTitle?.getId()})}"
+               th:href="@{'/admin/professor/{professorId}/titles/{titleId}/delete'(professorId=${professor.getId()}, titleId=${academicTitle?.getId()})}"
                th:if="${academicTitle!= null}" th:text="#{DELETE}"></a>
 
         </div>
