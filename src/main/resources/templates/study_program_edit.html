@@ -96,7 +96,7 @@
           <!-- Копче за бришење на ред (предмет од семестар) -->
           <td style="white-space: nowrap;max-width:100%;">
             <label style="display: flex; align-items: center; justify-content: center; white-space: nowrap;">
-              <button th:action="/program/${studyProgram}/delete/${s.subject.getId()}" style="display: flex; align-items: center; justify-content: center;">Х</button>
+              <button th:action="@{/program/{studyProgram}/delete/{subjectId}(studyProgram=${s.studyProgram.code}, subjectId=${s.subject.id})}" style="display: flex; align-items: center; justify-content: center;">Х</button>
             </label>
           </td>
 
@@ -114,7 +114,7 @@
           <!-- Број на кредити за предметот -->
           <td>
             <label>
-              <input type="number" th:text="${s.subject.getCredits()}" th:field="${s.subject.credits}" form="edit-form">
+              <input type="number" th:value="${s.subject.credits}" form="edit-form">
             </label>
           </td>
 

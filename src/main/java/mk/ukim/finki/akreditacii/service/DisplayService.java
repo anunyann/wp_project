@@ -3,6 +3,7 @@ package mk.ukim.finki.akreditacii.service;
 
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
