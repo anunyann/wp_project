@@ -1,0 +1,47 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <form method="POST" th:action="@{/admin/professor/{professorId}/education(professorId=${professorId})}">
+        <input name="educationId" th:value="${education?.getId()}" type="hidden"/>
+
+        <label for="educationDegree" th:text="#{EDUCATION_DEGREE}"></label>
+        <select class="form-control" id="educationDegree" name="degree">
+            <option
+                    th:each="degree : ${educationDegrees}"
+                    th:selected="${education!=null ? education.getDegree().equals(degree):false}"
+                    th:text="${degree}"
+                    th:value="${degree}">
+            </option>
+        </select>
+
+        <label for="finishingYear" th:text="#{FINISHING_YEAR}"></label>
+        <input class="form-control" id="finishingYear" name="finishingYear" required="required"
+               th:value="${education?.finishingYear}" type="number">
+
+        <label for="institution" th:text="#{INSTITUTION}"></label>
+        <input class="form-control" id="institution" name="institution"
+               required="required" th:value="${education?.institution}">
+
+        <label for="discipline" th:text="#{DISCIPLINE}"></label>
+        <input class="form-control" id="discipline" name="discipline"
+               required="required" th:value="${education?.discipline}">
+
+        <label for="field" th:text="#{FIELD}"></label>
+        <input class="form-control" id="field" name="field"
+               required="required" th:value="${education?.field}">
+
+        <label for="area" th:text="#{AREA}"></label>
+        <input class="form-control" id="area" name="area"
+               required="required" th:value="${education?.area}">
+
+        <button class="btn btn-primary " th:text="#{SUBMIT}" type="submit"></button>
+
+    </form>
+</div>
+</body>
+</html>
