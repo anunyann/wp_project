@@ -1,0 +1,122 @@
+<html lang="en" layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+
+>
+<meta charset="utf-8"/>
+<head>
+    <meta charset="UTF-8"/>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:inline="javascript">
+        function cleanQueryFilters() {
+            window.location = "?";
+        }
+
+    </script>
+</head>
+<body>
+<div class="view-content my-5" layout:fragment="content">
+    <h3 th:text="#{PROFESSORS}"></h3>
+
+    <div id="filters">
+        <form method="GET" th:action="@{/admin/professor}">
+            <div class="d-flex flex-wrap justify-content-between">
+                <div class="col-md-3 col-sm-6 p-1">
+                    <label class="mr-2 mb-0" for="searchString" th:text="#{SEARCH_BY_STRING}"></label>
+                    <input class="form-control"
+                           id="searchString"
+                           name="searchString"
+                           th:placeholder="#{SEARCH}"
+                           th:value="${searchString}"
+                           type="text"/>
+                </div>
+
+                <div class="col-md-3 col-sm-6  p-1">
+                    <label class="mr-2 mb-0" for="titleFilter" th:text="#{FILTER_BY_TITLE}"></label>
+                    <select class="form-control custom-select"
+                            id="titleFilter"
+                            name="titleFilter">
+                        <option th:text="#{SELECT}" value=""></option>
+                        <option th:each="title : ${professorTitles}"
+                                th:selected="${titleFilter != null && titleFilter!='' && title.name() == titleFilter}"
+                                th:text="${title}"
+                                th:value="${title}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-sm-6  p-1 text-end">
+                    <button
+                            class="btn btn-primary col-3"
+                            th:text="#{APPLY_FILTERS}"
+                            type="submit"></button>
+                    <button
+                            class="btn btn-outline-dark col-3"
+                            id="resetFiltersBtn"
+                            th:onclick="cleanQueryFilters()"
+                            th:text="#{RESET_FILTERS}"
+                            type="reset"
+                    ></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="item-list">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th class="text-primary" th:text="#{PROFESSOR_NAME}"></th>
+                <th class="text-primary" th:text="#{PROFESSOR_EMAIL}"></th>
+                <th class="text-primary" th:text="#{PROFESSOR_TITLE}"></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="professor: ${professorPage.getContent()}">
+                <td th:text="${professor.getName()}"/>
+                </td>
+                <td th:text="${professor.getEmail()}"></td>
+                <td th:text="${professor.getTitle()}"></td>
+                <td class="text-right d-flex flex-wrap justify-content-end">
+                    <div class="col-3">
+                        <a class="btn btn-sm btn-info m-1"
+                           th:href="@{'/admin/professor/{id}' (id=${professor.getId()})}">
+                            <i class="fa fa-trash" th:text="#{DETAILS}"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-sm btn-info m-1"
+                           th:href="@{'/admin/professor/{id}/edit' (id=${professor.getId()})}">
+                            <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-sm btn-danger m-1"
+                           th:href="@{'/admin/professor/{id}/delete' (id=${professor.getId()})}">
+                            <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:include="fragments/paging :: pageSection(${professorPage})"></div>
+    </div>
+    <div class="col mb-3">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 text-center">
+                <a class="btn btn-block btn-primary" href="/admin/professor/add-professor"
+                   th:text="#{ADD_PROFESSOR}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

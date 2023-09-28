@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div class="container" layout:fragment="content">
+  <form method="POST">
+
+        <label th:text="#{INSTITUTION}" for="institution"></label>
+        <input class="form-control" type="text" id="institution" name="institution" required="required"
+               th:value="${academicTitle?.institution}"/>
+
+
+        <label  for="title" th:text="#{TITLE}"></label>
+        <select class="form-control" name="title" id="title">
+          <option
+                  th:each="title : ${professorTitles}"
+                  th:value="${title}"
+                  th:text="${title}"
+                  th:selected="${academicTitle!=null ? academicTitle.getTitle().equals(title):false}">
+          </option>
+        </select>
+
+
+        <label for="area" th:text="#{AREA}"></label>
+        <input class="form-control" type="text" id="area" name="area" required="required"
+               th:value="${academicTitle?.area}"/>
+
+
+        <label  for="electionYear" th:text="#{ELECTION_YEAR}"></label>
+        <input class="form-control" type="number" id="electionYear" name="electionYear" required="required"
+               th:value="${academicTitle?.electionYear}"/>
+
+        <label  for="decisionDocumentNumber" th:text="#{DECISION_DOCUMENT_NUMBER}"></label>
+        <input class="form-control" type="number" id="decisionDocumentNumber" name="decisionDocumentNumber" required="required"
+               th:value="${academicTitle?.decisionDocumentNumber}"/>
+
+
+      <button type="submit" class="btn btn-primary" th:text="#{SUBMIT}"></button>
+
+  </form>
+</div>
+</body>
+</html>

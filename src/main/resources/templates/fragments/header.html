@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="p-3 text-bg-dark" th:fragment="header">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/admin/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <img src="/io.png" style="width: 25px"/>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/admin/accreditations" class="nav-link px-2 text-white" th:text="#{ACCREDITATIONS}"></a></li>
+            <li><a href="/admin/study-programs" class="nav-link px-2 text-white" th:text="#{STUDY_PROGRAMS}"></a></li>
+            <li><a href="/admin/professor" class="nav-link px-2 text-white" th:text="#{PROFESSORS}"></a></li>
+        </ul>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+            <input type="search" class="form-control form-control-dark text-bg-white"
+                   th:placeholder="#{SEARCH}"
+                   aria-label="Search" on
+            >
+        </form>
+
+        <div class="text-end">
+            <button type="button" class="btn btn-outline-light me-2" th:text="#{LOGIN}">Login</button>
+            <button type="button" class="btn btn-warning" th:text="#{SIGN_UP}">Sign-up</button>
+        </div>
+    </div>
+</header>
+</body>
+</html>
