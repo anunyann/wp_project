@@ -27,7 +27,7 @@
 <div>
     <div class="row">
         <div class="col-12">
-            <form th:action="@{/update-subject}" method="post" th:object="${sd}">
+            <form th:action="@{/admin/update-subject}" method="post" th:object="${sd}">
                 <input type="hidden" th:field="${sd.id}">
                 <div class="text-center mt-3">
                     <button type="submit" class="btn btn-primary">Update Subject Details</button>
@@ -117,7 +117,11 @@
                                 <input type="text" th:field="${sd.defaultSemester}" class="form-control" >
 
                                 /
-                                <input type="text" th:field="${sd.subject.semester}" class="form-control" >
+                                <select th:field="${sd.subject.semester}">
+                                    <option value="WINTER" th:text="WINTER">WINTER</option>
+                                    <option value="SUMMER" th:text="SUMMER">SUMMER</option>
+                                </select>
+
                             </p>
                         </td>
                         <td colspan="9"><p>
@@ -491,7 +495,7 @@
                         </p></td>
                         <td colspan="11"><p>
                             <span>Задолжителна литература</span>
-                            <a th:href="@{'/subject/' + ${sd.id} + '/edit/mandatory-books'}" class="btn btn-primary btn-sm mb-2">
+                            <a th:href="@{'/admin/subject/' + ${sd.id} + '/edit/mandatory-books'}" class="btn btn-primary btn-sm mb-2">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </a>
                         </p></td>
@@ -536,7 +540,7 @@
                         <td colspan="11">
                             <p>
                                 <span>Дополнителна литература</span>
-                                <a th:href="@{'/subject/' + ${sd.id} + '/edit/elective-books'}" class="btn btn-primary btn-sm mb-2">
+                                <a th:href="@{'/admin/subject/' + ${sd.id} + '/edit/elective-books'}" class="btn btn-primary btn-sm mb-2">
                                     <i class="fas fa-edit mr-1"></i> Edit
                                 </a>
                             </p>

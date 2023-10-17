@@ -33,7 +33,7 @@
             <td th:text="${b.publisher}"></td>
             <td th:text="${b.year}">2005</td>
             <td>
-                <form th:action="@{/remove-book}" method="post">
+                <form th:action="@{/admin/remove-book}" method="post">
                     <button type="submit" class="btn btn-danger">Remove</button>
                 </form>
             </td>
@@ -43,7 +43,7 @@
         </tr>
         <tr>
             <td></td>
-            <form th:action="@{'/add-new-elective-book/' + ${subjectId}}" method="post">
+            <form th:action="@{'/admin/add-new-elective-book/' + ${subjectId}}" method="post">
                 <td><input type="text" class="form-control" th:field="${newBook.author}" placeholder="Author"></td>
             <td><input type="text" class="form-control" th:field="${newBook.title}" placeholder="Title"></td>
             <td><input type="text" class="form-control" th:field="${newBook.publisher}" placeholder="Publisher"></td>

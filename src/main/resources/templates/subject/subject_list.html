@@ -34,7 +34,7 @@
 
         <tbody>
         <div id="filters">
-            <form th:action="@{/subject/list}" method="GET">
+            <form th:action="@{/admin/subject/list}" method="GET">
 
                 <div class="d-flex flex-wrap justify-content-between">
                     <div class="col-md-3 col-sm-6 p-1">
@@ -84,7 +84,7 @@
             <td th:text="${subjectDetail.subject.getName()}">Name</td>
             <td>
                 <div class="btn-group-vertical" role="group">
-                    <a th:href="@{'/subject/' + ${subjectDetail.id}} + '/edit'" class="btn btn-primary btn-sm mb-2">
+                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id}} + '/edit'" class="btn btn-primary btn-sm mb-2">
                         <i class="fas fa-edit mr-1" th:text="#{EDIT}"></i>
                     </a>
                     <button type="button" class="btn btn-danger btn-sm">
