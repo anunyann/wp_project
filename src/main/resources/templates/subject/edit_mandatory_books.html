@@ -34,7 +34,7 @@
             <td th:text="${b.publisher}"></td>
             <td th:text="${b.year}">2005</td>
             <td>
-                <form th:action="@{'/remove-book/'+ ${subjectId} + '/' + ${rowStat.count}} " method="post">
+                <form th:action="@{'/admin/remove-book/'+ ${subjectId} + '/' + ${rowStat.count}} " method="post">
                     <button type="submit" class="btn btn-danger">Remove</button>
                 </form>
             </td>
@@ -43,7 +43,7 @@
             <td colspan="5" class="text-center"><strong>Add new book</strong></td>
         </tr>
         <tr>
-            <form th:action="@{'/add-new-book/' + ${subjectId}}" method="post">
+            <form th:action="@{'/admin/add-new-book/' + ${subjectId}}" method="post">
                 <td></td>
                 <td><input type="text" class="form-control" th:field="${newBook.author}" placeholder="Author"></td>
             <td><input type="text" class="form-control" th:field="${newBook.title}" placeholder="Title"></td>

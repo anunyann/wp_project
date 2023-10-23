@@ -16,12 +16,13 @@ public interface SubjectDetailsRepository extends JpaRepository<SubjectDetails, 
     Page<SubjectDetails> findAll(Pageable pageable);
 
     @Query("SELECT sd FROM SubjectDetails sd " +
-            "WHERE (:nameSearch = '' OR sd.subject.name ILIKE %:nameSearch%)" +
-            "AND (:accreditationYear = '' OR sd.accreditation.year = :accreditationYear)")
+            "WHERE (:nameSearch is null OR sd.subject.name ILIKE %:nameSearch%) " +
+            "AND (:accreditationYear is null OR sd.accreditation.year = :accreditationYear)")
     Page<SubjectDetails> findAllFiltered(
             @Param("nameSearch") String nameSearch,
             @Param("accreditationYear") String accreditationYear,
             Pageable pageable
     );
+
 
 }

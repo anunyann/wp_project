@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/admin")
 public class SubjectController {
 
     private final SubjectService service;
@@ -104,7 +105,7 @@ public class SubjectController {
         SubjectDetails sd = service.findSubjectById(subjectId).get();
         sd.getBibliography().getBooks().remove(Integer.parseInt(bookId) -1 );
         service.updateSubject(sd);
-        return "redirect:/subject/list";
+        return "redirect:/admin/subject/list";
     }
 
     @PostMapping("/add-new-book/{subjectId}")
@@ -114,7 +115,7 @@ public class SubjectController {
        SubjectDetails sd = service.findSubjectById(subjectId).get();
        sd.getBibliography().getBooks().add(newBook);
        service.updateSubject(sd);
-       return "redirect:/subject/list";
+       return "redirect:/admin/subject/list";
     }
 
     @PostMapping("/add-new-elective-book/{subjectId}")
@@ -124,13 +125,13 @@ public class SubjectController {
         SubjectDetails sd = service.findSubjectById(subjectId).get();
         sd.getBibliography().getElectiveBooks().add(newBook);
         service.updateSubject(sd);
-        return "redirect:/subject/list";
+        return "redirect:/admin/subject/list";
     }
 
     @PostMapping("/update-subject")
     public String updateSubject(@ModelAttribute SubjectDetails subjectDetails) {
         this.service.updateSubject(subjectDetails);
-        return "redirect:/subject/list";
+        return "redirect:/admin/subject/list";
     }
 
 }
