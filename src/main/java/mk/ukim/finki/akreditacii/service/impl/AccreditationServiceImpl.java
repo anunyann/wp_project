@@ -36,8 +36,8 @@ public class AccreditationServiceImpl implements AccreditationService {
     }
 
     @Override
-    public Optional<Accreditation> findById(String year) {
-        return accreditationRepository.findById(year);
+    public Accreditation findById(String year) {
+        return accreditationRepository.findById(year).orElseThrow(() -> new InvalidAccreditation(year));
     }
 
     @Override

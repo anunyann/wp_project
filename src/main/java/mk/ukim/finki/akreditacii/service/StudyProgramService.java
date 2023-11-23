@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StudyProgramService {
+
     List<StudyProgram> findAll();
 
     Page<StudyProgram> findAllWithPagination(Pageable pageable);

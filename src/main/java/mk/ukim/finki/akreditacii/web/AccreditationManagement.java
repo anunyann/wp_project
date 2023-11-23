@@ -37,7 +37,7 @@ public class AccreditationManagement {
 
     @GetMapping("/edit-form/{id}")
     public String addAccreditation(Model model, @PathVariable String id) {
-        Accreditation accreditation = accreditationService.findById(id).get();
+        Accreditation accreditation = accreditationService.findById(id);
         model.addAttribute("accreditation", accreditation);
         return "accreditation/add_accreditation";
     }

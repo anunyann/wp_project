@@ -12,7 +12,7 @@ public interface AccreditationService {
 
     Page<Accreditation> findAllWithPagination(int pageNum, int pageSize);
 
-    Optional<Accreditation> findById(String year);
+    Accreditation findById(String year);
 
     void deleteById(String year);
 

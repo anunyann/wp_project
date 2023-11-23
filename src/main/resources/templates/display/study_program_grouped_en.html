@@ -45,6 +45,13 @@
             <h5 th:text="${studyProgram?.graduationTitleEn}"></h5>
         </div>
     </div>
+    <div class="col-12" th:if="${studyProgram?.coordinator!=null}">
+        <h3>Coordinator</h3>
+
+        <div class="col-12 ms-4">
+            <a th:text="${studyProgram?.coordinator.name}" th:href="${'mailto:'+studyProgram?.coordinator.email}"></a>
+        </div>
+    </div>
     <div class="col-12">
         <h3>Study program</h3>
         <p class="ms-4" th:text="${studyProgram?.subjectRestrictions}" style="white-space: pre-line"></p>

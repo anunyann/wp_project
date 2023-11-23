@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
 
@@ -48,5 +50,10 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public void deleteById(String id) {
         professorRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Professor> findAll() {
+        return professorRepository.findAll();
     }
 }

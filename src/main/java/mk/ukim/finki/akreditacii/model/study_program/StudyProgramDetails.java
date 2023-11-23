@@ -6,6 +6,7 @@ import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.accreditation.AccreditationDescriptiveField;
 import mk.ukim.finki.akreditacii.model.accreditation.AccreditationDocumentTypes;
+import mk.ukim.finki.akreditacii.model.professor.Professor;
 import org.hibernate.Hibernate;
 
 import java.util.List;
@@ -60,6 +61,10 @@ public class StudyProgramDetails {
 
     @ElementCollection
     private List<AccreditationDescriptiveField> fields;
+
+    @ManyToOne
+    private Professor coordinator;
+
 
     @Override
     public boolean equals(Object o) {
