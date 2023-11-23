@@ -44,7 +44,7 @@
                         <option th:each="acc : ${accreditations}"
                                 th:value="${acc.getYear()}"
                                 th:text="${acc.getYear()}"
-                                th:selected="${accreditation != null && accreditation != '' && accreditation == acc.getYear()}">
+                                th:selected="${accreditation == acc.getYear() || acc.getIsActive()}">
                         </option>
                     </select>
                 </div>
@@ -116,6 +116,9 @@
                 <th class="text-primary" th:text="'#'"></th>
                 <th class="text-primary" th:text="#{CODE}"></th>
                 <th class="text-primary" th:text="#{STUDY_PROGRAM_NAME}"></th>
+                <th class="text-primary" th:text="Акредитација"></th>
+                <th class="text-primary" th:text="Циклус"></th>
+                <th class="text-primary" th:text="Јазик"></th>
                 <th class="text-primary"></th>
             </tr>
             </thead>
@@ -125,6 +128,9 @@
                 <td th:text="${spDetails.getStudyProgram().getCode()}"/>
                 </td>
                 <td th:text="${spDetails.getStudyProgram().getName()}"></td>
+                <td th:text="${spDetails.accreditation?.year}"></td>
+                <td th:text="#{${spDetails.studyCycle}}"></td>
+                <td th:text='${spDetails.bilingual? "Двојазична": spDetails.onEnglish? "Англиски": "Македонски"}'></td>
                 <td class="text-right d-flex flex-wrap justify-content-end">
                     <div class="col-3">
                         <a th:href="@{'/admin/study-programs/edit-form/{id}' (id=${spDetails.getId()})}"

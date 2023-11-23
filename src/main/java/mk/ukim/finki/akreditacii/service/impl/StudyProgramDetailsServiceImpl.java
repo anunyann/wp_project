@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.exceptions.StudyProgramDetailsCannotBeDeletedException;
+import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 import mk.ukim.finki.akreditacii.repository.AccreditationRepository;
@@ -58,11 +59,35 @@ public class StudyProgramDetailsServiceImpl implements StudyProgramDetailsServic
 
     @Override
     @Transactional
-    public Optional<StudyProgramDetails> save(String code, String name, String nameEn, Float order, Short durationYears, Short durationSemesters, String generalInformation, String graduationTitle, String graduationTitleEn, String subjectRestrictions, Boolean onEnglish, StudyCycle studyCycle, Accreditation accreditation, Boolean bilingual) {
+    public Optional<StudyProgramDetails> save(String code, String name, String nameEn, Float order, Short durationYears,
+                                              Short durationSemesters, String generalInformation, String graduationTitle,
+                                              String graduationTitleEn, String subjectRestrictions, Boolean onEnglish,
+                                              StudyCycle studyCycle, Accreditation accreditation, Boolean bilingual,
+                                              Professor coordinator) {
 
         StudyProgram newStudyProgram = studyProgramRepository.save(new StudyProgram(code, name));
 
-        return Optional.of(studyProgramDetailsRepository.save(new StudyProgramDetails(code, newStudyProgram, nameEn, order, durationYears, durationSemesters, generalInformation, graduationTitle, graduationTitleEn, subjectRestrictions, onEnglish, studyCycle, accreditation, bilingual, null)));
+        return Optional.of(studyProgramDetailsRepository.save(
+                        new StudyProgramDetails(
+                                code,
+                                newStudyProgram,
+                                nameEn,
+                                order,
+                                durationYears,
+                                durationSemesters,
+                                generalInformation,
+                                graduationTitle,
+                                graduationTitleEn,
+                                subjectRestrictions,
+                                onEnglish,
+                                studyCycle,
+                                accreditation,
+                                bilingual,
+                                null,
+                                coordinator
+                        )
+                )
+        );
     }
 
     @Override
