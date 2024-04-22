@@ -1,6 +1,7 @@
 package mk.ukim.finki.akreditacii.web;
 
 import mk.ukim.finki.akreditacii.model.professor.*;
+import mk.ukim.finki.akreditacii.model.view_model.ProfessorStatsDTO;
 import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("admin/professor")
@@ -201,5 +206,22 @@ public class ProfessorManagementController {
         return "redirect:/admin/professor/" + professorId;
     }
 
-
+    @GetMapping(path = "/professorStats")
+    public String showProfessorStats(Model model,
+                                     @RequestParam(defaultValue = "1") Integer pageNum,
+                                     @RequestParam(defaultValue = "10") Integer results,
+                                     @RequestParam(required = false) String searchString,
+                                     @RequestParam(required = false) String titleFilter) {
+        Page<ProfessorStatsDTO> statsForProfessors;
+        if (searchString == null && titleFilter == null) {
+            statsForProfessors = professorService.getStatsForAllProfessorsWithPaginationAndFilters(pageNum, results, searchString, titleFilter);
+        } else {
+            statsForProfessors = professorService.getStatsForAllProfessorsWithPaginationAndFilters(pageNum, results, searchString, titleFilter);
+            model.addAttribute("searchString", searchString);
+            model.addAttribute("titleFilter", titleFilter);
+        }
+        model.addAttribute("statsForProfessors", statsForProfessors);
+        model.addAttribute("professorTitles", ProfessorTitle.values());
+        return "professor/professor_stats";
+    }
 }

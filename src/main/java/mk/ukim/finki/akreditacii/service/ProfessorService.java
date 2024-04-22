@@ -2,6 +2,7 @@ package mk.ukim.finki.akreditacii.service;
 
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
+import mk.ukim.finki.akreditacii.model.view_model.ProfessorStatsDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface ProfessorService {
     void deleteById(String id);
 
     List<Professor> findAll();
+
+    Page<ProfessorStatsDTO> getStatsForAllProfessorsWithPaginationAndFilters(Integer pageNum, Integer results, String stringSearch, String filteredTitle);
 }
