@@ -24,11 +24,4 @@ public class ProfessorStatsDTO {
     Double sumPerCycleSecond;
 
     Double sumPerCycleThird;
-
-    public ProfessorStatsDTO(Professor professor, Integer firstCycleTotal, Integer secondCycleTotal, Integer thirdCycleTotal) {
-        this.professor = professor;
-        this.firstCycleTotal = firstCycleTotal;
-        this.secondCycleTotal = secondCycleTotal;
-        this.thirdCycleTotal = thirdCycleTotal;
-    }
 }

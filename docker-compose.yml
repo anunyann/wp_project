@@ -9,7 +9,7 @@ services:
       - "8080:8080"
     environment:
       - spring.datasource.url=jdbc:postgresql://finki_services_db:5432/finki-services-db
-      - spring.datasource.password=f1nk1_@dm1n
+      - spring.datasource.password=${DB_PASSWORD}
       - spring.jpa.show-sql=false
     networks:
       - common-model_finki_services_net
