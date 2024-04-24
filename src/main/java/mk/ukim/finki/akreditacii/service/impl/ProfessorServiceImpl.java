@@ -4,24 +4,18 @@ import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
-import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubjectProfessor;
 import mk.ukim.finki.akreditacii.model.view_model.ProfessorStatsDTO;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.akreditacii.repository.professor.ProfessorRepository;
 import mk.ukim.finki.akreditacii.service.ProfessorService;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
@@ -77,7 +71,6 @@ public class ProfessorServiceImpl implements ProfessorService {
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
         List<Professor> professorList;
         List<ProfessorStatsDTO> professorStatsList = new ArrayList<>();
-        int countFirstCycle, countSecondCycle, countThirdCycle;
 
         if (stringSearch != null && filteredTitle != null) {
             professorList = professorRepository.findAllFilteredWithoutPaging(stringSearch,
@@ -103,6 +96,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
         for (Professor professor : professorList) {
             double sumOfSubjectPartsPerCycleFirst = 0, sumOfSubjectPartsPerCycleSecond = 0, sumOfSubjectPartsPerCycleThird = 0;
+            int countFirstCycle = 0, countSecondCycle = 0, countThirdCycle = 0;
             List<StudyProgramSubjectProfessor> studyProgramSubjectProfessorList = studyProgramSubjectProfessorRepository.findAllByProfessorId(professor.getId());
 
             // predmeti sto gi drzi profesorot
@@ -111,29 +105,26 @@ public class ProfessorServiceImpl implements ProfessorService {
             // iteriranje niz predmetite sto gi drzi profesorot
             for (var professorSubject : professorSubjects) {
                 // predmet sto go drzi profesorot
-                var subject = professorSubject.getStudyProgramSubject().getSubject();
-                if (subject.getCycle().equals(StudyCycle.UNDERGRADUATE)) {
-                    var subject2 = subject.getSubject();
-                    List<StudyProgramSubjectProfessor> firstCycle = studyProgramSubjectProfessorList.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getSubject().equals(subject2)).toList();
-                    sumOfSubjectPartsPerCycleFirst += 1.0 / firstCycle.size();
+                var subjectDetails = professorSubject.getStudyProgramSubject().getSubject();
+                if (subjectDetails.getCycle().equals(StudyCycle.UNDERGRADUATE)) {
+                    countFirstCycle += 1;
+                    var subject = subjectDetails.getSubject();
+                    List<StudyProgramSubjectProfessor> listOfSubjectProfessors = studyProgramSubjectProfessorList.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getSubject().equals(subject)).toList();
+                    sumOfSubjectPartsPerCycleFirst += 1.0 / listOfSubjectProfessors.size();
                 }
-                if (subject.getCycle().equals(StudyCycle.MASTER)) {
-                    var subject2 = subject.getSubject();
-                    List<StudyProgramSubjectProfessor> secondCycle = studyProgramSubjectProfessorList.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getSubject().equals(subject2)).toList();
-                    sumOfSubjectPartsPerCycleSecond += 1.0 / secondCycle.size();
+                if (subjectDetails.getCycle().equals(StudyCycle.MASTER)) {
+                    countSecondCycle += 1;
+                    var subject = subjectDetails.getSubject();
+                    List<StudyProgramSubjectProfessor> listOfSubjectProfessors = studyProgramSubjectProfessorList.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getSubject().equals(subject)).toList();
+                    sumOfSubjectPartsPerCycleSecond += 1.0 / listOfSubjectProfessors.size();
                 }
-                if (subject.getCycle().equals(StudyCycle.PHD)) {
-                    var subject2 = subject.getSubject();
-                    List<StudyProgramSubjectProfessor> thirdCycle = studyProgramSubjectProfessorList.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getSubject().equals(subject2)).toList();
-                    sumOfSubjectPartsPerCycleThird += 1.0 / thirdCycle.size();
+                if (subjectDetails.getCycle().equals(StudyCycle.PHD)) {
+                    countThirdCycle += 1;
+                    var subject = subjectDetails.getSubject();
+                    List<StudyProgramSubjectProfessor> listOfSubjectProfessors = studyProgramSubjectProfessorList.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getSubject().equals(subject)).toList();
+                    sumOfSubjectPartsPerCycleThird += 1.0 / listOfSubjectProfessors.size();
                 }
             }
-
-            // nadole e okej
-            countFirstCycle = (int) professorSubjects.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getCycle().equals(StudyCycle.UNDERGRADUATE)).count();
-            countSecondCycle = (int) professorSubjects.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getCycle().equals(StudyCycle.MASTER)).count();
-            countThirdCycle = (int) professorSubjects.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getStudyProgramSubject().getSubject().getCycle().equals(StudyCycle.PHD)).count();
-
 
             ProfessorStatsDTO dto = new ProfessorStatsDTO(professor, countFirstCycle, countSecondCycle, countThirdCycle, sumOfSubjectPartsPerCycleFirst, sumOfSubjectPartsPerCycleSecond, sumOfSubjectPartsPerCycleThird);
             professorStatsList.add(dto);
