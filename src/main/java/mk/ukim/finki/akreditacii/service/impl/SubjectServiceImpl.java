@@ -1,9 +1,9 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubjectProfessor;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
@@ -13,9 +13,9 @@ import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
 import mk.ukim.finki.akreditacii.service.SubjectService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -112,5 +112,84 @@ public class SubjectServiceImpl implements SubjectService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public String getSubjectProfessorsSeparatedWithComma(String subjectId) {
+        // Get all professors on given subject
+        List<Professor> professors = professorRepository.findAllByStudyProgramSubjectSubjectId(subjectId).stream()
+                .map(StudyProgramSubjectProfessor::getProfessor)
+                .distinct()
+                .toList();
 
+        if (professors.isEmpty())
+            return "";
+
+        StringBuilder string = new StringBuilder();
+        professors.forEach(p -> string.append(p.getId()).append(", "));
+
+        string.deleteCharAt(string.length() - 1);
+        string.deleteCharAt(string.length() - 1);
+        string.append(".");
+
+        return string.toString();
+    }
+
+    @Override
+    public Integer getNumberOfProfessorsOnSubject(String subjectId) {
+        return (int) professorRepository.findAllByStudyProgramSubjectSubjectId(subjectId).stream()
+                .map(StudyProgramSubjectProfessor::getProfessor)
+                .distinct()
+                .count();
+    }
+
+    @Override
+    public List<StudyProgram> getStudyProgramsWhereSubjectIsMandatory(String subjectId) {
+        List<StudyProgramSubject> studyProgramSubjects = this.studyProgramSubjectRepository.findAllBySubjectId(subjectId).stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+        studyProgramSubjects.removeIf(sps -> sps.getMandatory().equals(false));
+
+        List<StudyProgram> programs = studyProgramSubjects.stream().map(StudyProgramSubject::getStudyProgram).toList();
+
+        return studyProgramSubjects.stream().map(StudyProgramSubject::getStudyProgram).toList();
+    }
+
+    @Override
+    public String getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(String subjectId) {
+        List<StudyProgramSubject> studyProgramSubjects = this.studyProgramSubjectRepository.findAllBySubjectId(subjectId).stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+        studyProgramSubjects.removeIf(sps -> sps.getMandatory().equals(false));
+
+        List<StudyProgram> programs = studyProgramSubjects.stream().map(StudyProgramSubject::getStudyProgram).toList();
+
+        if (programs.isEmpty())
+            return "";
+
+        StringBuilder string = new StringBuilder();
+        programs.forEach(p -> string.append(p.getCode()).append(", "));
+
+        string.deleteCharAt(string.length() - 1);
+        string.deleteCharAt(string.length() - 1);
+        string.append(".");
+
+        return string.toString();
+    }
+
+    @Override
+    public Integer numberOfActiveYears(String subjectId) {
+        SubjectDetails subjectDetails = subjectDetailsRepository.findById(subjectId)
+                .orElseThrow(() -> new EntityNotFoundException("SubjectDetails not found"));
+
+        Integer startYear = Integer.valueOf(subjectDetails.getAccreditation().getYear());
+        Integer currentYear = LocalDateTime.now().getYear();
+
+        return currentYear - startYear;
+    }
+
+    @Override
+    public Double averageNumberOfStudents(String subjectId) {
+        return null;
+    }
 }

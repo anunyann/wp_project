@@ -1,16 +1,13 @@
 package mk.ukim.finki.akreditacii.service;
 
-import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
-import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
-import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubjectProfessor;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public interface SubjectService {
 
@@ -30,7 +27,16 @@ public interface SubjectService {
 
     List<StudyProgramSubject> getSubjectPrograms(String subjectId);
 
-
     List<Professor> getSubjectProfessors(String subjectId);
 
+    String getSubjectProfessorsSeparatedWithComma(String subjectId);
+
+    Integer getNumberOfProfessorsOnSubject(String subjectId);
+
+    List<StudyProgram> getStudyProgramsWhereSubjectIsMandatory(String subjectId);
+    String getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(String subjectId);
+
+    Integer numberOfActiveYears(String subjectId);
+
+    Double averageNumberOfStudents(String subjectId);
 }

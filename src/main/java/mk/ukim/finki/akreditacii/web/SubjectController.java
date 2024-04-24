@@ -4,6 +4,7 @@ package mk.ukim.finki.akreditacii.web;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.subject.Book;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
+import mk.ukim.finki.akreditacii.model.subject.Subject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
 import mk.ukim.finki.akreditacii.service.DisplayService;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -54,6 +56,43 @@ public class SubjectController {
         return "subject/subject_list.html";
     }
 
+    @GetMapping("/subject/{subjectId}/details")
+    public String subjectDetails(@PathVariable String subjectId,
+                                 Model model){
+        SubjectDetails subjectDetails = this.service.getSubjectDetailsById(subjectId);
+        Subject subject = subjectDetails.getSubject();
+
+        // All attr from Subject
+        model.addAttribute("subject", subject);
+
+        // All attr from SubjectDetails
+        model.addAttribute("subjectDetails", subjectDetails);
+
+        // All unique professors at the subject (regardless of the study program) StudyProgramSubjectProfessor, comma separated list of professor ids
+        model.addAttribute("professorsWithComa", this.service.getSubjectProfessorsSeparatedWithComma(subjectId));
+        model.addAttribute("professors", this.service.getSubjectProfessors(subjectId));
+
+        // Number of proffesors on the subject
+        model.addAttribute("numProfessors", this.service.getSubjectProfessors(subjectId).size());
+
+        // Study programs where it is mandatory StudyProgramSubject, comma separated list of study program codes
+        model.addAttribute("studyPrograms", this.service.getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(subjectId));
+        model.addAttribute("studyProgramsNum", this.service.getStudyProgramsWhereSubjectIsMandatory(subjectId).size());
+
+        // Number of years that this subject has been activated
+        model.addAttribute("yearsActive", this.service.numberOfActiveYears(subjectId));
+
+        // Get all books for given subject
+        model.addAttribute("books", subjectDetails.getBibliography().getBooks());
+        model.addAttribute("numBooks", subjectDetails.getBibliography().getBooks().size());
+
+        // Get all electiveBooks for given subject
+        model.addAttribute("electiveBooks", subjectDetails.getBibliography().getElectiveBooks());
+
+        //todo: Average students per year
+
+        return "subject/subject_details.html";
+    }
 
     @GetMapping("/subject/{subjectId}/edit")
     public String editSubject(@PathVariable String subjectId, Model model) {
