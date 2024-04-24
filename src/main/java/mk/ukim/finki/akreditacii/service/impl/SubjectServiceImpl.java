@@ -1,6 +1,7 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import mk.ukim.finki.akreditacii.model.dto.SubjectInfoDto;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
@@ -13,12 +14,16 @@ import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
 import mk.ukim.finki.akreditacii.service.SubjectService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecification.*;
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
@@ -139,6 +144,16 @@ public class SubjectServiceImpl implements SubjectService {
                 .map(StudyProgramSubjectProfessor::getProfessor)
                 .distinct()
                 .count();
+    }
+
+    @Override
+    public List<SubjectInfoDto> findSubjectsInfo(String name, String professorId, String studyProgramCode, String accreditationYear) {
+        // todo: implement this with specification search
+//        Specification<StudyProgramSubjectProfessor> spec = where(filterContainsText(StudyProgramSubjectProfessor.class, "name", name))
+//                .and(filterEquals(StudyProgramSubjectProfessor.class, "mainSubject.id", mainSubject))
+//                .and(filterEqualsV(StudyProgramSubjectProfessor.class, "semesterType", semesterType))
+//                .and(greaterThan(StudyProgramSubjectProfessor.class, "lastUpdateTime", modifiedAfter));
+        return null;
     }
 
     @Override

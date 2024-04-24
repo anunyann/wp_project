@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.service;
 
+import mk.ukim.finki.akreditacii.model.dto.SubjectInfoDto;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
@@ -33,7 +34,10 @@ public interface SubjectService {
 
     Integer getNumberOfProfessorsOnSubject(String subjectId);
 
+    List<SubjectInfoDto> findSubjectsInfo(String name, String professorId, String studyProgramCode, String accreditationYear);
+
     List<StudyProgram> getStudyProgramsWhereSubjectIsMandatory(String subjectId);
+
     String getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(String subjectId);
 
     Integer numberOfActiveYears(String subjectId);
