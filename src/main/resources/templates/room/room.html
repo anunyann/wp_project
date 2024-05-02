@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -8,25 +9,30 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" layout:fragment="content">
     <div class="row justify-content-lg-center">
         <div class="row">
 
             <h1>Соби</h1>
 
             <div class="container">
-                <form th:action="@{/rooms}" method="GET">
+                <form th:action="@{/admin/rooms}" method="GET">
 
                     <div class="d-flex flex-wrap justify-content-between">
 
                         <div class="col-md-2 col-sm-4 p-1">
                             <label class="small">Пребарај по име</label>
-                            <input type="nameSearch" id="nameSearch" class="form-control" name="nameSearch">
+                            <input type="nameSearch" placeholder="Пребарај..." id="nameSearch" class="form-control" name="nameSearch">
                         </div>
 
                         <div class="col-md-2 col-sm-8 p-1">
                             <label class="small">Пребарај по локација</label>
-                            <input type="text" id="descriptionSearch" class="form-control" name="descriptionSearch">
+                            <input type="text" placeholder="Пребарај..." id="locationDescriptionSearch" class="form-control" name="locationDescriptionSearch">
+                        </div>
+
+                        <div class="col-md-2 col-sm-8 p-1">
+                            <label class="small">Пребарај по опрема</label>
+                            <input type="text" placeholder="Пребарај..." id="equipmentDescriptionSearch" class="form-control" name="equipmentDescriptionSearch">
                         </div>
 
                         <div class="col-md-2 col-sm-8 p-1">
@@ -57,43 +63,50 @@
             </div>
             <div class="col-md-8 "></div>
             <div class="col-md-3 col-sm-6">
-                <form th:action="@{/rooms}" method="GET" class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-dark float-end" style="width: 99px;">Ресетирај</button>
+                <form th:action="@{/admin/rooms}" method="GET" class="d-flex justify-content-end" >
+                    <button type="submit" class="btn btn-outline-dark float-end">Ресетирај</button>
                 </form>
             </div>
 
 
-            <form class="mb-2" method="get" th:action="@{'/rooms/add'}">
-                <button type="submit" class="btn btn-success btn-sm">Додај соба</button>
-            </form>
-
-            <form class="mb-2 " method="get" th:action="@{'/rooms/download'}">
-                <input type="hidden" name="nameSearch" th:value="${nameSearch}">
-                <input type="hidden" name="descriptionSearch" th:value="${descriptionSearch}">
-                <input type="hidden" name="participantsSearch" th:value="${participantsSearch}">
-                <input type="hidden" name="typeSearch" th:value="${typeSearch}">
-                <button type="submit" class="btn btn-primary btn-sm" style="text-align:center">Симни податоци</button>
-            </form>
-
-            <form class="mb-2 "action="/rooms/import" method="post" enctype="multipart/form-data">
-                <div class="form-group mb-2" >
-                    <input type="file" class="form-control-file" id="file" name="file">
+            <div class="row justify-content-start ">
+                <div class="col-auto">
+                    <form method="get" th:action="@{'/admin/rooms/add'}">
+                        <button type="submit" class="btn btn-success btn-sm">Додај соба</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-outline-dark btn-sm " style="text-align:center">Прикачи</button>
-            </form>
+                <div class="col-auto">
+                    <form method="get" th:action="@{'/admin/rooms/import'}">
+                        <button type="submit" class="btn btn-primary btn-sm">Внеси повеќе соби</button>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <form method="get" th:action="@{'/admin/rooms/download'}">
+                        <input type="hidden" name="nameSearch" th:value="${nameSearch}">
+                        <input type="hidden" name="locationDescriptionSearch" th:value="${locationDescriptionSearch}">
+                        <input type="hidden" name="equipmentDescriptionSearch" th:value="${equipmentDescriptionSearch}">
+                        <input type="hidden" name="participantsSearch" th:value="${participantsSearch}">
+                        <input type="hidden" name="typeSearch" th:value="${typeSearch}">
+                        <button type="submit" class="btn btn-secondary btn-sm">Симни податоци</button>
+                    </form>
+                </div>
+            </div>
 
 
 
 
 
-            <table class="table table-striped table-bordered">
+
+            <table class="table table-striped table-bordered mt-3">
 
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Име</th>
-                    <th>Локација</th>
-                    <th>Слушатели</th>
+                    <th class="text-primary">#</th>
+                    <th class="text-primary">Име</th>
+                    <th class="text-primary">Локација</th>
+                    <th class="text-primary">Опрема</th>
+                    <th class="text-primary">Тип</th>
+                    <th class="text-primary">Слушатели</th>
                     <th class="col-1"></th>
                     <th class="col-1"></th>
                 </tr>
@@ -103,14 +116,16 @@
                     <td class="col-1" th:text="${iterStat.count}"></td>
                     <td class="col-3" th:text="${room.name}"></td>
                     <td th:text="${room.locationDescription}"></td>
+                    <td th:text="${room.equipmentDescription}"></td>
+                    <td th:text="${room.type}"></td>
                     <td class="col-1" th:text="${room.capacity}"></td>
                     <td class="col-1">
-                        <form method="get" th:action="@{'/rooms/edit/{name}' (name=${room.name})}">
+                        <form method="get" th:action="@{'/admin/rooms/edit/{name}' (name=${room.name})}">
                             <button type="submit" class="btn btn-info btn-sm" style="text-align:center">Промени</button>
                         </form>
                     </td>
                     <td class="col-1">
-                        <form method="post" th:action="@{'/rooms/delete/{name}' (name=${room.name})}">
+                        <form method="post" th:action="@{'/admin/rooms/delete/{name}' (name=${room.name})}">
                             <button type="submit" class="btn btn-danger btn-sm" style="text-align:center">Избриши</button>
                         </form>
                     </td>
@@ -119,21 +134,33 @@
                 </tbody>
             </table>
             <div>
-
-                <form id="perPageForm" th:action="@{/rooms}" method="get">
-                    <label>Соби по страна:</label>
+                <form id="perPageForm" th:action="@{/admin/rooms}" method="get">
+                    <label>Резултати по страна:</label>
                     <input type="number" id="perPageInput" name="results" min="1" th:value="${rooms.size}" onchange="this.form.submit()">
                 </form>
             </div>
             <div>
-
-                <ul class="pagination">
-                    <li th:each="i : ${#numbers.sequence(1, rooms.totalPages)}">
-                        <a class="page-link" th:href="@{/rooms(pageNum=${i}, results=${rooms.size})}" th:text="${i}"></a>
+                <ul class="pagination mt-4">
+                    <li class="page-item" th:class="${rooms.number + 1 == 1} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=1, results=${rooms.size})}">Прва</a>
+                    </li>
+                    <li class="page-item" th:class="${rooms.number + 1 == 1} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number}, results=${rooms.size})}">Претходна</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(1, rooms.totalPages)}" th:class="${rooms.number + 1 == i} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${i}, results=${rooms.size})}" th:text="${i}"></a>
+                    </li>
+                    <li class="page-item" th:class="${rooms.number + 1 >= rooms.totalPages} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number + 2}, results=${rooms.size})}">Следна</a>
+                    </li>
+                    <li class="page-item" th:class="${rooms.number + 1 >= rooms.totalPages} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.totalPages}, results=${rooms.size})}">Последна</a>
                     </li>
                 </ul>
-
             </div>
+
+
+
 
         </div>
     </div>

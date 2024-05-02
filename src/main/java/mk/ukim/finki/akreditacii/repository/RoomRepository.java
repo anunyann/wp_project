@@ -16,12 +16,14 @@ public interface RoomRepository extends JpaRepository<Room,Long> {
     Page<Room> findAll(Pageable pageable);
     @Query("SELECT rm FROM Room rm " +
             "WHERE (:nameSearch is null OR rm.name ILIKE CONCAT('%', :nameSearch, '%')) " +
-            "AND (:descriptionSearch is null OR COALESCE(rm.locationDescription, '') ILIKE CONCAT('%', :descriptionSearch, '%')) " +
+            "AND (:locationDescriptionSearch is null OR COALESCE(rm.locationDescription, '') ILIKE CONCAT('%', :equipmentDescriptionSearch, '%')) " +
+            "AND (:equipmentDescriptionSearch is null OR COALESCE(rm.locationDescription, '') ILIKE CONCAT('%', :locationDescriptionSearch, '%')) " +
             "AND (:participantsSearch is null OR rm.capacity = :participantsSearch) " +
             "AND (:typeSearch is null OR rm.type = :typeSearch)")
     Page<Room> findAllFiltered(
             @Param("nameSearch") String nameSearch,
-            @Param("descriptionSearch") String descriptionSearch,
+            @Param("locationDescriptionSearch") String locationDescriptionSearch,
+            @Param("equipmentDescriptionSearch") String equipmentDescriptionSearch,
             @Param("participantsSearch") Long participantsSearch,
             @Param("typeSearch") RoomType typeSearch,
             Pageable pageable);

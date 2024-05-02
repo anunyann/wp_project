@@ -10,9 +10,10 @@ import java.util.List;
 public interface RoomService {
     Page<Room> findAllWithPagination(Integer pageNum, Integer pageSize);
     List<Room> findAll();
-    Page<Room> findAllWithPaginationFiltered(Integer pageNum, Integer results, String nameSearch, String descriptionSearch,Long participantsSearch,RoomType typeSearch);
+    Page<Room> findAllWithPaginationFiltered(Integer pageNum, Integer results, String nameSearch, String locationDescriptionSearch,String equipmentDescriptionSearch,Long participantsSearch,RoomType typeSearch);
     Room findByName(String name);
     Room create(String name, String locationDescription, String equipmentDescription, RoomType type, Long capacity);
-    Room update(String name, String locationDescription, String equipmentDescription, RoomType type, Long capacity);
+    Room update(String name,String newName, String locationDescription, String equipmentDescription, RoomType type, Long capacity);
     Room delete(String name);
+    List<Room> importData(List<Room> students);
 }
