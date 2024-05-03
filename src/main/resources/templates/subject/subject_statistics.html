@@ -1,0 +1,189 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+>
+<meta charset="utf-8"/>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Subject STATISTICS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<div class="container" layout:fragment="content">
+    <style>
+        .counter-cell-data {
+            width: 30px;
+            text-align: center;
+            align-items: center;
+        }
+
+        .info-cell-data {
+            text-align: center;
+            vertical-align: center;
+            horiz-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .big-cell-data {
+            min-width: 300px;
+        }
+
+        .medium-cell-data {
+            min-width: 150px;
+        }
+
+        .small-cell-data {
+            min-width: 50px;
+        }
+
+        .table-cell-data-span {
+            display: inline-flex;
+        }
+
+        .link-data{
+            text-decoration: none;
+            color: black;
+        }
+
+        .link-data:hover {
+            color: #1a7dc4;
+            text-decoration: underline #1a7dc4;
+            transition: 0.2s;
+        }
+
+        #stats-filter-div {
+            display: inline-flex;
+            align-items: center;
+            align-content: center;
+        }
+
+        #stats-filter-div > div {
+            margin-right: 15px;
+        }
+
+        .filter-button {
+            height: 40px;
+            width: 110px;
+        }
+
+        .filter-input {
+            height: 40px;
+            width: 240px;
+        }
+    </style>
+    <div class="breadcrumbs">
+        <ul>
+            <li class="abreadcrumb">
+                <a href="/admin/subject/list" class="active">Назад</a>
+                <span class="arrow"></span>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <form th:method="GET" th:action="@{'/admin/subject/statistics'}">
+            <div class="col-12 mb-2" id="stats-filter-div">
+                <div>
+                    <!--subjectCode-->
+                    <label for="subjectCode" hidden="hidden">subjectCode</label>
+                    <input type="text"
+                           class="form-control filter-input"
+                           name="subjectCode"
+                           id="subjectCode"
+                           placeholder="Код на предмет">
+                </div>
+                <div>
+                    <!--professorCode-->
+                    <label for="professorCode" hidden="hidden">professorCode</label>
+                    <input type="text"
+                           class="form-control filter-input"
+                           name="professorCode"
+                           id="professorCode"
+                           placeholder="Код на професор">
+                </div>
+                <div>
+                    <!--studyProgramCode-->
+                    <label for="studyProgramCode" hidden="hidden">studyProgramCode</label>
+                    <input type="text"
+                           class="form-control filter-input"
+                           name="studyProgramCode"
+                           id="studyProgramCode"
+                           placeholder="Код на студиска програма">
+                </div>
+                <div>
+                    <!--accreditationYear-->
+                    <label for="accreditationYear" hidden="hidden">accreditationYear</label>
+                    <input type="text"
+                           class="form-control filter-input"
+                           name="accreditationYear"
+                           id="accreditationYear"
+                           placeholder="Година">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-dark filter-button">Пребарувај</button>
+                    <a href="/admin/subject/statistics" class="btn btn-dark filter-button">Обнови</a>
+                </div>
+            </div>
+        </form>
+        <div class="col-12 mb-4">
+            <div class="col-12">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <td class="counter-cell-data">#</td>
+                        <td class="info-cell-data">Име</td>
+                        <td class="info-cell-data">Професори</td>
+                        <td class="info-cell-data">Број на професори</td>
+                        <td class="info-cell-data">
+                            <a>Студиски програми</a>
+                            <a>(задолжителен)</a>
+                        </td>
+                        <td class="info-cell-data">Години активен</td>
+                        <td class="info-cell-data">
+                            <a>Студенти</a>
+                            <a>(прв пат)</a>
+                        </td>
+                        <td class="info-cell-data">
+                            <a>Студенти</a>
+                            <a>(повеќе пати)</a>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="subject, counter  : ${subjects}">
+                        <td class="counter-cell-data" th:text="${counter.index + 1}">Number</td>
+                        <td class="medium-cell-data info-cell-data">
+                            <a class="link-data"
+                               th:text="${subject.subjectName}"
+                               th:href="@{'/admin/subject/{subjectId}/details'(subjectId=${subject.subjectName})}"></a>
+                        </td>
+                        <td class="big-cell-data info-cell-data">
+                            <span class="table-cell-data-span" th:each="pCode, counter : ${subject.professorCodes}">
+                                <a class="link-data" th:href="@{'/admin/professor/' + ${pCode}}" th:text="${pCode}">Professor</a>
+                                <a th:unless="${counter.last}">, </a>
+                            </span>
+                        </td>
+                        <td class="small-cell-data info-cell-data" th:text="${subject.professorNumber}">Num Professors</td>
+                        <td class="big-cell-data info-cell-data">
+                            <span class="table-cell-data-span"
+                                  th:each="pCode, counter : ${subject.mandatoryStudyPrograms}">
+                                <a class="link-data" href="" th:text="${pCode}">Mandatory study programs</a>
+                                <a th:unless="${counter.last}">,</a>
+                            </span>
+                        </td>
+                        <td class="small-cell-data info-cell-data" th:text="${subject.yearsActive}">Years active</td>
+                        <td class="small-cell-data info-cell-data" th:text="${subject.numberOfFirstTimeStudents}">Students(first
+                            enroll)
+                        </td>
+                        <td class="medium-cell-data info-cell-data" th:text="${subject.numberOfReEnrollmentStudents}">Students(re
+                            enroll)
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

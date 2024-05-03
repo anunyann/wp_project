@@ -1,10 +1,10 @@
 package mk.ukim.finki.akreditacii.service;
 
-import mk.ukim.finki.akreditacii.model.dto.SubjectInfoDto;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
+import mk.ukim.finki.akreditacii.model.subject.SubjectStatisticsDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -30,15 +30,15 @@ public interface SubjectService {
 
     List<Professor> getSubjectProfessors(String subjectId);
 
-    String getSubjectProfessorsSeparatedWithComma(String subjectId);
+    List<String> getSubjectProfessorsCodes(String subjectId);
 
     Integer getNumberOfProfessorsOnSubject(String subjectId);
 
-    List<SubjectInfoDto> findSubjectsInfo(String name, String professorId, String studyProgramCode, String accreditationYear);
+    List<SubjectStatisticsDTO> findSubjectsInfo(String subjectCode, String professorCode, String studyProgramCode, String accreditationYear);
 
     List<StudyProgram> getStudyProgramsWhereSubjectIsMandatory(String subjectId);
 
-    String getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(String subjectId);
+    List<StudyProgram> getStudyProgramsWhereSubjectIsNotMandatory(String subjectId);
 
     Integer numberOfActiveYears(String subjectId);
 

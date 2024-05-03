@@ -16,7 +16,7 @@
             width: 300px;
         }
 
-        .counter-table-data {
+        .counter-cell-data {
             width: 30px;
             text-align: center;
         }
@@ -149,16 +149,12 @@
                                                                    th:text="${subject.name}"></span>"</b>: <b><span
                             th:text="${numProfessors}"></span></b></span>
                 </div>
-                <!--     Professors as String       -->
-                <div class="col-12 mb-2">
-                    <span th:text="${professorsWithComa}"></span>
-                </div>
                 <!--     Professors as Table       -->
                 <div class="col-12">
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <td class="counter-table-data">#</td>
+                            <td class="counter-cell-data">#</td>
                             <td>Име</td>
                             <td>E-mail</td>
                             <td>Код</td>
@@ -166,7 +162,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="professor, counter : ${professors}">
-                            <td class="counter-table-data" th:text="${counter.index + 1}">Number</td>
+                            <td class="counter-cell-data" th:text="${counter.index + 1}">Number</td>
                             <td th:text="${professor.name}">Автор на книгата</td>
                             <td th:text="${professor.email}">Автор на книгата</td>
                             <td th:text="${professor.id}">Издавач на книгата</td>
@@ -220,81 +216,6 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <!-- Bibliography -->
-        <div class="col-12 mb-4">
-            <!-- Bibliography(mandatoryBooks) -->
-            <h3>Литература</h3>
-            <hr>
-            <h5>Задолжителна литература</h5>
-            <div class="col-12">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <td class="counter-table-data">#</td>
-                        <td>Автор на книгата</td>
-                        <td>Наслов на книгата</td>
-                        <td>Издавач на книгата</td>
-                        <td>Година на книгата</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="book, counter : ${books}">
-                        <td class="counter-table-data" th:text="${counter.index + 1}">Number</td>
-                        <td th:text="${book.author}">Автор на книгата</td>
-                        <td th:text="${book.title}">Наслов на книгата</td>
-                        <td th:text="${book.publisher}">Издавач на книгата</td>
-                        <td th:text="${book.year}">Година на книгата</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <h5 class="text-alert-custom" th:if="${books.size() == 0}">... за предмерот
-                    "<span th:text="${subject.name}"></span>".</h5>
-            </div>
-            <!-- Bibliography(electiveBooks) -->
-            <hr>
-            <h5>Изборна литература</h5>
-            <div class="col-12">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <td class="counter-table-data">#</td>
-                        <td>Автор на книгата</td>
-                        <td>Наслов на книгата</td>
-                        <td>Издавач на книгата</td>
-                        <td>Година на книгата</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="book, counter : ${electiveBooks}">
-                        <td class="counter-table-data" th:text="${counter.index + 1}">Number</td>
-                        <td th:text="${book.author}">Автор на книгата</td>
-                        <td th:text="${book.title}">Наслов на книгата</td>
-                        <td th:text="${book.publisher}">Издавач на книгата</td>
-                        <td th:text="${book.year}">Година на книгата</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <h5 class="text-alert-custom" th:if="${electiveBooks.size() == 0}">... за предмерот
-                    "<span th:text="${subject.name}"></span>".</h5>
-            </div>
-        </div>
-        <!-- Notes -->
-        <div class="col-12 mb-4">
-            <h3>Забелешки</h3>
-            <hr>
-            <div class="col-12">
-                <table class="table table-bordered table-striped">
-                    <tbody>
-                    <tr th:each="note : ${subjectDetails.notes}">
-                        <td th:text="${note}">Забелешка</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <h5 class="text-alert-custom" th:if="${subjectDetails.notes.size() == 0}">Не се прикачени дополнителни
-                    забелешки за предмерот
-                    "<span th:text="${subject.name}"></span>".</h5>
             </div>
         </div>
     </div>

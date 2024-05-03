@@ -2,10 +2,7 @@ package mk.ukim.finki.akreditacii.web;
 
 
 import mk.ukim.finki.akreditacii.model.professor.Professor;
-import mk.ukim.finki.akreditacii.model.subject.Book;
-import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
-import mk.ukim.finki.akreditacii.model.subject.Subject;
-import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
+import mk.ukim.finki.akreditacii.model.subject.*;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
 import mk.ukim.finki.akreditacii.service.DisplayService;
 import mk.ukim.finki.akreditacii.service.SubjectService;
@@ -35,30 +32,30 @@ public class SubjectController {
 
     @GetMapping("/subject/list")
     public String findAllSubjectsFiltered(Model model,
-                                                   @RequestParam(defaultValue = "1") Integer pageNum,
-                                                   @RequestParam(defaultValue = "10") Integer results,
-                                                   @RequestParam(required = false) String nameSearch,
-                                                   @RequestParam(required = false) String filteredAccreditation
-                                                   ){
+                                          @RequestParam(defaultValue = "1") Integer pageNum,
+                                          @RequestParam(defaultValue = "10") Integer results,
+                                          @RequestParam(required = false) String nameSearch,
+                                          @RequestParam(required = false) String filteredAccreditation
+    ) {
         Page<SubjectDetails> subjectDetailsListPage;
 
         if (nameSearch == null && filteredAccreditation == null) {
-            subjectDetailsListPage = service.findAllWithPagination(pageNum,results);
+            subjectDetailsListPage = service.findAllWithPagination(pageNum, results);
 
         } else {
-            subjectDetailsListPage =  service.findAllWithPaginationFiltered(pageNum,results,nameSearch,filteredAccreditation);
+            subjectDetailsListPage = service.findAllWithPaginationFiltered(pageNum, results, nameSearch, filteredAccreditation);
             model.addAttribute("text", nameSearch);
             model.addAttribute("accreditation", filteredAccreditation);
         }
 
         model.addAttribute("accreditations", accreditationService.findAll());
-        model.addAttribute("subjectDetailsListPage",subjectDetailsListPage);
+        model.addAttribute("subjectDetailsListPage", subjectDetailsListPage);
         return "subject/subject_list.html";
     }
 
     @GetMapping("/subject/{subjectId}/details")
     public String subjectDetails(@PathVariable String subjectId,
-                                 Model model){
+                                 Model model) {
         SubjectDetails subjectDetails = this.service.getSubjectDetailsById(subjectId);
         Subject subject = subjectDetails.getSubject();
 
@@ -69,14 +66,13 @@ public class SubjectController {
         model.addAttribute("subjectDetails", subjectDetails);
 
         // All unique professors at the subject (regardless of the study program) StudyProgramSubjectProfessor, comma separated list of professor ids
-        model.addAttribute("professorsWithComa", this.service.getSubjectProfessorsSeparatedWithComma(subjectId));
         model.addAttribute("professors", this.service.getSubjectProfessors(subjectId));
 
         // Number of proffesors on the subject
         model.addAttribute("numProfessors", this.service.getSubjectProfessors(subjectId).size());
 
         // Study programs where it is mandatory StudyProgramSubject, comma separated list of study program codes
-        model.addAttribute("studyPrograms", this.service.getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(subjectId));
+        model.addAttribute("studyPrograms", "this.service.getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(subjectId)");
         model.addAttribute("studyProgramsNum", this.service.getStudyProgramsWhereSubjectIsMandatory(subjectId).size());
 
         // Number of years that this subject has been activated
@@ -89,9 +85,28 @@ public class SubjectController {
         // Get all electiveBooks for given subject
         model.addAttribute("electiveBooks", subjectDetails.getBibliography().getElectiveBooks());
 
-        //todo: Average students per year
-
         return "subject/subject_details.html";
+    }
+
+    @GetMapping("/subject/statistics")
+    public String subjectStatisctics(Model model,
+                                     @RequestParam(required = false) String subjectCode,
+                                     @RequestParam(required = false) String professorCode,
+                                     @RequestParam(required = false) String studyProgramCode,
+                                     @RequestParam(required = false) String accreditationYear) {
+        //subjectCode, professorCode, studyProgramCode, accreditationYear
+
+        if (subjectCode == null && professorCode == null && studyProgramCode == null && accreditationYear == null) {
+            model.addAttribute("emptyMessage", true);
+            return "subject/subject_statistics.html";
+        }
+
+        model.addAttribute("subjectCode", subjectCode);
+        model.addAttribute("professorCode", professorCode);
+        model.addAttribute("studyProgramCode", studyProgramCode);
+        model.addAttribute("accreditationYear", accreditationYear);
+        model.addAttribute("subjects", this.service.findSubjectsInfo(subjectCode, professorCode, studyProgramCode, accreditationYear));
+        return "subject/subject_statistics.html";
     }
 
     @GetMapping("/subject/{subjectId}/edit")
@@ -117,7 +132,7 @@ public class SubjectController {
         List<Book> mandatoryBooks = sd.getBibliography().getBooks();
         Book newBook = new Book();
 
-        model.addAttribute("newBook",newBook);
+        model.addAttribute("newBook", newBook);
         model.addAttribute("subjectId", sd.getId());
         model.addAttribute("books", mandatoryBooks);
         return "subject/edit_mandatory_books";
@@ -131,7 +146,7 @@ public class SubjectController {
 
         model.addAttribute("subjectId", sd.getId());
         model.addAttribute("books", additionalBooks);
-        model.addAttribute("newBook",newBook);
+        model.addAttribute("newBook", newBook);
         return "subject/edit_elective_books";
     }
 
@@ -140,9 +155,8 @@ public class SubjectController {
                              @PathVariable("bookId") String bookId) {
 
 
-
         SubjectDetails sd = service.findSubjectById(subjectId).get();
-        sd.getBibliography().getBooks().remove(Integer.parseInt(bookId) -1 );
+        sd.getBibliography().getBooks().remove(Integer.parseInt(bookId) - 1);
         service.updateSubject(sd);
         return "redirect:/admin/subject/list";
     }
@@ -151,15 +165,15 @@ public class SubjectController {
     public String addBook(@ModelAttribute("newBook") Book newBook,
                           @PathVariable("subjectId") String subjectId) {
 
-       SubjectDetails sd = service.findSubjectById(subjectId).get();
-       sd.getBibliography().getBooks().add(newBook);
-       service.updateSubject(sd);
-       return "redirect:/admin/subject/list";
+        SubjectDetails sd = service.findSubjectById(subjectId).get();
+        sd.getBibliography().getBooks().add(newBook);
+        service.updateSubject(sd);
+        return "redirect:/admin/subject/list";
     }
 
     @PostMapping("/add-new-elective-book/{subjectId}")
     public String addElectiveBook(@ModelAttribute("newBook") Book newBook,
-                          @PathVariable("subjectId") String subjectId) {
+                                  @PathVariable("subjectId") String subjectId) {
 
         SubjectDetails sd = service.findSubjectById(subjectId).get();
         sd.getBibliography().getElectiveBooks().add(newBook);
