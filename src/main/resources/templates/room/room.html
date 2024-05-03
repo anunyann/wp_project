@@ -95,10 +95,7 @@
 
 
 
-
-
             <table class="table table-striped table-bordered mt-3">
-
                 <thead>
                 <tr>
                     <th class="text-primary">#</th>
@@ -113,7 +110,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="room, iterStat : ${rooms.content}">
-                    <td class="col-1" th:text="${iterStat.count}"></td>
+                    <td class="col-1" th:text="${iterStat.count + rooms.size * rooms.number}"></td>
                     <td class="col-3" th:text="${room.name}"></td>
                     <td th:text="${room.locationDescription}"></td>
                     <td th:text="${room.equipmentDescription}"></td>
@@ -129,7 +126,6 @@
                             <button type="submit" class="btn btn-danger btn-sm" style="text-align:center">Избриши</button>
                         </form>
                     </td>
-
                 </tr>
                 </tbody>
             </table>
