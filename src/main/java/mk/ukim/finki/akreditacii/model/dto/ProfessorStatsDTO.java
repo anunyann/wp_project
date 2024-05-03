@@ -1,4 +1,4 @@
-package mk.ukim.finki.akreditacii.model.view_model;
+package mk.ukim.finki.akreditacii.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

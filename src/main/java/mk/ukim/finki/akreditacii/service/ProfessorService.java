@@ -1,8 +1,8 @@
 package mk.ukim.finki.akreditacii.service;
 
+import mk.ukim.finki.akreditacii.model.dto.ProfessorStatsDTO;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
-import mk.ukim.finki.akreditacii.model.view_model.ProfessorStatsDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

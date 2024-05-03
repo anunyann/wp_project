@@ -1,11 +1,11 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import mk.ukim.finki.akreditacii.model.StudyCycle;
+import mk.ukim.finki.akreditacii.model.dto.ProfessorStatsDTO;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubjectProfessor;
-import mk.ukim.finki.akreditacii.model.view_model.ProfessorStatsDTO;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.akreditacii.repository.professor.ProfessorRepository;
 import mk.ukim.finki.akreditacii.service.ProfessorService;
@@ -67,7 +67,6 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Page<ProfessorStatsDTO> getStatsForAllProfessorsWithPaginationAndFilters(Integer pageNum, Integer results, String stringSearch, String filteredTitle) {
-
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
         List<Professor> professorList;
         List<ProfessorStatsDTO> professorStatsList = new ArrayList<>();
@@ -79,11 +78,9 @@ public class ProfessorServiceImpl implements ProfessorService {
             professorList = professorRepository.findAll();
         }
 
-
         int mainListSize = professorList.size();
         int startIndex = (pageNum - 1) * results;
         int endIndex = Math.min(startIndex + results, professorList.size());
-
 
         if (endIndex < startIndex || startIndex < 0) {
             startIndex = 0;
@@ -93,18 +90,13 @@ public class ProfessorServiceImpl implements ProfessorService {
         }
         professorList = professorList.subList(startIndex, endIndex);
 
-
         for (Professor professor : professorList) {
             double sumOfSubjectPartsPerCycleFirst = 0, sumOfSubjectPartsPerCycleSecond = 0, sumOfSubjectPartsPerCycleThird = 0;
             int countFirstCycle = 0, countSecondCycle = 0, countThirdCycle = 0;
             List<StudyProgramSubjectProfessor> studyProgramSubjectProfessorList = studyProgramSubjectProfessorRepository.findAllByProfessorId(professor.getId());
-
-            // predmeti sto gi drzi profesorot
             List<StudyProgramSubjectProfessor> professorSubjects = studyProgramSubjectProfessorList.stream().filter(studyProgramSubjectProfessor -> studyProgramSubjectProfessor.getProfessor().equals(professor)).toList();
 
-            // iteriranje niz predmetite sto gi drzi profesorot
             for (var professorSubject : professorSubjects) {
-                // predmet sto go drzi profesorot
                 var subjectDetails = professorSubject.getStudyProgramSubject().getSubject();
                 if (subjectDetails.getCycle().equals(StudyCycle.UNDERGRADUATE)) {
                     countFirstCycle += 1;
@@ -125,11 +117,9 @@ public class ProfessorServiceImpl implements ProfessorService {
                     sumOfSubjectPartsPerCycleThird += 1.0 / listOfSubjectProfessors.size();
                 }
             }
-
             ProfessorStatsDTO dto = new ProfessorStatsDTO(professor, countFirstCycle, countSecondCycle, countThirdCycle, sumOfSubjectPartsPerCycleFirst, sumOfSubjectPartsPerCycleSecond, sumOfSubjectPartsPerCycleThird);
             professorStatsList.add(dto);
         }
-
         return new PageImpl<>(professorStatsList, pageRequest, mainListSize);
     }
 }
