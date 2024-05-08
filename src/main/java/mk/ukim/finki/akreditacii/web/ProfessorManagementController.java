@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidProfessorId;
 import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
@@ -19,8 +20,9 @@ public class ProfessorManagementController {
     private final ProfessorService professorService;
     private final ProfessorDetailsService professorDetailsService;
     private final ProfessorDeleteService professorDeleteService;
+    private final ProfessorResumeService professorResumeService;
 
-    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService) {
+    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService, ProfessorResumeService professorResumeService) {
 
         this.professorService = professorService;
         this.professorAcademicTitlesService = professorAcademicTitlesService;
@@ -29,6 +31,7 @@ public class ProfessorManagementController {
         this.professorEducationService = professorEducationService;
         this.professorDetailsService = professorDetailsService;
         this.professorDeleteService = professorDeleteService;
+        this.professorResumeService = professorResumeService;
     }
 
     @GetMapping(value = {"/{professorId}"})
@@ -201,5 +204,35 @@ public class ProfessorManagementController {
         return "redirect:/admin/professor/" + professorId;
     }
 
+    /*RESUME*/
+
+    @GetMapping("/{professorId}/resume/edit")
+    public String editResume(@PathVariable String professorId, Model model){
+        Professor professor = this.professorService.getProfessorById(professorId);
+        model.addAttribute("professor", professor);
+        if(this.professorResumeService.findById(professorId).isPresent())
+            model.addAttribute("professorResume", this.professorResumeService.findById(professorId));
+        else {
+            model.addAttribute("professorResume", new ProfessorResume());
+            model.addAttribute("professorId", professorId);
+        }
+
+        return "professor/edit_professor_resume";
+    }
+    @PostMapping("/{professorId}/resume/save")
+    public String saveResume (@PathVariable String professorId, @RequestParam String resume, @RequestParam(required = false) byte[] image){
+        this.professorResumeService.save(professorId, resume, image);
+        return "redirect:/admin/professor";
+    }
+    @GetMapping("/{professorId}/resume")
+    public String viewResume(@PathVariable String professorId, Model model){
+        ProfessorResume professorResume = this.professorResumeService.findById(professorId).orElseThrow(()->new InvalidProfessorId(professorId));
+        if(professorResume != null)
+            model.addAttribute("professorResume", professorResume);
+        else
+            model.addAttribute("emptyProfessorResume", true);
+
+        return "professor/preview_professor_resume";
+    }
 
 }

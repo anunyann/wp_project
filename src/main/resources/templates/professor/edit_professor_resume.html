@@ -1,0 +1,32 @@
+<html lang="en" layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body class="bg-light">
+<h3 th:text="resume"></h3>
+<form method="POST" th:action="@{'/admin/professor/' + ${professor.getId()} + '/resume/save'}">
+    <div class="container" layout:fragment="content">
+        <br>
+        <h3>Промени биографија на професор: <span th:text="${professor.getName()}"></span></h3>
+        <br>
+        <div>
+            <label for="image">Прикачи слика</label>
+            <br>
+            <input type="file" id="image" name="image">
+        </div>
+        <br>
+        <div>
+            <label for="resume">Додади биографија</label>
+            <br>
+            <textarea id="resume" name="resume" rows="10" cols="50"></textarea>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-dark">Зачувај</button>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>
