@@ -6,9 +6,14 @@ import mk.ukim.finki.akreditacii.repository.RoomRepository;
 import mk.ukim.finki.akreditacii.service.RoomService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+
+
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -90,7 +95,31 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> importData(List<Room> data) {
-        return null;
+        return roomRepository.saveAll(data);
+    }
+
+    @Override
+    public String toTsv(List<Room> rooms) {
+        StringBuilder sb = new StringBuilder();
+        rooms.forEach(room -> {
+            processRoom(sb, room);
+        }
+        );
+        return sb.toString();
+    }
+
+    private void processRoom(StringBuilder sb, Room room) {
+        String name = Objects.toString(room.getName(), "");
+        String locationDescription = Objects.toString(room.getLocationDescription(), "");
+        String equipmentDescription = Objects.toString(room.getEquipmentDescription(), "");
+        String type = Objects.toString(room.getType(), "");
+        String capacity = Objects.toString(room.getCapacity(), "");
+
+        sb.append(name).append("\t")
+                .append(locationDescription).append("\t")
+                .append(equipmentDescription).append("\t")
+                .append(type).append("\t")
+                .append(capacity).append("\n");
     }
 
 }

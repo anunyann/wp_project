@@ -16,4 +16,7 @@ public interface RoomService {
     Room update(String name,String newName, String locationDescription, String equipmentDescription, RoomType type, Long capacity);
     Room delete(String name);
     List<Room> importData(List<Room> students);
+    String toTsv(List<Room> groups);
+
+
 }

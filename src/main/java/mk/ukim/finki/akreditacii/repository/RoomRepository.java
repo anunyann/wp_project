@@ -3,6 +3,7 @@ import mk.ukim.finki.akreditacii.model.room.Room;
 import mk.ukim.finki.akreditacii.model.room.RoomType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,9 +12,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 
 @Repository
-public interface RoomRepository extends JpaRepository<Room,Long> {
+public interface RoomRepository extends JpaSpecificationRepository<Room,String> {
 
-    Page<Room> findAll(Pageable pageable);
+    Page<Room> findAll(Specification<Room> filter,Pageable pageable);
     @Query("SELECT rm FROM Room rm " +
             "WHERE (:nameSearch is null OR rm.name ILIKE CONCAT('%', :nameSearch, '%')) " +
             "AND (:locationDescriptionSearch is null OR COALESCE(rm.locationDescription, '') ILIKE CONCAT('%', :locationDescriptionSearch, '%')) " +

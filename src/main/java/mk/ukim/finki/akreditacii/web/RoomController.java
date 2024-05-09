@@ -1,7 +1,9 @@
 package mk.ukim.finki.akreditacii.web;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.ukim.finki.akreditacii.model.DTO.RoomDto;
 import mk.ukim.finki.akreditacii.model.room.Room;
 import mk.ukim.finki.akreditacii.model.room.RoomType;
+import mk.ukim.finki.akreditacii.repository.ImportRepository;
 import mk.ukim.finki.akreditacii.service.RoomService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -24,13 +26,16 @@ import java.util.stream.Collectors;
 @RequestMapping()
 public class RoomController {
     private final RoomService roomService;
+    private final ImportRepository importRepository;
 
-    public RoomController(RoomService roomService) {
+
+    public RoomController(RoomService roomService, ImportRepository importRepository) {
         this.roomService = roomService;
+        this.importRepository = importRepository;
     }
 
     @GetMapping("/admin/rooms")
-    public String findAllSubjectsFiltered(Model model,
+    public String findAllRoomsFiltered(Model model,
                                           @RequestParam(defaultValue = "1") Integer pageNum,
                                           @RequestParam(defaultValue = "10") Integer results,
                                           @RequestParam(required = false) String nameSearch,
@@ -57,20 +62,21 @@ public class RoomController {
         model.addAttribute("rooms", roomPage);
         return "room/room.html";
     }
+
     @PostMapping("/admin/rooms/delete/{name}")
-    public String deleteProduct(@PathVariable String name){
+    public String deleteRoom(@PathVariable String name){
         this.roomService.delete(name);
         return "redirect:/admin/rooms";
 
     }
     @GetMapping("/admin/rooms/edit/{name}")
-    public String editProductPage(@PathVariable String name,Model model) {
+    public String editRoomPage(@PathVariable String name,Model model) {
         model.addAttribute("room", roomService.findByName(name));
         model.addAttribute("types",RoomType.values());
         return "room/edit_room.html";
     }
     @PostMapping("/admin/rooms/edit/{name}")
-    public String editProduct(
+    public String editRoom(
             @PathVariable String name,
             @RequestParam String newName,
             @RequestParam String locationDescription,
@@ -81,18 +87,14 @@ public class RoomController {
         return "redirect:/admin/rooms";
     }
     @GetMapping("/admin/rooms/add")
-    public String addProductPage(Model model) {
+    public String addRoomPage(Model model) {
         Room room = new Room();
         model.addAttribute("types",RoomType.values());
         model.addAttribute("room", room);
         return "room/add_room.html";
     }
-    @GetMapping("/admin/rooms/import")
-    public String ImportPage(Model model) {
-        return "room/import.html";
-    }
     @PostMapping("/admin/rooms/add")
-    public String saveProduct(
+    public String saveRoom(
             @RequestParam String name,
             @RequestParam String locationDescription,
             @RequestParam String equipmentDescription,
@@ -101,58 +103,46 @@ public class RoomController {
         this.roomService.create(name,locationDescription,equipmentDescription,type,capacity);
         return "redirect:/admin/rooms";
     }
-    @GetMapping("/admin/rooms/download")
-    public ResponseEntity<byte[]> exportRooms(
-            @RequestParam(defaultValue = "1") Integer pageNum,
-            @RequestParam(defaultValue = "100") Integer results,
-            @RequestParam(required = false) String nameSearch,
-            @RequestParam(required = false) String locationDescriptionSearch,
-            @RequestParam(required = false) String equipmentDescriptionSearch,
-            @RequestParam(required = false) Long participantsSearch,
-            @RequestParam(required = false) RoomType typeSearch) throws IOException {
 
-        Page<Room> roomsPage;
-        if (nameSearch == null && locationDescriptionSearch == null && equipmentDescriptionSearch == null && participantsSearch == null && typeSearch == null) {
-            roomsPage = roomService.findAllWithPagination(pageNum, results);
-        } else {
-            roomsPage = roomService.findAllWithPaginationFiltered(pageNum, results, nameSearch, locationDescriptionSearch,equipmentDescriptionSearch, participantsSearch, typeSearch);
+
+
+    @GetMapping("/admin/rooms/export")
+    public void export(@RequestParam(required = false) String nameSearch,
+                       @RequestParam(required = false) String locationDescriptionSearch,
+                       @RequestParam(required = false) String equipmentDescriptionSearch,
+                       @RequestParam(required = false) Long participantsSearch,
+                       @RequestParam(required = false) RoomType typeSearch,HttpServletResponse response) {
+        String tsv = roomService.toTsv(roomService.findAllWithPaginationFiltered( 1,100000,nameSearch, locationDescriptionSearch, equipmentDescriptionSearch,participantsSearch,typeSearch).getContent());
+
+        response.setContentType("text/tab-separated-values");
+        response.setHeader("Content-Disposition", "attachment; filename=\"rooms.tsv\"");
+
+        try (BufferedWriter outputStream = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()))) {
+            outputStream.write(tsv);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
 
-        List<Room> filteredRooms = roomsPage.getContent();
+    @GetMapping("/admin/rooms/sample-tsv")
+    public void sampleTsv(HttpServletResponse response) {
+        List<RoomDto> example = new ArrayList<>();
+        example.add(new RoomDto("Амф ТМФ", "", "", "CLASSROOM","150"));
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        outputStream.write("Pagination,Name,Location Description,Equipment Description,Type,Capacity\n".getBytes(StandardCharsets.UTF_8));
+        doExport(response, example);
+    }
 
-        int pagination = (pageNum - 1) * results + 1;
 
-        for (Room room : filteredRooms) {
-            String name = Optional.ofNullable(room.getName()).orElse("").replace("\"", "\"\"");
-            String locationDesc = Optional.ofNullable(room.getLocationDescription()).orElse("").replace("\"", "\"\"");
-            String equipmentDesc = Optional.ofNullable(room.getEquipmentDescription()).orElse("").replace("\"", "\"\"");
-            String type = room.getType() == null ? "" : room.getType().toString();
-            Long capacity = room.getCapacity() == null ? 0L : room.getCapacity();
+    public void doExport(HttpServletResponse response, List<RoomDto> data) {
+        String fileName = "rooms_example.tsv";
+        response.setContentType("text/tab-separated-values");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
-            String rowData = String.format("%d,\"%s\",\"%s\",\"%s\",\"%s\",%d\n",
-                    pagination++,
-                    name,
-                    locationDesc,
-                    equipmentDesc,
-                    type,
-                    capacity);
-            outputStream.write(rowData.getBytes(StandardCharsets.UTF_8));
+        try (OutputStream outputStream = response.getOutputStream()) {
+            importRepository.writeRooms(RoomDto.class, data, outputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        byte[] csvBytes = outputStream.toByteArray();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"rooms.csv\"");
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .headers(headers)
-                .contentType(MediaType.parseMediaType("text/csv"))
-                .contentLength(csvBytes.length)
-                .body(csvBytes);
     }
 
 

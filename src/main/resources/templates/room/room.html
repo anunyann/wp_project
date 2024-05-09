@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}"
-      xmlns:layout="http://www.w3.org/1999/xhtml">
+      xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -70,18 +70,13 @@
 
 
             <div class="row justify-content-start ">
-                <div class="col-auto">
+                <div class="col-auto mt-3">
                     <form method="get" th:action="@{'/admin/rooms/add'}">
                         <button type="submit" class="btn btn-success btn-sm">Додај соба</button>
                     </form>
                 </div>
-                <div class="col-auto">
-                    <form method="get" th:action="@{'/admin/rooms/import'}">
-                        <button type="submit" class="btn btn-primary btn-sm">Внеси повеќе соби</button>
-                    </form>
-                </div>
-                <div class="col-auto">
-                    <form method="get" th:action="@{'/admin/rooms/download'}">
+                <div class="col-auto mt-3">
+                    <form method="get" th:action="@{'/admin/rooms/export'}">
                         <input type="hidden" name="nameSearch" th:value="${nameSearch}">
                         <input type="hidden" name="locationDescriptionSearch" th:value="${locationDescriptionSearch}">
                         <input type="hidden" name="equipmentDescriptionSearch" th:value="${equipmentDescriptionSearch}">
@@ -91,6 +86,44 @@
                     </form>
                 </div>
             </div>
+
+
+
+
+
+                <div class="row mb-3 mt-3">
+                    <div class="col-6" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="card">
+                            <div class="card-header">
+                                Import rooms
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/api/rooms/import}" method="post"
+                                      enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group mt-1">
+                                                <input class="form-control" type="file" name="file" id="file" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 text-end">
+                                            <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                                            <a th:href="@{/admin/rooms/sample-tsv}"
+                                               class="btn  btn-secondary mt-2 mb-2">Template</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
 
 
 
@@ -117,12 +150,15 @@
                     <td th:text="${room.type}"></td>
                     <td class="col-1" th:text="${room.capacity}"></td>
                     <td class="col-1">
-                        <form method="get" th:action="@{'/admin/rooms/edit/{name}' (name=${room.name})}">
+                        <form method="get" th:action="@{'/admin/rooms/edit/{name}' (name=${room.name})}" sec:authorize="hasRole('ROLE_ADMIN')">
                             <button type="submit" class="btn btn-info btn-sm" style="text-align:center">Промени</button>
                         </form>
                     </td>
                     <td class="col-1">
-                        <form method="post" th:action="@{'/admin/rooms/delete/{name}' (name=${room.name})}">
+
+                        <form method="post"  th:action="@{'/admin/rooms/delete/{name}' (name=${room.name})}"
+                              sec:authorize="hasRole('ROLE_ADMIN')"
+                              onclick="return confirm('Are you sure you want to delete this room?')">
                             <button type="submit" class="btn btn-danger btn-sm" style="text-align:center">Избриши</button>
                         </form>
                     </td>
@@ -133,24 +169,30 @@
                 <form id="perPageForm" th:action="@{/admin/rooms}" method="get">
                     <label>Резултати по страна:</label>
                     <input type="number" id="perPageInput" name="results" min="1" th:value="${rooms.size}" onchange="this.form.submit()">
+                    <!-- Hidden inputs for maintaining filter states -->
+                    <input type="hidden" name="nameSearch" th:value="${nameSearch}" />
+                    <input type="hidden" name="locationDescriptionSearch" th:value="${locationDescriptionSearch}" />
+                    <input type="hidden" name="equipmentDescriptionSearch" th:value="${equipmentDescriptionSearch}" />
+                    <input type="hidden" name="participantsSearch" th:value="${participantsSearch}" />
+                    <input type="hidden" name="typeSearch" th:value="${typeSearch}" />
                 </form>
             </div>
             <div>
                 <ul class="pagination mt-4">
                     <li class="page-item" th:class="${rooms.number + 1 == 1} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=1, results=${rooms.size})}">Прва</a>
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=1, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Прва</a>
                     </li>
                     <li class="page-item" th:class="${rooms.number + 1 == 1} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number}, results=${rooms.size})}">Претходна</a>
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Претходна</a>
                     </li>
                     <li th:each="i : ${#numbers.sequence(1, rooms.totalPages)}" th:class="${rooms.number + 1 == i} ? 'active' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${i}, results=${rooms.size})}" th:text="${i}"></a>
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${i}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}" th:text="${i}"></a>
                     </li>
                     <li class="page-item" th:class="${rooms.number + 1 >= rooms.totalPages} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number + 2}, results=${rooms.size})}">Следна</a>
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number + 2}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Наредна</a>
                     </li>
                     <li class="page-item" th:class="${rooms.number + 1 >= rooms.totalPages} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.totalPages}, results=${rooms.size})}">Последна</a>
+                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.totalPages}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Последна</a>
                     </li>
                 </ul>
             </div>

@@ -3,6 +3,7 @@ package mk.ukim.finki.akreditacii.web.api;
 import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.akreditacii.model.room.Room;
 import mk.ukim.finki.akreditacii.model.room.RoomType;
+import mk.ukim.finki.akreditacii.repository.ImportRepository;
 import mk.ukim.finki.akreditacii.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,81 +24,32 @@ public class RestRoomController {
 
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private ImportRepository importRepository;
 
     @PostMapping("/api/rooms/import")
     public void importRooms(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
-        if (file.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            try {
-                response.getWriter().write("No file was provided for the import.");
-            } catch (IOException e) {
-                e.printStackTrace(); // Log this error appropriately
-            }
-            return;
-        }
+        try {
 
-        List<Room> invalidRooms = new ArrayList<>();
+            List<Room> rooms = importRepository.readRooms(file, Room.class);
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            String line;
-            boolean skipHeader = true;
 
-            while ((line = reader.readLine()) != null) {
-                if (skipHeader) {
-                    skipHeader = false;
-                    continue;
-                }
+            List<Room> importedRooms = roomService.importData(rooms);
 
-                String[] data = line.split(",");
-                for (int i = 0; i < data.length; i++) {
-                    data[i] = data[i].trim().replaceAll("^\"|\"$", ""); // Trim and remove surrounding quotes
-                }
 
-                try {
-                    Room room = new Room();
-                    room.setName(data[0]);
-                    room.setLocationDescription(data[1]);
-                    room.setEquipmentDescription(data[2]);
-                    room.setType(RoomType.valueOf(data[3])); // This might throw IllegalArgumentException
-                    room.setCapacity(Long.parseLong(data[4]));
-                    roomService.create(room.getName(), room.getLocationDescription(), room.getEquipmentDescription(), room.getType(), room.getCapacity());
-                } catch (IllegalArgumentException e) {
-                    // Log the exception or handle it as appropriate
-                    invalidRooms.add(new Room(data[0], data[1], data[2], null, Long.parseLong(data[4])));
-                }
-            }
-        } catch (IOException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                response.getWriter().write("Error reading from the file.");
-            } catch (IOException ex) {
-                ex.printStackTrace(); // Log this error appropriately
-            }
-            return;
-        }
-
-        if (!invalidRooms.isEmpty()) {
-            String fileName = "invalid_rooms.tsv";
-            response.setContentType(MediaType.TEXT_PLAIN_VALUE);
+            String fileName = "imported_rooms.tsv";
+            response.setContentType("text/tab-separated-values");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
             try (OutputStream outputStream = response.getOutputStream()) {
-                for (Room room : invalidRooms) {
-                    String line = String.join("\t", room.getName(), room.getLocationDescription(), room.getEquipmentDescription(),
-                            (room.getType() == null ? "INVALID_TYPE" : room.getType().toString()), room.getCapacity().toString());
-                    outputStream.write((line + "\n").getBytes());
-                }
-                outputStream.flush();
-            } catch (IOException e) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                importRepository.writeRooms(Room.class, importedRooms, outputStream);
             }
-        } else {
-            response.setStatus(HttpServletResponse.SC_OK);
-            try {
-                response.getWriter().write("All rooms have been successfully imported.");
-            } catch (IOException e) {
-                e.printStackTrace(); // Log this error appropriately
-            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to process the file", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during the import operation", e);
         }
+
     }
 }
