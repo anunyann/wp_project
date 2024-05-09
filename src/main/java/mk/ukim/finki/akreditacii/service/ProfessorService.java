@@ -1,5 +1,7 @@
 package mk.ukim.finki.akreditacii.service;
 
+import mk.ukim.finki.akreditacii.model.StudyCycle;
+import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.dto.ProfessorStatsDTO;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
@@ -21,5 +23,5 @@ public interface ProfessorService {
 
     List<Professor> findAll();
 
-    Page<ProfessorStatsDTO> getStatsForAllProfessorsWithPaginationAndFilters(Integer pageNum, Integer results, String stringSearch, String filteredTitle);
+    Page<ProfessorStatsDTO> getStatsForAllProfessorsWithPaginationAndFilters(Integer pageNum, Integer results, StudyCycle studyCycle, Accreditation accreditation);
 }

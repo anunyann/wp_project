@@ -1,5 +1,7 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.StudyCycle;
+import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.dto.ProfessorStatsDTO;
 import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.service.*;
@@ -202,19 +204,29 @@ public class ProfessorManagementController {
         return "redirect:/admin/professor/" + professorId;
     }
 
-    @GetMapping(path = "/professor-stats")
-    public String showProfessorStats(Model model,
-                                     @RequestParam(defaultValue = "1") Integer pageNum,
-                                     @RequestParam(defaultValue = "10") Integer results,
-                                     @RequestParam(required = false) String searchString,
-                                     @RequestParam(required = false) String titleFilter) {
-        Page<ProfessorStatsDTO> statsForProfessors = professorService.getStatsForAllProfessorsWithPaginationAndFilters(pageNum, results, searchString, titleFilter);
-        if (searchString != null && titleFilter != null) {
-            model.addAttribute("searchString", searchString);
-            model.addAttribute("titleFilter", titleFilter);
-        }
-        model.addAttribute("statsForProfessors", statsForProfessors);
-        model.addAttribute("professorTitles", ProfessorTitle.values());
-        return "professor/professor_stats";
+//    @GetMapping(path = "/professor-stats")
+//    public String showProfessorStats(Model model,
+//                                     @RequestParam(defaultValue = "1") Integer pageNum,
+//                                     @RequestParam(defaultValue = "10") Integer results,
+//                                     @RequestParam(required = false) String searchString,
+//                                     @RequestParam(required = false) String titleFilter) {
+//        Page<ProfessorStatsDTO> statsForProfessors = professorService.getStatsForAllProfessorsWithPaginationAndFilters(pageNum, results, searchString, titleFilter);
+//        if (searchString != null && titleFilter != null) {
+//            model.addAttribute("searchString", searchString);
+//            model.addAttribute("titleFilter", titleFilter);
+//        }
+//        model.addAttribute("statsForProfessors", statsForProfessors);
+//        model.addAttribute("professorTitles", ProfessorTitle.values());
+//        return "professor/professor_stats";
+//    }
+
+    @GetMapping("/stats")
+    public String stats(Model model,
+                        @RequestParam Accreditation accreditation,
+                        @RequestParam StudyCycle studyCycle,
+                        @RequestParam(defaultValue = "1") Integer pageNum,
+                        @RequestParam(defaultValue = "10") Integer results) {
+        System.out.println(professorService.getStatsForAllProfessorsWithPaginationAndFilters(pageNum, results, studyCycle, accreditation));
+        return "";
     }
 }
