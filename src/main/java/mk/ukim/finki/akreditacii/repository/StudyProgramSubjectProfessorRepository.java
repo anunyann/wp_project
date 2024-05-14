@@ -8,4 +8,5 @@ import java.util.List;
 public interface StudyProgramSubjectProfessorRepository extends JpaRepository<StudyProgramSubjectProfessor, String> {
 
     List<StudyProgramSubjectProfessor> findAllByStudyProgramSubjectSubjectId(String subjectId);
+    boolean existsByStudyProgramSubjectId(String subjectId);
 }

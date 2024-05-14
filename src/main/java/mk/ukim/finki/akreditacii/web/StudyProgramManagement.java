@@ -2,23 +2,21 @@ package mk.ukim.finki.akreditacii.web;
 
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
-import mk.ukim.finki.akreditacii.service.AccreditationService;
-import mk.ukim.finki.akreditacii.service.StudyProgramDetailsService;
-import mk.ukim.finki.akreditacii.service.StudyProgramService;
+
+import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 @RequestMapping("admin/study-programs")
 @Controller
 public class StudyProgramManagement {
-    private final StudyProgramService studyProgramService;
     private final StudyProgramDetailsService studyProgramDetailsService;
     private final AccreditationService accreditationService;
 
-    public StudyProgramManagement(StudyProgramService studyProgramService, StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService) {
-        this.studyProgramService = studyProgramService;
+    public StudyProgramManagement(StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService) {
         this.studyProgramDetailsService = studyProgramDetailsService;
         this.accreditationService = accreditationService;
     }
