@@ -28,12 +28,10 @@ import static java.util.stream.Collectors.groupingBy;
 public class DisplayController {
 
     private final DisplayService service;
-    private final StudyProgramSubjectRepository programSubjectRepository;
 
 
-    public DisplayController(DisplayService service, StudyProgramSubjectRepository programSubjectRepository) {
+    public DisplayController(DisplayService service) {
         this.service = service;
-        this.programSubjectRepository = programSubjectRepository;
     }
 
     @GetMapping(value = {"/{accreditation}/{cycle}"})
@@ -97,58 +95,6 @@ public class DisplayController {
         } else {
             return "display/study_program_grouped_mk";
         }
-    }
-
-    @GetMapping("/program/{program}/edit-subjects")
-    public String programSubjectManagement(@PathVariable String program, @RequestParam(defaultValue = "mk") String lang, Model model){
-
-        List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
-
-        Map<Short, Map<Boolean, List<StudyProgramSubject>>> bySemesterAndMandatory = subjects.stream()
-                .collect(groupingBy(StudyProgramSubject::getSemester, groupingBy(StudyProgramSubject::getMandatory)));
-
-        Map<StudyProgramSubject,List<StudyProgram>> subjectStudyProgramMap = new HashMap<StudyProgramSubject,List<StudyProgram>>();
-
-        StudyProgramDetails studyProgramDetails = this.service.getStudyProgramDetailsById(program);
-        if (!subjects.isEmpty()) {
-            model.addAttribute("studyProgram", studyProgramDetails);
-        }
-        model.addAttribute("bySemesterAndMandatory", bySemesterAndMandatory);
-        return "study_program_edit";
-    }
-
-    //TODO: action for saving an edited subject
-    @PostMapping("/program/{program}/edit/{code}")
-    public String programEditSubject(@PathVariable String program,
-                                     @PathVariable String code,
-                                     @RequestParam Float credits,
-                                     @RequestParam Short semester,
-                                     @RequestParam Boolean mandatory,
-                                     @RequestParam StudyProgram studyProgram,
-                                     @RequestParam String subjectGroup){
-
-        this.service.save(program,code,credits,semester,mandatory,studyProgram,subjectGroup);
-
-        return "redirect:study_program_edit";
-    }
-
-    //TODO: action for adding a subject to semester
-//    @PostMapping("/program/{program}/add")
-//    public String programAddSubject(@PathVariable String program, @RequestParam String code, @RequestParam Short semester, @RequestParam Boolean type){
-//        List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
-//
-//        StudyProgramSubject temp = subjects.stream().filter(i->i.getId().equals(code)).findFirst().get();
-//
-//
-//        return "redirect:/study_program_edit";
-//    }
-
-    // Action for deleting a subject from semester (table row)
-    @PostMapping("/program/{program}/delete/{code}")
-    public String programSubjectDelete (@PathVariable String program, @PathVariable String code){
-        List<StudyProgramSubject> subjects = service.getProgramSubjects(program);
-        service.getProgramSubjects(program).remove(subjects.stream().filter(i->i.getId().equals(code)).findFirst().get());
-        return "redirect:/study_program_edit";
     }
 
     @GetMapping("/subject/{subjectId}")

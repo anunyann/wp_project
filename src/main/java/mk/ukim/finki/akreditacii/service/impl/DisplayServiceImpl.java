@@ -29,17 +29,14 @@ public class DisplayServiceImpl implements DisplayService {
     private final StudyProgramSubjectRepository studyProgramSubjectRepository;
     private final StudyProgramSubjectProfessorRepository professorRepository;
 
-    private final StudyProgramSubjectRepository programSubjectRepository;
-
     public DisplayServiceImpl(SubjectDetailsRepository repository,
                               StudyProgramDetailsRepository programDetailsRepository,
                               StudyProgramSubjectRepository studyProgramSubjectRepository,
-                              StudyProgramSubjectProfessorRepository professorRepository, StudyProgramSubjectRepository programSubjectRepository) {
+                              StudyProgramSubjectProfessorRepository professorRepository) {
         this.subjectDetailsRepository = repository;
         this.programDetailsRepository = programDetailsRepository;
         this.studyProgramSubjectRepository = studyProgramSubjectRepository;
         this.professorRepository = professorRepository;
-        this.programSubjectRepository = programSubjectRepository;
     }
 
     @Override
@@ -75,18 +72,4 @@ public class DisplayServiceImpl implements DisplayService {
         return this.programDetailsRepository.findById(program).orElseThrow(() -> new InvalidStudyProgram(program));
     }
 
-    @Override
-    public StudyProgramSubject save(String program, String code, Float credits, Short semester, Boolean mandatory, StudyProgram studyProgram, String subjectGroup) {
-        StudyProgramSubject sub = this.programSubjectRepository.findById(code).get();
-
-        sub.setSemester(semester);
-        sub.setStudyProgram(studyProgram);
-        sub.setSubjectGroup(subjectGroup);
-        sub.getSubject().setCredits(credits);
-        sub.setMandatory(mandatory);
-
-        this.programSubjectRepository.save(sub);
-
-        return sub;
-    }
 }

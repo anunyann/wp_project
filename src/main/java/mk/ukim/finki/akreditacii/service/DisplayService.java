@@ -23,6 +23,4 @@ public interface DisplayService {
 
     StudyProgramDetails getStudyProgramDetailsById(String program);
 
-    StudyProgramSubject save(String program, String code, Float credits, Short semester, Boolean mandatory, StudyProgram studyProgram, String subjectGroup);
-
 }
