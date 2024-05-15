@@ -21,7 +21,7 @@
     <form th:action="@{/admin/study-programs/add}" method="POST">
         <div class="d-flex flex-wrap justify-content-between">
 
-            <div class="form-group col-6  p-1">
+            <div class="form-group col-4  p-1">
                 <label for="name" th:text="#{STUDY_PROGRAM_NAME_2} +  ':'"></label>
                 <input type="text"
                        id="name"
@@ -31,7 +31,7 @@
                        th:value="(${studyProgramDetails} != null ? ${studyProgramDetails.getStudyProgram().getName()} : '')">
             </div>
 
-            <div class="form-group col-6  p-1">
+            <div class="form-group col-4  p-1">
                 <label
                         for="nameEn"
                         th:text="#{STUDY_PROGRAM_NAME_3} +  ':'"></label>
@@ -41,6 +41,24 @@
                        name="nameEn"
                        required="required"
                        th:value="(${studyProgramDetails} != null ? ${studyProgramDetails.getNameEn()} : '')">
+            </div>
+            <div class="form-group col-4  p-1">
+                <label
+                        for="nameEn"
+                        th:text="'Координатор:'"></label>
+                <select
+                        class="form-control"
+                        id="professor"
+                        name="professor"
+                        required="required">
+                    <option value="">Избери професор</option>
+                    <option
+                            th:each="p : ${professors}"
+                            th:value="${p.id}"
+                            th:text="${p.name}"
+                            th:selected="${studyProgramDetails?.coordinator?.id == p.id}"
+                    ></option>
+                </select>
             </div>
 
             <div class="form-group col-3 p-1">

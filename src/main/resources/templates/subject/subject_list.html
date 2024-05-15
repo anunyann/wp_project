@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Details</title>
+    <!-- Add Bootstrap CSS link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script th:inline="javascript">
+        function cleanQueryFilters() {
+            window.location = "?";
+        }
+
+    </script>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+
+    <h1>Subject List</h1>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th class="text-primary"><b class="fas fa-edit mr-1" th:text="#{CODE}"></b></th>
+            <th class="text-primary"><b class="fas fa-edit mr-1" th:text="#{NAME}"></b></th>
+
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <div id="filters">
+            <form th:action="@{/admin/subject/list}" method="GET">
+
+                <div class="d-flex flex-wrap justify-content-between">
+                    <div class="col-md-3 col-sm-6 p-1">
+                        <label for="nameSearch" class="mr-2 mb-0" th:text="#{SEARCH_BY_NAME}"></label>
+                        <input type="text"
+                               id="nameSearch"
+                               class="form-control"
+                               name="nameSearch"
+                               th:placeholder="#{SEARCH}"
+                               th:value="${text}"/>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6  p-1">
+                        <label for="accreditationFilter" class="mr-2 mb-0" th:text="#{FILTER_BY_ACCREDITATION}"></label>
+                        <select id="accreditationFilter"
+                                class="form-control custom-select"
+                                name="filteredAccreditation">
+                            <option value="" th:text="#{SELECT}"></option>
+                            <option th:each="acc : ${accreditations}"
+                                    th:value="${acc.getYear()}"
+                                    th:text="${acc.getYear()}"
+                                    th:selected="${accreditation != null && accreditation != '' && accreditation == acc.getYear()}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6  p-1 text-end">
+                        <button
+                                type="submit"
+                                class="btn btn-primary col-3"
+                                th:text="#{APPLY_FILTERS}"></button>
+                        <button
+                                id="resetFiltersBtn"
+                                type="reset"
+                                class="btn btn-outline-dark col-3"
+                                th:text="#{RESET_FILTERS}"
+                                th:onclick="cleanQueryFilters()"
+                        ></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <tr th:each="subjectDetail, start: ${subjectDetailsListPage.getContent()}">
+            <td th:text="${start.index + subjectDetailsListPage.getNumber() * subjectDetailsListPage.getSize() + 1}"></td>
+            <td th:text="${subjectDetail.id}">Code</td>
+            <td th:text="${subjectDetail.subject.getName()}">Name</td>
+            <td>
+                <div class="btn-group-vertical" role="group">
+                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id}} + '/edit'" class="btn btn-primary btn-sm mb-2">
+                        <i class="fas fa-edit mr-1" th:text="#{EDIT}"></i>
+                    </a>
+                    <button type="button" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt mr-1" th:text="#{DELETE}"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+       <div th:include="fragments/paging :: pageSection(${subjectDetailsListPage})"></div>
+</div>
+
+<!-- Add Bootstrap JavaScript and jQuery scripts (optional) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

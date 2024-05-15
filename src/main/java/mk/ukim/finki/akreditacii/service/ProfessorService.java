@@ -4,6 +4,8 @@ import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface ProfessorService {
 
     Professor getProfessorById(String professorId);
@@ -15,4 +17,6 @@ public interface ProfessorService {
     Professor save(String id, String name, String email, ProfessorTitle title);
 
     void deleteById(String id);
+
+    List<Professor> findAll();
 }
