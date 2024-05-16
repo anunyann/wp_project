@@ -130,7 +130,7 @@
                 <td th:text="${spDetails.getStudyProgram().getName()}"></td>
                 <td th:text="${spDetails.accreditation?.year}"></td>
                 <td th:text="#{${spDetails.studyCycle}}"></td>
-                <td th:text='${spDetails.bilingual? "Двојазична": spDetails.onEnglish? "Англиски": "Македонски"}'></td>
+                <td th:text="${spDetails.bilingual ? 'Двојазична' : (spDetails.onEnglish ? 'Англиски' : 'Македонски')}"></td>
                 <td class="text-right d-flex flex-wrap justify-content-end">
                     <div class="col-3">
                         <a th:href="@{'/admin/study-programs/edit-form/{id}' (id=${spDetails.getId()})}"
@@ -148,6 +148,11 @@
                         <a th:href="@{'/admin/study-programs/{id}/documents' (id=${spDetails.getId()})}"
                            class="btn btn-sm btn-outline-dark m-1">
                             <i class="fa fa-trash" th:text="#{DOCUMENTS}"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a th:href="@{'/programs/' + ${spDetails.getId()} + '/edit-professors'}" class="btn btn-sm btn-outline-dark m-1">
+                            <i class="fa fa-trash" th:text="#{EDIT_STUDY_PROGRAM_PROFESSORS}"></i>
                         </a>
                     </div>
                 </td>

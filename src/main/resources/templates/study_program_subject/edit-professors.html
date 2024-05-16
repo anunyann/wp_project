@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-jdBCDq2R8M4E2WUYbX8mqHpPn+zSKnX3JhCIpKs5pP03SwrR5id6DOszLg03BbbwQ8UyQb/0VemM02zLKBVTPw==" crossorigin="anonymous" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+<div class="view-content my-5" layout:fragment="content">
+    <h2 th:text="${studyProgramDetails.getStudyProgram().getName()}"></h2>
+    <div th:if="${studyProgramDetails.getGeneralInformation()!=null}">
+        <h4 th:text="#{GENERAL_INFO}"></h4>
+        <p th:text="${studyProgramDetails.getGeneralInformation()}"></p>
+    </div>
+    <div  th:if="${studyProgramDetails.getGraduationTitle()!=null || studyProgramDetails.getGraduationTitleEn()!=null}">
+        <h4 th:text="#{TITLE_OBTAINED_AFTER_COMPLETION_OF_THE_STUDY_PROGRAM}"></h4>
+        <p class="fw-bold" th:text="${studyProgramDetails.getGraduationTitle()}" ></p>
+        <p class="fw-bold" th:text="${studyProgramDetails.getGraduationTitleEn()}" ></p>
+    </div>
+    <div  th:if="${studyProgramDetails.getSubjectRestrictions()!=null}">
+        <h4 th:text="#{CURICULUM}"></h4>
+        <p th:text="${studyProgramDetails.getSubjectRestrictions()}" ></p>
+    </div>
+
+
+
+    <div class="container">
+        <div class="float-right">
+        <form th:action="@{'/programs/'+${programCode}+'/add-all-professors'}" method="post" style="margin-bottom: 2px">
+            <button type="submit" class="btn btn-info" style="margin-top: 2px" th:text="#{ADD_ALL_PROFESSORS_FROM_THIS_STUDY_PROGRAM}"></button>
+
+            <label for="order" th:text="#{ENTER_ORDER}"></label>
+            <input type="number" name="order" id="order" step="0.01" placeholder="Внеси order" required>
+
+        </form>
+        </div>
+
+        <h2 th:text="#{MANDATORY_SUBJECTS}"></h2>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th class="col-sm-2"><b th:text="#{CODE}"></b></th>
+                <th class="col-sm-2"><b th:text="#{SUBJECT}"></b></th>
+                <th class="col-sm-8"><b th:text="#{PROFESSORS}"></b></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${subjectProfessorsMap}">
+                <div th:if="${entry.key.mandatory==true}">
+                <td><span th:text="${entry.key.subject.id}"></span></td>
+                <td><span th:text="${entry.key.subject.subject.getName()}"></span></td>
+
+                <td>
+                    <div class="container">
+                    <div class="row">
+                    <div class="col-first" style="width: 50%;">
+                    <ul class="list-group">
+                        <li th:each="professor : ${entry.value}" class="list-group-item d-flex justify-content-between align-items-center" >
+                            <span class="col-sm-auto" th:text="${professor.getProfessor().getName()}"></span>
+                            <form th:action="@{'/programs/' + ${entry.key.id} + '/delete-professor/' + ${professor.getProfessor().getId()}}" method="post">
+                                <button type="submit" class="btn btn-danger" th:text="#{REMOVE}"></button>
+                            </form>
+
+
+                        </li>
+
+                    </ul>
+                    </div>
+                    <div class="col-last" style="width: 40%;">
+                        <form th:action="@{'/programs/' + ${entry.key.id} + '/add-professor'}" method="post">
+                            <div style="margin-top: 1vh; margin-bottom: 1vh;">
+                                <label for="selectedProfessor" style="margin-bottom: 1vh;" th:text="#{SELECT_PROFESSOR}"></label>
+                                <select id="selectedProfessor" name="selectedProfessor">
+                                    <option th:each="professor : ${professorsNotAssigned.get(entry.key)}"
+                                            th:value="${professor.id}"
+                                            th:text="${professor.name}"></option>
+                                </select>
+                            </div>
+                            <div style="margin-top: 1vh;margin-bottom: 1vh;">
+                                <label for="order2" th:text="#{ENTER_ORDER}"></label>
+                                <input type="number" name="order" id="order2" step="0.01" placeholder="Внеси order" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-info" style="margin-bottom: 2vh;" th:text="#{ADD_PROFESSOR}"></button>
+                        </form>
+                        <form th:action="@{'/programs/' + ${entry.key.id} + '/add-professors-from-other-study-programs'}" method="post">
+                            <button type="submit" class="btn btn-info" style="margin-top: 1vh" th:text="#{ADD_PROFESSORS_FROM_OTHER_STUDY_PROGRAM}"></button>
+                            <div style="margin-top: 1vh;">
+                            <label for="order3" th:text="#{ENTER_ORDER}"></label>
+                            <input type="number" name="order" id="order3" step="0.01" placeholder="Внеси order" required>
+                            </div>
+
+                        </form>
+
+                    </div>
+                    </div>
+                    </div>
+
+
+
+                </td>
+                </div>
+
+            </tr>
+            </tbody>
+        </table>
+
+        <h2 th:text="#{ELECTIVE_SUBJECTS}"></h2>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th class="col-sm-2"><b th:text="#{CODE}"></b></th>
+                <th class="col-sm-2"><b th:text="#{SUBJECT}"></b></th>
+                <th class="col-sm-8"><b th:text="#{PROFESSORS}"></b></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${subjectProfessorsMap}">
+                <div th:if="${entry.key.mandatory==false}">
+                    <td><span th:text="${entry.key.subject.id}"></span></td>
+                    <td><span th:text="${entry.key.subject.subject.getName()}"></span></td>
+
+                    <td>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-first" style="width: 50%;">
+                                    <ul class="list-group">
+                                        <li th:each="professor : ${entry.value}" class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="col-sm-auto" th:text="${professor.getProfessor().getName()}"></span>
+                                            <form th:action="@{'/programs/' + ${entry.key.id} + '/delete-professor/' + ${professor.getProfessor().getId()}}" method="post">
+                                                <button type="submit" class="btn btn-danger" th:text="#{REMOVE}"></button>
+                                            </form>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div class="col-last" style="width: 40%;">
+                                    <form th:action="@{'/programs/' + ${entry.key.id} + '/add-professor'}" method="post">
+                                        <div style="margin-top: 1vh; margin-bottom: 1vh;">
+                                            <label for="selectedProfessor2" style="margin-bottom: 1vh;" th:text="#{SELECT_PROFESSOR}"></label>
+                                            <select id="selectedProfessor2" name="selectedProfessor">
+                                                <option th:each="professor : ${professorsNotAssigned.get(entry.key)}"
+                                                        th:value="${professor.id}"
+                                                        th:text="${professor.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div style="margin-top: 1vh;">
+                                        <label for="order4" th:text="#{ENTER_ORDER}"></label>
+                                        <input type="number" name="order" id="order4" step="0.01" placeholder="Внеси order" required>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-info" style="margin-bottom: 1vh;margin-top: 1vh;" th:text="#{ADD_PROFESSOR}"></button>
+                                    </form>
+                                    <form th:action="@{'/programs/' + ${entry.key.id} + '/add-professors-from-other-study-programs'}" method="post">
+                                        <button type="submit" class="btn btn-info" style="margin-top: 1vh;" th:text="#{ADD_PROFESSORS_FROM_OTHER_STUDY_PROGRAM}"></button>
+                                        <div style="margin-top: 1vh;">
+                                        <label for="order5" th:text="#{ENTER_ORDER}"></label>
+                                        <input type="number" name="order" id="order5" step="0.01" placeholder="Внеси order" required>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                </div>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>
