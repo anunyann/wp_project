@@ -1,17 +1,21 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.*;
+import mk.ukim.finki.akreditacii.model.subject.dto.StudyProgramSubjectProfessorDTO;
+import mk.ukim.finki.akreditacii.model.subject.dto.SubjectAllocationStatsDTO;
+import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
+import mk.ukim.finki.akreditacii.repository.AccreditationRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
 import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
 import mk.ukim.finki.akreditacii.service.SubjectService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,7 +23,6 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecification.*;
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -30,11 +33,13 @@ public class SubjectServiceImpl implements SubjectService {
     private final SubjectDetailsRepository subjectDetailsRepository;
     private final StudyProgramSubjectRepository studyProgramSubjectRepository;
     private final StudyProgramSubjectProfessorRepository professorRepository;
+    private final AccreditationRepository accreditationRepository;
 
-    public SubjectServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository) {
+    public SubjectServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository, AccreditationRepository accreditationRepository) {
         this.subjectDetailsRepository = subjectDetailsRepository;
         this.studyProgramSubjectRepository = studyProgramSubjectRepository;
         this.professorRepository = professorRepository;
+        this.accreditationRepository = accreditationRepository;
     }
 
 
@@ -134,7 +139,9 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public List<SubjectStatisticsDTO> findSubjectsInfo(String subjectCode, String professorCode, String studyProgramCode, String accreditationYear) {
-        // implement this with specification search
+        if (subjectCode.isEmpty() && professorCode.isEmpty() && studyProgramCode.isEmpty() && accreditationYear.isEmpty())
+            return new ArrayList<>();
+
         Specification<StudyProgramSubjectProfessor> spec = where(null);
 
         if (!StringUtils.isEmpty(subjectCode)) {
@@ -154,47 +161,47 @@ public class SubjectServiceImpl implements SubjectService {
         }
 
         List<StudyProgramSubjectProfessor> studyProgramSubjectProfessors = this.professorRepository.findAll(spec);
+        List<String> subjectCodes = studyProgramSubjectProfessors.stream().map(obj -> obj.getStudyProgramSubject().getSubject().getSubject().getId()).distinct().toList();
 
-        Map<String, List<StudyProgramSubjectProfessor>> subjects1 = studyProgramSubjectProfessors.stream().collect(Collectors.groupingBy(obj -> obj.getStudyProgramSubject().getSubject().getSubject().getId()));
+        List<StudyProgramSubjectProfessorDTO> allData = this.professorRepository.findAllCustomQuery();
+        Map<String, List<StudyProgramSubjectProfessorDTO>> allDataMap = allData.stream().collect(Collectors.groupingBy(StudyProgramSubjectProfessorDTO::getSubjectId));
 
-        return createSubjectStatisticsDTO(subjects1);
+        //Get getSubjectAllocationStatsDTOList
+        List<SubjectAllocationStatsDTO> subjectAllocationStatsDTOList = this.subjectDetailsRepository.getSubjectAllocationStatsDTOList();
+
+        List<SubjectStatisticsDTO> resultList = new ArrayList<>();
+        subjectCodes.forEach(code -> {
+            Optional<SubjectAllocationStatsDTO> subjectAllocationStatsDTO = subjectAllocationStatsDTOList.stream().filter(obj -> obj.getId().equals(code)).findFirst();
+
+            if (allDataMap.get(code) != null) {
+                resultList.add(createSubjectStatisticsDTO(allDataMap.get(code), subjectAllocationStatsDTO));
+            }
+        });
+
+        return resultList;
     }
 
-    private List<SubjectStatisticsDTO> createSubjectStatisticsDTO(Map<String, List<StudyProgramSubjectProfessor>> subjectsMap) {
-        List<String> subjectCodes = subjectsMap.keySet().stream().toList();
+    private SubjectStatisticsDTO createSubjectStatisticsDTO(List<StudyProgramSubjectProfessorDTO> list, Optional<SubjectAllocationStatsDTO> subjectAllocationStatsDTO) {
+        String subjectCode = list.get(0).getSubjectId();
+        List<String> professorCodes = list.stream().map(StudyProgramSubjectProfessorDTO::getProfessorId).distinct().toList();
+        Integer professorNumber = professorCodes.size();
+        List<String> mandatoryStudyPrograms = list.stream()
+                .filter(obj -> obj.getStudyProgramMandatory().equals(true))
+                .map(StudyProgramSubjectProfessorDTO::getStudyProgramId)
+                .distinct()
+                .toList();
 
-        List<SubjectStatisticsDTO> subjectStatisticsDTOS = new ArrayList<>();
-        for (String code : subjectCodes){
-            List<StudyProgramSubjectProfessor> subjectsInfoList = subjectsMap.get(code);
-
-            StudyProgramSubjectProfessor template = subjectsInfoList.get(0);
-            // attributes
-            String subjectName = template.getStudyProgramSubject().getSubject().getSubject().getId();
-            List<Professor> professors = this.getSubjectProfessors(subjectName);
-            List<String> professorCodes = professors.stream().map(Professor::getId).distinct().toList();
-            Integer professorNumber = professorCodes.size();
-            List<String> mandatoryStudyPrograms = new ArrayList<>();
-            subjectsInfoList.forEach(obj -> {
-                if (obj.getStudyProgramSubject().getMandatory())
-                    mandatoryStudyPrograms.add(obj.getStudyProgramSubject().getStudyProgram().getCode());
-            });
-            Integer yearsActive = 0;
-            Double numberOfFirstTimeStudents = 0.0;
-            Double numberOfReEnrollmentStudents = 0.0;
-
-            subjectStatisticsDTOS.add(new SubjectStatisticsDTO(subjectName, professorCodes, professorNumber, mandatoryStudyPrograms, yearsActive, numberOfFirstTimeStudents, numberOfReEnrollmentStudents));
+        long yearsActive = 0L;
+        double numberOfFirstTimeStudents = 0.0;
+        double numberOfReEnrollmentStudents = 0.0;
+        if (subjectAllocationStatsDTO.isPresent()) {
+            SubjectAllocationStatsDTO stats = subjectAllocationStatsDTO.get();
+            yearsActive = (stats.getYearsActive() != null) ? stats.getYearsActive() : 0L;
+            numberOfFirstTimeStudents = (stats.getNumberOfFirstTimeStudents() != null) ? stats.getNumberOfFirstTimeStudents() : 0.0;
+            numberOfReEnrollmentStudents = (stats.getNumberOfReEnrollmentStudents() != null) ? stats.getNumberOfReEnrollmentStudents() : 0.0;
         }
 
-        return subjectStatisticsDTOS;
-    }
-
-    private SubjectAllocationStatsDTO getAllocationStats(String subjectCode){
-
-//        Integer yearsActive = this.;
-        Double numberOfFirstTimeStudents = 0.0;
-        Double numberOfReEnrollmentStudents = 0.0;
-
-        return null;
+        return new SubjectStatisticsDTO(subjectCode, professorCodes, professorNumber, mandatoryStudyPrograms, (int) yearsActive, numberOfFirstTimeStudents, numberOfReEnrollmentStudents);
     }
 
     @Override
@@ -233,5 +240,14 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Double averageNumberOfStudents(String subjectId) {
         return null;
+    }
+
+    @Override
+    public Accreditation getActiveAccreditationYear() {
+        List<Accreditation> list = this.accreditationRepository.findAll();
+
+        list.removeIf(obj -> obj.getIsActive().equals(false));
+
+        return list.get(0);
     }
 }

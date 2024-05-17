@@ -1,10 +1,11 @@
 package mk.ukim.finki.akreditacii.service;
 
+import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
-import mk.ukim.finki.akreditacii.model.subject.SubjectStatisticsDTO;
+import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -43,4 +44,6 @@ public interface SubjectService {
     Integer numberOfActiveYears(String subjectId);
 
     Double averageNumberOfStudents(String subjectId);
+
+    Accreditation getActiveAccreditationYear();
 }

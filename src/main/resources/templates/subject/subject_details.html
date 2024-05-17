@@ -12,6 +12,15 @@
 </head>
 <div class="container" layout:fragment="content">
     <style>
+        .container{
+            padding-top: 10px;
+        }
+
+        .buttons{
+            padding-bottom: 10px;
+            color: white;
+        }
+
         .info-table-data {
             width: 300px;
         }
@@ -25,15 +34,10 @@
             color: crimson;
         }
     </style>
-    <div class="breadcrumbs">
-        <ul>
-            <li class="abreadcrumb">
-                <a href="/admin/subject/list" class="active">Назад</a>
-                <span class="arrow"> &gt; </span>
-            </li>
-        </ul>
+    <div class="buttons">
+        <a href="/admin/subject/list" class="active btn btn-primary"><i>Назад</i></a>
     </div>
-    <div class="row" id="main-div">
+    <div class="row main-div">
         <div class="two-column-summary mb-4">
             <div class="col">
                 <span>Код на предмет:</span>

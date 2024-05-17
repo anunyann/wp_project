@@ -1,4 +1,6 @@
-package mk.ukim.finki.akreditacii.model.subject;
+package mk.ukim.finki.akreditacii.model.subject.dto;
+import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
+
 import java.util.Date;
 import java.util.List;
 

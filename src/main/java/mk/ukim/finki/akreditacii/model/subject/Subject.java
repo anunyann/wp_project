@@ -2,7 +2,7 @@ package mk.ukim.finki.akreditacii.model.subject;
 
 import jakarta.persistence.*;
 import lombok.*;
-import mk.ukim.finki.akreditacii.model.SemesterType;
+import mk.ukim.finki.akreditacii.model.semester.SemesterType;
 import org.hibernate.Hibernate;
 
 import java.util.Objects;

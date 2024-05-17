@@ -12,6 +12,15 @@
 </head>
 <div class="container" layout:fragment="content">
     <style>
+        .container{
+            padding-top: 10px;
+        }
+
+        .buttons{
+            padding-bottom: 10px;
+            color: white;
+        }
+
         .counter-cell-data {
             width: 30px;
             text-align: center;
@@ -72,22 +81,32 @@
             height: 40px;
             width: 240px;
         }
+
+        .empty-message-div {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: red;
+        }
+
+        .empty-message-div a {
+            font-weight: bold;
+            font-size: 18px;
+        }
     </style>
-    <div class="breadcrumbs">
-        <ul>
-            <li class="abreadcrumb">
-                <a href="/admin/subject/list" class="active">Назад</a>
-                <span class="arrow"></span>
-            </li>
-        </ul>
+    <div class="buttons">
+        <a href="/admin/subject/list" class="active btn btn-primary"><i>Назад</i></a>
     </div>
-    <div class="row">
+    <div class="row main-div">
         <form th:method="GET" th:action="@{'/admin/subject/statistics'}">
             <div class="col-12 mb-2" id="stats-filter-div">
                 <div>
                     <!--subjectCode-->
                     <label for="subjectCode" hidden="hidden">subjectCode</label>
                     <input type="text"
+                           th:value="${subjectCode}"
                            class="form-control filter-input"
                            name="subjectCode"
                            id="subjectCode"
@@ -97,6 +116,7 @@
                     <!--professorCode-->
                     <label for="professorCode" hidden="hidden">professorCode</label>
                     <input type="text"
+                           th:value="${professorCode}"
                            class="form-control filter-input"
                            name="professorCode"
                            id="professorCode"
@@ -106,6 +126,7 @@
                     <!--studyProgramCode-->
                     <label for="studyProgramCode" hidden="hidden">studyProgramCode</label>
                     <input type="text"
+                           th:value="${studyProgramCode}"
                            class="form-control filter-input"
                            name="studyProgramCode"
                            id="studyProgramCode"
@@ -115,6 +136,7 @@
                     <!--accreditationYear-->
                     <label for="accreditationYear" hidden="hidden">accreditationYear</label>
                     <input type="text"
+                           th:value="${defaultActiveYear}"
                            class="form-control filter-input"
                            name="accreditationYear"
                            id="accreditationYear"
@@ -155,8 +177,8 @@
                         <td class="counter-cell-data" th:text="${counter.index + 1}">Number</td>
                         <td class="medium-cell-data info-cell-data">
                             <a class="link-data"
-                               th:text="${subject.subjectName}"
-                               th:href="@{'/admin/subject/{subjectId}/details'(subjectId=${subject.subjectName})}"></a>
+                               th:text="${subject.subjectCode}"
+                               th:href="@{'/admin/subject/{subjectId}/details'(subjectId=${subject.subjectCode})}"></a>
                         </td>
                         <td class="big-cell-data info-cell-data">
                             <span class="table-cell-data-span" th:each="pCode, counter : ${subject.professorCodes}">
@@ -168,7 +190,7 @@
                         <td class="big-cell-data info-cell-data">
                             <span class="table-cell-data-span"
                                   th:each="pCode, counter : ${subject.mandatoryStudyPrograms}">
-                                <a class="link-data" href="" th:text="${pCode}">Mandatory study programs</a>
+                                <a th:text="${pCode}">Mandatory study programs</a>
                                 <a th:unless="${counter.last}">,</a>
                             </span>
                         </td>
@@ -182,6 +204,16 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="col-12 mb-4" th:if="${emptyMessage}">
+            <div class="empty-message-div">
+                <a>Внеси филтер.</a>
+            </div>
+        </div>
+        <div class="col-12 mb-4" th:if="${emptyList}">
+            <div class="empty-message-div">
+                <a>Не се пронајдени резултати.</a>
             </div>
         </div>
     </div>

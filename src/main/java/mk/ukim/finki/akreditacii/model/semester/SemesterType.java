@@ -1,4 +1,4 @@
-package mk.ukim.finki.akreditacii.model;
+package mk.ukim.finki.akreditacii.model.semester;
 
 public enum SemesterType {
     WINTER,

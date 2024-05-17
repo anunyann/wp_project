@@ -3,6 +3,7 @@ package mk.ukim.finki.akreditacii.web;
 
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.subject.*;
+import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
 import mk.ukim.finki.akreditacii.service.DisplayService;
 import mk.ukim.finki.akreditacii.service.SubjectService;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -94,9 +94,13 @@ public class SubjectController {
                                      @RequestParam(required = false) String professorCode,
                                      @RequestParam(required = false) String studyProgramCode,
                                      @RequestParam(required = false) String accreditationYear) {
-        //subjectCode, professorCode, studyProgramCode, accreditationYear
+        model.addAttribute("defaultActiveYear", this.service.getActiveAccreditationYear().getYear());
 
-        if (subjectCode == null && professorCode == null && studyProgramCode == null && accreditationYear == null) {
+        //subjectCode, professorCode, studyProgramCode, accreditationYear
+        if ((subjectCode == null || subjectCode.isEmpty()) &&
+                (professorCode == null || professorCode.isEmpty()) &&
+                (studyProgramCode == null || studyProgramCode.isEmpty()) &&
+                (accreditationYear == null || accreditationYear.isEmpty())) {
             model.addAttribute("emptyMessage", true);
             return "subject/subject_statistics.html";
         }
@@ -105,7 +109,14 @@ public class SubjectController {
         model.addAttribute("professorCode", professorCode);
         model.addAttribute("studyProgramCode", studyProgramCode);
         model.addAttribute("accreditationYear", accreditationYear);
-        model.addAttribute("subjects", this.service.findSubjectsInfo(subjectCode, professorCode, studyProgramCode, accreditationYear));
+
+        List<SubjectStatisticsDTO> subjects = this.service.findSubjectsInfo(subjectCode, professorCode, studyProgramCode, accreditationYear);
+        model.addAttribute("subjects", subjects);
+
+        if (subjects.isEmpty()){
+            model.addAttribute("emptyList", true);
+        }
+
         return "subject/subject_statistics.html";
     }
 
