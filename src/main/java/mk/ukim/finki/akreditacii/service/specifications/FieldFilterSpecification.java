@@ -3,7 +3,6 @@ package mk.ukim.finki.akreditacii.service.specifications;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
-import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import org.springframework.data.jpa.domain.Specification;
 
 
@@ -12,21 +11,11 @@ public class FieldFilterSpecification {
     public static <T> Specification<T> filterEquals(Class<T> clazz, String field, StudyCycle value) {
         return (root, query, criteriaBuilder) -> {
             if (value == null) {
-                // If value is null, return a specification that always evaluates to true
                 return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
             } else {
-                // Otherwise, construct an equality condition based on the provided value
                 return criteriaBuilder.equal(fieldToPath(field, root), value);
             }
         };
-    }
-
-    public static <T> Specification<T> filterEquals(Class<T> clazz, String field, Accreditation value) {
-        if (value == null) {
-            return null;
-        }
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(fieldToPath(field, root), value);
     }
 
     public static <T> Specification<T> filterEquals(Class<T> clazz, String field, String value) {
