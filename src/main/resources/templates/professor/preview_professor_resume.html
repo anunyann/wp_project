@@ -7,6 +7,26 @@
 <body class="bg-light">
 <h3 th:text="resume"></h3>
 <div class="container" layout:fragment="content">
+    <div class="row mb-4 mt-4">
+        <div class="col-md-12">
+            <h3>Резиме на професор: <span th:text="${professor.getName()}"></span></h3>
+        </div>
+    </div>
+    <div class="row mb-4 ">
+        <div class="col-md-2">
+            <a class="btn btn-primary w-50" th:href="@{/admin/professor/{professorId}/resume/edit (professorId=${professorId})}"><i>Промени</i></a>
+        </div>
+        <div class="col-md-8"></div>
+        <div class="col-md-2 d-flex justify-content-end">
+            <a class="btn btn-primary w-50 " th:href="@{/admin/professor}"><i>Назад</i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="row mb-4">
+        <p th:text="${professorResume.resume}"></p>
+    </div>
+
+
 
 </div>
 

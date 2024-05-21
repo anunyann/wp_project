@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("admin/professor")
@@ -219,18 +221,24 @@ public class ProfessorManagementController {
 
         return "professor/edit_professor_resume";
     }
+
     @PostMapping("/{professorId}/resume/save")
-    public String saveResume (@PathVariable String professorId, @RequestParam String resume, @RequestParam(required = false) byte[] image){
+    public String saveResume (@PathVariable String professorId, @RequestParam(required = false) String resume, @RequestParam(value = "image", required = false) MultipartFile image){
         this.professorResumeService.save(professorId, resume, image);
-        return "redirect:/admin/professor";
+
+        return "redirect:/admin/professor/" + professorId + "/resume";
     }
+
     @GetMapping("/{professorId}/resume")
     public String viewResume(@PathVariable String professorId, Model model){
-        ProfessorResume professorResume = this.professorResumeService.findById(professorId).orElseThrow(()->new InvalidProfessorId(professorId));
-        if(professorResume != null)
-            model.addAttribute("professorResume", professorResume);
-        else
-            model.addAttribute("emptyProfessorResume", true);
+        Professor professor = this.professorService.getProfessorById(professorId);
+        model.addAttribute("professor", professor);
+
+        Optional<ProfessorResume> professorResume = this.professorResumeService.findById(professor.getId());
+        if (professorResume.isEmpty())
+            return "redirect:/admin/professor/" + professorId + "/resume/edit";
+
+        model.addAttribute("professorResume", professorResume.get());
 
         return "professor/preview_professor_resume";
     }

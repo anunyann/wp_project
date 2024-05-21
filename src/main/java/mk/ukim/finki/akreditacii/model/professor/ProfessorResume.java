@@ -12,7 +12,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "professor_resume") //same table name as in the database
+@Table(name = "professor_resume")
 public class ProfessorResume {
     @Id
     @Column(name = "id")

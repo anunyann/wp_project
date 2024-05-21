@@ -1,32 +1,38 @@
-<html lang="en" layout:decorate="~{layout}"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
 </head>
-<body class="bg-light">
-<h3 th:text="resume"></h3>
-<form method="POST" th:action="@{'/admin/professor/' + ${professor.getId()} + '/resume/save'}">
-    <div class="container" layout:fragment="content">
-        <br>
-        <h3>Промени биографија на професор: <span th:text="${professor.getName()}"></span></h3>
-        <br>
-        <div>
-            <label for="image">Прикачи слика</label>
-            <br>
-            <input type="file" id="image" name="image">
-        </div>
-        <br>
-        <div>
-            <label for="resume">Додади биографија</label>
-            <br>
-            <textarea id="resume" name="resume" rows="10" cols="50"></textarea>
-        </div>
-        <div>
-            <button type="submit" class="btn btn-dark">Зачувај</button>
-        </div>
-    </div>
-</form>
+<body>
+<div class="container mb-4" layout:fragment="content">
+    <form method="POST" enctype="multipart/form-data"
+          th:action="@{/admin/professor/{professorId}/resume/save (professorId=${professorId})}">
 
+        <input type="hidden" id="professorId" name="professorId" th:value="${professorId}">
+
+        <h3>Промени биографија на професор: <span th:text="${professor.getName()}"></span></h3>
+
+        <div class="row mb-4">
+            <label class="mb-2" for="image">Додади слика</label>
+            <input class="form-control" type="file" id="image" name="image" accept="image/*" required>
+        </div>
+
+        <div class="row mb-4">
+            <label class="mb-2" for="resume">Додади биографија</label>
+            <textarea class="form-control" id="resume" name="resume" rows="8" required></textarea>
+        </div>
+
+        <div class="row mb-4 ">
+            <div class="col-md-2">
+                <button class="btn btn-primary w-50" type="submit"><i>Зачувај</i></button>
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-2 d-flex justify-content-end">
+                <a class="btn btn-primary w-50" th:href="@{/admin/professor}"><i>Назад</i></a>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>
