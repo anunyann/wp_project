@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Optional;
 
-public interface SubjectService {
+public interface SubjectDetailsService {
 
     void updateSubject(SubjectDetails sd);
 

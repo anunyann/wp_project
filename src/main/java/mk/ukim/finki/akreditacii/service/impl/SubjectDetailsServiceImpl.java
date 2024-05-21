@@ -13,7 +13,7 @@ import mk.ukim.finki.akreditacii.repository.AccreditationRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
 import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
-import mk.ukim.finki.akreditacii.service.SubjectService;
+import mk.ukim.finki.akreditacii.service.SubjectDetailsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,14 +28,14 @@ import static mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecif
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
-public class SubjectServiceImpl implements SubjectService {
+public class SubjectDetailsServiceImpl implements SubjectDetailsService {
 
     private final SubjectDetailsRepository subjectDetailsRepository;
     private final StudyProgramSubjectRepository studyProgramSubjectRepository;
     private final StudyProgramSubjectProfessorRepository professorRepository;
     private final AccreditationRepository accreditationRepository;
 
-    public SubjectServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository, AccreditationRepository accreditationRepository) {
+    public SubjectDetailsServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository, AccreditationRepository accreditationRepository) {
         this.subjectDetailsRepository = subjectDetailsRepository;
         this.studyProgramSubjectRepository = studyProgramSubjectRepository;
         this.professorRepository = professorRepository;
