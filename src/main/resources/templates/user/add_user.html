@@ -1,0 +1,53 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="container" layout:fragment="content">
+
+    <form method="POST" th:action="@{/admin/user/add-user}">
+
+        <label for="name" th:text="#{PROFESSOR_NAME}"></label>
+        <input class="form-control" id="name" name="name" required="required"
+               th:value="${user?.name}">
+
+        <label for="id" th:text="#{ID}"></label>
+        <input class="form-control" id="id" name="id" required="required"
+               th:value="${user?.id}">
+
+<!--        <label for="dateOfBirth" th:text="#{DATE_OF_BIRTH}"></label>-->
+<!--        <input class="form-control" id="dateOfBirth" name="dateOfBirth" required="required"-->
+<!--               th:value="${professorDetails?.birthDay}"-->
+<!--               type="date"/>-->
+
+        <label for="email" th:text="#{PROFESSOR_EMAIL}"></label>
+        <input class="form-control" id="email" name="email" required="required"
+               th:value="${user?.email}">
+
+<!--        <label for="title" th:text="#{DEGREE_TITLE}"></label>-->
+<!--        <select class="form-control" id="title" name="title">-->
+<!--            <option-->
+<!--                    th:each="title : ${professorTitles}"-->
+<!--                    th:text="${title}"-->
+<!--                    th:value="${title}">-->
+<!--            </option>-->
+<!--        </select>-->
+
+        <label for="role">Звање</label>
+        <select class="form-control" id="role" name="role">
+            <option
+                    th:each="role : ${userRoles}"
+                    th:selected="${role != null ? role.roleName().equals(role) : false}"
+                    th:text="${role}"
+                    th:value="${role}">
+            </option>
+        </select>
+
+
+        <button class="btn btn-primary " th:text="#{SUBMIT}" type="submit"></button>
+    </form>
+</div>
+</body>
+</html>
