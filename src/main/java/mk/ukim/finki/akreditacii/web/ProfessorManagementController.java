@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
@@ -19,8 +20,10 @@ public class ProfessorManagementController {
     private final ProfessorService professorService;
     private final ProfessorDetailsService professorDetailsService;
     private final ProfessorDeleteService professorDeleteService;
+    private final AccreditationService accreditationService;
+    private final ProfessorAccreditationStatsService professorAccreditationStatsService;
 
-    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService) {
+    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService, AccreditationService accreditationService, ProfessorAccreditationStatsService professorAccreditationStatsService) {
 
         this.professorService = professorService;
         this.professorAcademicTitlesService = professorAcademicTitlesService;
@@ -29,6 +32,8 @@ public class ProfessorManagementController {
         this.professorEducationService = professorEducationService;
         this.professorDetailsService = professorDetailsService;
         this.professorDeleteService = professorDeleteService;
+        this.accreditationService = accreditationService;
+        this.professorAccreditationStatsService = professorAccreditationStatsService;
     }
 
     @GetMapping(value = {"/{professorId}"})
@@ -201,5 +206,32 @@ public class ProfessorManagementController {
         return "redirect:/admin/professor/" + professorId;
     }
 
+    @GetMapping("/professor-stats")
+    public String stats(Model model,
+                        @RequestParam(required = false) String accreditation,
+                        @RequestParam(required = false) StudyCycle studyCycle,
+                        @RequestParam(defaultValue = "1") Integer pageNum,
+                        @RequestParam(defaultValue = "10") Integer results) {
 
+        String selectedAccreditation;
+        StudyCycle selectedCycle = null;
+
+        if (accreditation == null || accreditation.isEmpty()) {
+            selectedAccreditation = accreditationService.findActiveAccreditation().getYear();
+        } else {
+            selectedAccreditation = accreditation;
+        }
+
+        if (studyCycle != null) {
+            selectedCycle = studyCycle;
+        }
+
+        Page<ProfessorAccreditationStats> stats = professorAccreditationStatsService.findAllWithPaginationAndFilters(pageNum, results, accreditation, studyCycle);
+        model.addAttribute("accreditations", accreditationService.findAll());
+        model.addAttribute("studyCycles", StudyCycle.values());
+        model.addAttribute("statsPerProfessors", stats);
+        model.addAttribute("selectedAccreditation", selectedAccreditation);
+        model.addAttribute("selectedCycle", selectedCycle);
+        return "professor/professor_stats";
+    }
 }

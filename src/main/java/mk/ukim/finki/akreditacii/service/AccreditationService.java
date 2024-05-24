@@ -19,4 +19,6 @@ public interface AccreditationService {
     Optional<Accreditation> save(String year, LocalDate activeFrom, LocalDate activeTo, List<String> studyProgramFields);
 
     void activate(String year);
+
+    Accreditation findActiveAccreditation();
 }

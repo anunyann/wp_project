@@ -7,7 +7,7 @@ import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 import mk.ukim.finki.akreditacii.service.AccreditationService;
 import mk.ukim.finki.akreditacii.service.DisplayService;
-import mk.ukim.finki.akreditacii.service.SubjectService;
+import mk.ukim.finki.akreditacii.service.SubjectDetailsService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +19,12 @@ import java.util.List;
 @RequestMapping("/admin")
 public class SubjectController {
 
-    private final SubjectService service;
+    private final SubjectDetailsService service;
     private final AccreditationService accreditationService;
 
     private final DisplayService displayService;
 
-    public SubjectController(SubjectService service, AccreditationService accreditationService, DisplayService displayService) {
+    public SubjectController(SubjectDetailsService service, AccreditationService accreditationService, DisplayService displayService) {
         this.service = service;
         this.accreditationService = accreditationService;
         this.displayService = displayService;

@@ -1,7 +1,6 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
@@ -10,10 +9,9 @@ import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
 import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
-import mk.ukim.finki.akreditacii.service.SubjectService;
+import mk.ukim.finki.akreditacii.service.SubjectDetailsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +19,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class SubjectServiceImpl implements SubjectService {
+public class SubjectDetailsServiceImpl implements SubjectDetailsService {
 
     private final SubjectDetailsRepository subjectDetailsRepository;
     private final StudyProgramSubjectRepository studyProgramSubjectRepository;
     private final StudyProgramSubjectProfessorRepository professorRepository;
 
-    public SubjectServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository) {
+    public SubjectDetailsServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository) {
         this.subjectDetailsRepository = subjectDetailsRepository;
         this.studyProgramSubjectRepository = studyProgramSubjectRepository;
         this.professorRepository = professorRepository;
