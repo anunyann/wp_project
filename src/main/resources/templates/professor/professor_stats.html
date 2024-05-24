@@ -24,6 +24,55 @@
     <div id="filters">
         <form method="GET" th:action="@{/admin/professor/professor-stats}">
             <div class="d-flex flex-wrap justify-content-between">
+
+                <div class="col-md-3 col-sm-6 p-1">
+                    <label class="mr-2 mb-0" for="nameSearch" th:text="#{SEARCH_BY_NAME}"></label>
+                    <input class="form-control"
+                           id="nameSearch"
+                           name="nameSearch"
+                           th:placeholder="#{SEARCH}"
+                           th:value="${nameSearch}"
+                           type="text"/>
+                </div>
+
+                <div class="col-md-3 col-sm-6 p-1">
+                    <label class="mr-2 mb-0" for="emailSearch" th:text="#{SEARCH_BY_EMAIL}"></label>
+                    <input class="form-control"
+                           id="emailSearch"
+                           name="emailSearch"
+                           th:placeholder="#{SEARCH}"
+                           th:value="${emailSearch}"
+                           type="text"/>
+                </div>
+
+                <div class="col-md-3 col-sm-6  p-1">
+                    <label class="mr-2 mb-0" for="titleFilter" th:text="#{FILTER_BY_TITLE}"></label>
+                    <select class="form-control custom-select"
+                            id="titleFilter"
+                            name="titleFilter">
+                        <option th:text="#{SELECT}" value=""></option>
+                        <option th:each="title : ${professorTitles}"
+                                th:selected="${titleFilter != null && title == titleFilter}"
+                                th:text="${title}"
+                                th:value="${title}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-sm-6  p-1">
+                    <label class="mr-2 mb-0" for="semesterType" th:text="#{FILTER_BY_SEMESTER_TYPE}"></label>
+                    <select class="form-control custom-select"
+                            id="semesterType"
+                            name="semesterSearch">
+                        <option th:text="#{SELECT}" value=""></option>
+                        <option th:each="semesterType : ${semesterTypes}"
+                                th:selected="${semesterSearch != null && semesterType == semesterSearch}"
+                                th:text="${semesterType}"
+                                th:value="${semesterType}">
+                        </option>
+                    </select>
+                </div>
+
                 <div class="col-md-3 col-sm-6  p-1">
                     <label class="mr-2 mb-0" for="studyCycle" th:text="#{FILTER_BY_STUDY_CYCLE}"></label>
                     <select class="form-control custom-select"
