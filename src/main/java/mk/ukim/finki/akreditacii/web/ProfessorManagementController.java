@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.SemesterType;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.service.*;
@@ -210,6 +211,10 @@ public class ProfessorManagementController {
     public String stats(Model model,
                         @RequestParam(required = false) String accreditation,
                         @RequestParam(required = false) StudyCycle studyCycle,
+                        @RequestParam(required = false) String nameSearch,
+                        @RequestParam(required = false) String emailSearch,
+                        @RequestParam(required = false) ProfessorTitle titleFilter,
+                        @RequestParam(required = false) SemesterType semesterSearch,
                         @RequestParam(defaultValue = "1") Integer pageNum,
                         @RequestParam(defaultValue = "10") Integer results) {
 
@@ -226,12 +231,19 @@ public class ProfessorManagementController {
             selectedCycle = studyCycle;
         }
 
-        Page<ProfessorAccreditationStats> stats = professorAccreditationStatsService.findAllWithPaginationAndFilters(pageNum, results, accreditation, studyCycle);
+        Page<ProfessorAccreditationStats> stats = professorAccreditationStatsService.findAllWithPaginationAndFilters(pageNum, results, accreditation, studyCycle,
+                nameSearch, emailSearch, titleFilter, semesterSearch);
         model.addAttribute("accreditations", accreditationService.findAll());
         model.addAttribute("studyCycles", StudyCycle.values());
         model.addAttribute("statsPerProfessors", stats);
         model.addAttribute("selectedAccreditation", selectedAccreditation);
         model.addAttribute("selectedCycle", selectedCycle);
+        model.addAttribute("professorTitles", ProfessorTitle.values());
+        model.addAttribute("semesterTypes", SemesterType.values());
+        model.addAttribute("nameSearch", nameSearch);
+        model.addAttribute("emailSearch", emailSearch);
+        model.addAttribute("titleFilter", titleFilter);
+        model.addAttribute("semesterSearch", semesterSearch);
         return "professor/professor_stats";
     }
 }
