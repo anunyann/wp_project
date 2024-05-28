@@ -79,9 +79,6 @@ public class SubjectController {
         model.addAttribute("studyPrograms", "this.service.getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(subjectId)");
         model.addAttribute("studyProgramsNum", this.service.getStudyProgramsWhereSubjectIsMandatory(subjectId).size());
 
-        // Number of years that this subject has been activated
-        model.addAttribute("yearsActive", 0);
-
         // Get all books for given subject
         model.addAttribute("books", subjectDetails.getBibliography().getBooks());
         model.addAttribute("numBooks", subjectDetails.getBibliography().getBooks().size());
