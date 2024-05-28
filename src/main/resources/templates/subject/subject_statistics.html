@@ -10,17 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
-<div class="container" layout:fragment="content">
+<div class="pt-3" layout:fragment="content">
     <style>
-        .container{
-            padding-top: 10px;
-        }
-
-        .buttons{
-            padding-bottom: 10px;
-            color: white;
-        }
-
         .counter-cell-data {
             width: 30px;
             text-align: center;
@@ -62,16 +53,6 @@
             transition: 0.2s;
         }
 
-        #stats-filter-div {
-            display: inline-flex;
-            align-items: center;
-            align-content: center;
-        }
-
-        #stats-filter-div > div {
-            margin-right: 15px;
-        }
-
         .filter-button {
             height: 40px;
             width: 110px;
@@ -96,58 +77,81 @@
             font-size: 18px;
         }
     </style>
-    <div class="buttons">
-        <a href="/admin/subject/list" class="active btn btn-primary"><i>Назад</i></a>
-    </div>
     <div class="row main-div">
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <a href="/admin/subject/list" class="btn btn-primary"><i>Назад</i></a>
+            </div>
+        </div>
+        <hr>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <h3>Статистика за предмети</h3>
+            </div>
+        </div>
         <form th:method="GET" th:action="@{'/admin/subject/statistics'}">
-            <div class="col-12 mb-2" id="stats-filter-div">
-                <div>
-                    <!--subjectCode-->
-                    <label for="subjectCode" hidden="hidden">subjectCode</label>
-                    <input type="text"
-                           th:value="${subjectCode}"
-                           class="form-control filter-input"
-                           name="subjectCode"
-                           id="subjectCode"
-                           placeholder="Код на предмет">
+            <div class="col-12 mb-2">
+                <div class="row w-100">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <!--subjectCode-->
+                            <label for="subjectCode" hidden="hidden">subjectCode</label>
+                            <select class="form-control filter-input w-100" name="subjectCode" id="subjectCode" th:value="${subjectCode}">
+                                <option value="">Избери предмет</option>
+                                <option th:each="subject : ${subjectsDropdown}" th:value="${subject.code}">
+                                    <label th:text="${subject.name}"></label>
+                                    (<label th:text="${subject.code}"></label>)
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <!--professorCode-->
+                            <label for="professorCode" hidden="hidden">professorCode</label>
+                            <select class="form-control filter-input w-100" name="professorCode" id="professorCode" th:value="${professorCode}">
+                                <option value="">Избери професор</option>
+                                <option th:each="professor : ${professorsDropdown}" th:value="${professor.code}">
+                                    <label th:text="${professor.name}"></label>
+                                    (<label th:text="${professor.code}"></label>)
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end flex-wrap col-md-6">
+                        <div class="mb-2 w-100">
+                            <!--studyProgramCode-->
+                            <label for="studyProgramCode" hidden="hidden">studyProgramCode</label>
+                            <select class="form-control filter-input w-100" name="studyProgramCode" id="studyProgramCode" th:value="${studyProgramCode}">
+                                <option value="">Избери студиска програма</option>
+                                <option th:each="sp : ${studyProgramsDropdown}" th:value="${sp.code}">
+                                    <label th:text="${sp.name}"></label>
+                                    (<label th:text="${sp.code}"></label>)
+                                </option>
+                            </select>
+                        </div>
+                        <div class="w-100">
+                            <!--accreditationYear-->
+                            <label for="accreditationYear" hidden="hidden">accreditationYear</label>
+                            <select class="form-control filter-input w-100" name="accreditationYear" id="accreditationYear" th:value="${accreditationYear}">
+                                <option th:each="ay : ${accreditationYearsDropdown}" th:value="${ay.year}" th:selected="${ay.year} == ${defaultActiveYear}">
+                                    <label th:text="${ay.year}"></label>
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <!--professorCode-->
-                    <label for="professorCode" hidden="hidden">professorCode</label>
-                    <input type="text"
-                           th:value="${professorCode}"
-                           class="form-control filter-input"
-                           name="professorCode"
-                           id="professorCode"
-                           placeholder="Код на професор">
-                </div>
-                <div>
-                    <!--studyProgramCode-->
-                    <label for="studyProgramCode" hidden="hidden">studyProgramCode</label>
-                    <input type="text"
-                           th:value="${studyProgramCode}"
-                           class="form-control filter-input"
-                           name="studyProgramCode"
-                           id="studyProgramCode"
-                           placeholder="Код на студиска програма">
-                </div>
-                <div>
-                    <!--accreditationYear-->
-                    <label for="accreditationYear" hidden="hidden">accreditationYear</label>
-                    <input type="text"
-                           th:value="${defaultActiveYear}"
-                           class="form-control filter-input"
-                           name="accreditationYear"
-                           id="accreditationYear"
-                           placeholder="Година">
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-dark filter-button">Пребарувај</button>
-                    <a href="/admin/subject/statistics" class="btn btn-dark filter-button">Обнови</a>
+            </div>
+            <div class="col-12 mb-3 mt-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary"><i>Пребарувај</i></button>
+                    </div>
+                    <div class="d-flex justify-content-end col-md-6">
+                        <a href="/admin/subject/statistics" class="btn btn-primary"><i>Обнови</i></a>
+                    </div>
                 </div>
             </div>
         </form>
+        <hr>
         <div class="col-12 mb-4">
             <div class="col-12">
                 <table class="table table-bordered table-striped">

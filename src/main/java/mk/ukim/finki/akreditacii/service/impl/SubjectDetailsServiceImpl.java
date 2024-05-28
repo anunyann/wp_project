@@ -8,6 +8,7 @@ import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.*;
 import mk.ukim.finki.akreditacii.model.subject.dto.StudyProgramSubjectProfessorDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectAllocationStatsDTO;
+import mk.ukim.finki.akreditacii.model.subject.dto.SubjectNameAndCodeDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
 import mk.ukim.finki.akreditacii.repository.AccreditationRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
@@ -20,7 +21,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -106,6 +106,14 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
     @Override
     public SubjectDetails getSubjectDetailsById(String subjectId) {
         return subjectDetailsRepository.findById(subjectId).orElseThrow(() -> new InvalidSubjectId(subjectId));
+    }
+
+    @Override
+    public List<SubjectNameAndCodeDTO> findAllSubjectNameAndCode() {
+        return this.subjectDetailsRepository.findAllNameAndCode()
+                .stream()
+                .sorted(Comparator.comparing(SubjectNameAndCodeDTO::getName))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -224,22 +232,6 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
         studyProgramSubjects.removeIf(sps -> sps.getMandatory().equals(true));
 
         return studyProgramSubjects.stream().map(StudyProgramSubject::getStudyProgram).toList();
-    }
-
-    @Override
-    public Integer numberOfActiveYears(String subjectId) {
-        SubjectDetails subjectDetails = subjectDetailsRepository.findById(subjectId)
-                .orElseThrow(() -> new EntityNotFoundException("SubjectDetails not found"));
-
-        Integer startYear = Integer.valueOf(subjectDetails.getAccreditation().getYear());
-        Integer currentYear = LocalDateTime.now().getYear();
-
-        return currentYear - startYear;
-    }
-
-    @Override
-    public Double averageNumberOfStudents(String subjectId) {
-        return null;
     }
 
     @Override

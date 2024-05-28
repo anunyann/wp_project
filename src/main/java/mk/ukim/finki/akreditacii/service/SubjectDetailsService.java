@@ -5,6 +5,7 @@ import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
+import mk.ukim.finki.akreditacii.model.subject.dto.SubjectNameAndCodeDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
 import org.springframework.data.domain.Page;
 
@@ -27,6 +28,8 @@ public interface SubjectDetailsService {
 
     SubjectDetails getSubjectDetailsById(String subjectId);
 
+    List<SubjectNameAndCodeDTO> findAllSubjectNameAndCode();
+
     List<StudyProgramSubject> getSubjectPrograms(String subjectId);
 
     List<Professor> getSubjectProfessors(String subjectId);
@@ -40,10 +43,6 @@ public interface SubjectDetailsService {
     List<StudyProgram> getStudyProgramsWhereSubjectIsMandatory(String subjectId);
 
     List<StudyProgram> getStudyProgramsWhereSubjectIsNotMandatory(String subjectId);
-
-    Integer numberOfActiveYears(String subjectId);
-
-    Double averageNumberOfStudents(String subjectId);
 
     Accreditation getActiveAccreditationYear();
 }

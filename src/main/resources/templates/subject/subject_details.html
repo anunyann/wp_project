@@ -10,16 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
-<div class="container" layout:fragment="content">
+<div class="pt-3" layout:fragment="content">
     <style>
-        .container{
-            padding-top: 10px;
-        }
-
-        .buttons{
-            padding-bottom: 10px;
-            color: white;
-        }
 
         .info-table-data {
             width: 300px;
@@ -34,9 +26,12 @@
             color: crimson;
         }
     </style>
-    <div class="buttons">
-        <a href="/admin/subject/list" class="active btn btn-primary"><i>Назад</i></a>
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <a href="/admin/subject/list" class="btn btn-primary"><i>Назад</i></a>
+        </div>
     </div>
+    <hr>
     <div class="row main-div">
         <div class="two-column-summary mb-4">
             <div class="col">

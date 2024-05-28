@@ -2,16 +2,17 @@ package mk.ukim.finki.akreditacii.web;
 
 
 import mk.ukim.finki.akreditacii.model.professor.Professor;
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.*;
+import mk.ukim.finki.akreditacii.model.subject.dto.SubjectNameAndCodeDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
-import mk.ukim.finki.akreditacii.service.AccreditationService;
-import mk.ukim.finki.akreditacii.service.DisplayService;
-import mk.ukim.finki.akreditacii.service.SubjectDetailsService;
+import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -20,13 +21,16 @@ public class SubjectController {
 
     private final SubjectDetailsService service;
     private final AccreditationService accreditationService;
-
     private final DisplayService displayService;
+    private final ProfessorService professorService;
+    private final StudyProgramService studyProgramService;
 
-    public SubjectController(SubjectDetailsService service, AccreditationService accreditationService, DisplayService displayService) {
+    public SubjectController(SubjectDetailsService service, AccreditationService accreditationService, DisplayService displayService, ProfessorService professorService, StudyProgramService studyProgramService) {
         this.service = service;
         this.accreditationService = accreditationService;
         this.displayService = displayService;
+        this.professorService = professorService;
+        this.studyProgramService = studyProgramService;
     }
 
 
@@ -76,7 +80,7 @@ public class SubjectController {
         model.addAttribute("studyProgramsNum", this.service.getStudyProgramsWhereSubjectIsMandatory(subjectId).size());
 
         // Number of years that this subject has been activated
-        model.addAttribute("yearsActive", this.service.numberOfActiveYears(subjectId));
+        model.addAttribute("yearsActive", 0);
 
         // Get all books for given subject
         model.addAttribute("books", subjectDetails.getBibliography().getBooks());
@@ -94,7 +98,12 @@ public class SubjectController {
                                      @RequestParam(required = false) String professorCode,
                                      @RequestParam(required = false) String studyProgramCode,
                                      @RequestParam(required = false) String accreditationYear) {
-        model.addAttribute("defaultActiveYear", this.service.getActiveAccreditationYear().getYear());
+        //Dropdown menu attr
+        model.addAttribute("subjectsDropdown", this.service.findAllSubjectNameAndCode());
+        model.addAttribute("professorsDropdown", this.professorService.findAllProfessorNameAndCode());
+        List<StudyProgram> studyProgramsDropdown = this.studyProgramService.findAll().stream().sorted(Comparator.comparing(StudyProgram::getName)).toList();
+        model.addAttribute("studyProgramsDropdown", studyProgramsDropdown);
+        model.addAttribute("accreditationYearsDropdown", this.accreditationService.findAll());
 
         //subjectCode, professorCode, studyProgramCode, accreditationYear
         if ((subjectCode == null || subjectCode.isEmpty()) &&
@@ -109,6 +118,8 @@ public class SubjectController {
         model.addAttribute("professorCode", professorCode);
         model.addAttribute("studyProgramCode", studyProgramCode);
         model.addAttribute("accreditationYear", accreditationYear);
+
+        model.addAttribute("defaultActiveYear", this.service.getActiveAccreditationYear().getYear());
 
         List<SubjectStatisticsDTO> subjects = this.service.findSubjectsInfo(subjectCode, professorCode, studyProgramCode, accreditationYear);
         model.addAttribute("subjects", subjects);
