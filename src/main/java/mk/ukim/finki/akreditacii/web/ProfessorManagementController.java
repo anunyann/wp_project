@@ -1,8 +1,8 @@
 package mk.ukim.finki.akreditacii.web;
 
-import mk.ukim.finki.akreditacii.model.SemesterType;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.*;
+import mk.ukim.finki.akreditacii.model.semester.SemesterType;
 import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
