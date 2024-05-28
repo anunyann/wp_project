@@ -2,9 +2,9 @@ package mk.ukim.finki.akreditacii.service.specifications;
 
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
-import mk.ukim.finki.akreditacii.model.SemesterType;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
+import mk.ukim.finki.akreditacii.model.semester.SemesterType;
 import org.springframework.data.jpa.domain.Specification;
 
 

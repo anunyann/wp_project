@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mk.ukim.finki.akreditacii.model.SemesterType;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
+import mk.ukim.finki.akreditacii.model.semester.SemesterType;
 import org.hibernate.annotations.Immutable;
 
 @Entity
