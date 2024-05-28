@@ -125,12 +125,7 @@
                     <tr>
                         <td><span class="text-danger">Предуслов</span></td>
                         <td>
-                            <div th:if="${!subjectDetails.dependencies.dependencies.isEmpty()}">
-                                <span th:text="${subjectDetails.dependencies.dependencies}"></span>
-                            </div>
-                            <div th:if="${subjectDetails.dependencies.dependencies.isEmpty()}">
-                                <span>Предметот нема предуслов</span>
-                            </div>
+                            За мастер студии нема предуслов (ДА СЕ СРЕДИ)
                         </td>
                     </tr>
                     </tbody>
