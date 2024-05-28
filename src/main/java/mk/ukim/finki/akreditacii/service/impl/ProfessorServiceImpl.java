@@ -74,3 +74,4 @@ public class ProfessorServiceImpl implements ProfessorService {
         return professorRepository.findAll();
     }
 }
+

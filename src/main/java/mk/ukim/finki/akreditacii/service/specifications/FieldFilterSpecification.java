@@ -2,13 +2,26 @@ package mk.ukim.finki.akreditacii.service.specifications;
 
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
+import mk.ukim.finki.akreditacii.model.SemesterType;
+import mk.ukim.finki.akreditacii.model.StudyCycle;
+import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
 import org.springframework.data.jpa.domain.Specification;
 
 
 public class FieldFilterSpecification {
 
+    public static <T> Specification<T> filterEquals(Class<T> clazz, String field, StudyCycle value) {
+        return (root, query, criteriaBuilder) -> {
+            if (value == null) {
+                return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+            } else {
+                return criteriaBuilder.equal(fieldToPath(field, root), value);
+            }
+        };
+    }
+
     public static <T> Specification<T> filterEquals(Class<T> clazz, String field, String value) {
-        if (value == null || value.isEmpty()) {
+        if (value == null) {
             return null;
         }
         return (root, query, criteriaBuilder) ->
@@ -66,5 +79,25 @@ public class FieldFilterSpecification {
             res = res.get(p);
         }
         return res;
+    }
+
+    public static <T> Specification<T> filterEquals(Class<T> clazz, String field, SemesterType value) {
+        return (root, query, criteriaBuilder) -> {
+            if (value == null) {
+                return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+            } else {
+                return criteriaBuilder.equal(fieldToPath(field, root), value);
+            }
+        };
+    }
+
+    public static <T> Specification<T> filterEquals(Class<T> clazz, String field, ProfessorTitle value) {
+        return (root, query, criteriaBuilder) -> {
+            if (value == null) {
+                return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+            } else {
+                return criteriaBuilder.equal(fieldToPath(field, root), value);
+            }
+        };
     }
 }
