@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.Base64;
 import java.util.Objects;
 
 @Getter
@@ -25,6 +26,7 @@ public class ProfessorResume {
     @Column(name = "biography")
     private String resume;
 
+
     @Column(name = "image")
     private byte[] image;
 
@@ -40,4 +42,9 @@ public class ProfessorResume {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public String generateBase64Image(){
+        return Base64.getEncoder().encodeToString(this.image);
+    }
+
 }
