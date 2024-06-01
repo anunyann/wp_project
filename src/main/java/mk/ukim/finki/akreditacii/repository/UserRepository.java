@@ -2,8 +2,6 @@ package mk.ukim.finki.akreditacii.repository;
 
 import mk.ukim.finki.akreditacii.model.User;
 import mk.ukim.finki.akreditacii.model.UserRole;
-import mk.ukim.finki.akreditacii.model.professor.Professor;
-import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

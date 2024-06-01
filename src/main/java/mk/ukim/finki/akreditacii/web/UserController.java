@@ -2,6 +2,7 @@ package mk.ukim.finki.akreditacii.web;
 
 import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.akreditacii.model.User;
+import mk.ukim.finki.akreditacii.model.UserDto;
 import mk.ukim.finki.akreditacii.model.UserRole;
 import mk.ukim.finki.akreditacii.repository.import_repository.ImportRepository;
 import mk.ukim.finki.akreditacii.service.UserService;
@@ -63,12 +64,7 @@ public class UserController {
 
     @PostMapping("/add-user")
     public String addUser(@RequestParam String name, @RequestParam String id, @RequestParam String email, @RequestParam(required = false) UserRole role) {
-
         userService.save(id, name, email, role);
-//        ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.getProfessorById(id), 1F, degree, title.toString(), dateOfBirthParsed, null);
-//        professorDetailsService.save(professorDetails);
-
-
         return "redirect:/admin/user";
     }
 
@@ -76,43 +72,43 @@ public class UserController {
     public String editProfessor(@PathVariable String id, Model model) {
 
         User user = userService.getUserById(id);
-//        ProfessorDetails professorDetails = professorDetailsService.findById(id);
         model.addAttribute("user", user);
-//        model.addAttribute("professorDetails", professorDetails);
         model.addAttribute("userRoles", UserRole.values());
-//        model.addAttribute("educationDegrees", EducationDegree.values());
-
         return "user/add_user";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteProfessor(@PathVariable String id) {
-
         userService.deleteById(id);
-
         return "redirect:/admin/user";
     }
 
     @PostMapping("/import")
-    public void importStudents(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
-        List<User> students = importRepository.readEnrolments(file, User.class);
+    public void importUsers(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
+        List<UserDto> users = importRepository.readEnrolments(file, UserDto.class);
 
-        List<User> invalidEnrollments = userService.importData(students);
+        List<UserDto> invalidEnrollments = userService.importStudents(users);
 
-        String fileName = "invalid_students.tsv";
+        String fileName = "invalid_users.tsv";
         response.setContentType("text/tab-separated-values");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
         try (OutputStream outputStream = response.getOutputStream()) {
-            importRepository.writeEnrollments(User.class, invalidEnrollments, outputStream);
+            importRepository.writeEnrollments(UserDto.class, invalidEnrollments, outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+
 //    @GetMapping("/export")
-//    public void export(@RequestParam String name, HttpServletResponse response) {
-//        String tsv = userService.toTsv(userService.list(name, null, null, null, 1, 10000).getContent());
+//    public void export(HttpServletResponse response,
+//                       @RequestParam(required = false) String id,
+//                       @RequestParam(required = false) String name,
+//                       @RequestParam(required = false) String email,
+//                       @RequestParam(required = false) String role)
+//    {
+//        String tsv = userService.toTsv(userService.list(id, name, email, role).getContent());
 //
 //        response.setContentType("text/tab-separated-values");
 //        response.setHeader("Content-Disposition", "attachment; filename=\"schedule_import.tsv\"");

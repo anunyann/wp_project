@@ -1,16 +1,21 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
+import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.akreditacii.model.User;
+import mk.ukim.finki.akreditacii.model.UserDto;
 import mk.ukim.finki.akreditacii.model.UserRole;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidId;
 import mk.ukim.finki.akreditacii.repository.UserRepository;
+import mk.ukim.finki.akreditacii.repository.import_repository.ImportRepository;
 import mk.ukim.finki.akreditacii.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -60,41 +65,77 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> importData(List<User> users) {
-//        return users.stream()
-//                .map(us -> {
-//                    try {
-//                        us.setEmail(us.getEmail());
-//                        us.setId(us.getId());
-//                        us.setName(us.getName());
-//                        us.setRole(us.getRole());
-//                        userRepository.save(us);
-//                        return null;
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        return us;
-//                    }
-//                })
-//                .filter(Objects::nonNull)
-//                .collect(Collectors.toList());
-        return null;
+    public List<UserDto> importStudents(List<UserDto> students) {
+        return students.stream()
+                .map(dto -> saveUser(dto))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
     }
 
-    @Override
-    public String toTsv(List<User> users) {
-        StringBuilder sb = new StringBuilder();
-        users.forEach(user -> {
-            processGroup(sb, user);
-        });
-        return sb.toString();
+    private Optional<UserDto> saveUser(UserDto dto) {
+        try {
+            User user = new User(dto.getId(),
+                    dto.getName(),
+                    dto.getEmail(),
+                    dto.getRole()
+            );
+            this.userRepository.save(user);
+            return Optional.empty();
+        } catch (Exception e) {
+            dto.setMessage(e.getMessage());
+        }
+        return Optional.of(dto);
     }
 
-    @Override
-    public Page<User> list(String name, String email, String role) {
-        return null;
-    }
+
+
+//    @Override
+//    public String toTsv(List<User> users) {
+//        StringBuilder sb = new StringBuilder();
+//        users.forEach(user -> {
+//            processGroup(sb, user);
+//        });
+//        return sb.toString();
+//    }
+
+//    @Override
+//    public Page<User> list(String id, String name, String email, String role) {
+//        return null;
+//    }
+
+//    @Override
+//    public Page<User> list(String id, String name, String email, String role) {
+//        return null;
+//    }
+
+//    @Override
+//    public Page<User> list(String id, String name, String email, String role) {
+//        Page<User> page = userService.list(id, name, email, role);
+//        doExport(response, page.getContent().stream()
+//                .map(it -> new UserDto(it,
+//                        coursePreferenceRepository.findById(it.getJoinedSubject().getAbbreviation()).orElse(null))
+//                )
+//                .collect(Collectors.toList()));
+//
+//    }
+
+//    public void doExport(HttpServletResponse response, List<UserDto> data) {
+//        String fileName = "courses.tsv";
+//        response.setContentType("text/tab-separated-values");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+//
+//        try (OutputStream outputStream = response.getOutputStream()) {
+//            importRepository.writeEnrollments(UserDto.class, data, outputStream);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
 
     public void processGroup (StringBuilder sb, User user) {
+        sb.append(user.getId()).append("\t");
         sb.append(user.getName()).append("\t");
         sb.append(user.getEmail()).append("\t");
         sb.append(user.getRole().roleName()).append("\t");

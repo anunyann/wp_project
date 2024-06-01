@@ -1,6 +1,7 @@
 package mk.ukim.finki.akreditacii.service;
 
 import mk.ukim.finki.akreditacii.model.User;
+import mk.ukim.finki.akreditacii.model.UserDto;
 import mk.ukim.finki.akreditacii.model.UserRole;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
@@ -23,10 +24,10 @@ public interface UserService {
 
     List<User> findAll();
 
-    List<User> importData(List<User> users);
+    //List<User> importData(List<User> users);
+    List<UserDto> importStudents(List<UserDto> students);
 
-    String toTsv(List<User> users);
-    Page<User> list(String name, String email, String role);
+    //String toTsv(List<User> users);
+    //Page<User> list(String id, String name, String email, String role);
 
-//    public void deleteUser(String id)
 }
