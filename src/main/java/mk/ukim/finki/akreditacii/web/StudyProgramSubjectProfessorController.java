@@ -42,7 +42,6 @@ public class StudyProgramSubjectProfessorController {
             model.addAttribute("studyProgramDetails", studyProgramDetails);
 
             List<StudyProgramSubject> subjects = studyProgramSubjectService.findAllByStudyProgramCodeOrderBySemesterAscOrderAscSubjectIdAsc(studyProgramDetails.getStudyProgram().getCode());
-            model.addAttribute("spDetails", studyProgramDetails);
             model.addAttribute("subjects", subjects);
 
             Map<StudyProgramSubject, List<StudyProgramSubjectProfessor>> subjectProfessorsMap = new TreeMap<>((subj1, subj2) -> subj1.getSubject().getId().compareTo(subj2.getSubject().getId()));
@@ -114,24 +113,34 @@ public class StudyProgramSubjectProfessorController {
     String addAllProfessorsToAllSubjectsFromTheStudyProgram(@PathVariable("programCode") String programCode,@RequestParam("order") Float order)
     {
 
-        List<Professor> professors = studyProgramSubjectProfessorService.professorsOnAStudyProgram(programCode);
+        List<Professor> assignedProfessors = new ArrayList<>();
+
         List<StudyProgramSubject> studyProgramSubjects = studyProgramSubjectService.findAllByStudyProgram(programCode);
-        List<StudyProgramSubjectProfessor> newAssignments = new ArrayList<>();
-        professors.forEach(professor -> {
-            studyProgramSubjects.forEach(subject -> {
-                String newId = subject.getSubject().getId() + "-" + professor.getId();
-                StudyProgramSubjectProfessor assignment = new StudyProgramSubjectProfessor();
-                assignment.setId(newId);
-                assignment.setStudyProgramSubject(subject);
-                assignment.setProfessor(professor);
-                assignment.setOrder(order);
-                newAssignments.add(assignment);
-            });
-        });
 
-        studyProgramSubjectProfessorService.saveAll(newAssignments);
+        for (StudyProgramSubject s : studyProgramSubjects) {
+
+            List<StudyProgramSubjectProfessor> professorsAssignedToTheSubject =
+                    studyProgramSubjectProfessorService.professorsFromStudyProgramSubject(s);
+
+            List<Professor> professors = professorsAssignedToTheSubject.stream()
+                    .map(StudyProgramSubjectProfessor::getProfessor)
+                    .toList();
+
+            assignedProfessors.addAll(professors);
+            List<Professor> professorsFromOtherStudyProgramsForTheSubject =
+                    studyProgramSubjectProfessorService.findProfessorsFromOtherProgramsForSubject(
+                            s.getSubject().getId(), s.getStudyProgram().getCode());
+
+            List<Professor> uniqueProfessors = professorsFromOtherStudyProgramsForTheSubject.stream()
+                    .filter(p -> !assignedProfessors.contains(p))
+                    .toList();
+
+            for (Professor professor : uniqueProfessors) {
+                String newId = s.getId() + "-" + professor.getId();
+                studyProgramSubjectProfessorService.save(newId, s.getId(), professor.getId(), order);
+            }
+        }
         return "redirect:/programs/" + programCode + "/edit-professors";
-
     }
 
 

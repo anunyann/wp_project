@@ -1,4 +1,6 @@
 package mk.ukim.finki.akreditacii.service.impl;
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgramSubjectId;
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
@@ -27,7 +29,7 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
 
     @Override
     public StudyProgramSubject findById(String id) {
-        return studyProgramSubjectRepository.findById(id).orElseThrow(RuntimeException::new);
+        return studyProgramSubjectRepository.findById(id).orElseThrow(() -> new InvalidStudyProgramSubjectId(id));
     }
 
     @Override
@@ -38,7 +40,7 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
 
     @Override
     public StudyProgramSubject edit(String studyProgramSubjectId, String name, Boolean mandatory, short semester) {
-        StudyProgramSubject subject = studyProgramSubjectRepository.findById(studyProgramSubjectId).orElseThrow(RuntimeException::new);
+        StudyProgramSubject subject = studyProgramSubjectRepository.findById(studyProgramSubjectId).orElseThrow(() -> new InvalidStudyProgramSubjectId(studyProgramSubjectId));
 
         subject.getSubject().getSubject().setName(name);
         subject.setMandatory(mandatory);
@@ -63,7 +65,7 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
         String studyProgramSubjectId = id + "-" + subjectId;
         studyProgramSubject.setId(studyProgramSubjectId);
 
-        SubjectDetails subjectDetails = subjectDetailsRepository.findById(subjectId).orElseThrow(RuntimeException::new);
+        SubjectDetails subjectDetails = subjectDetailsRepository.findById(subjectId).orElseThrow(() -> new InvalidSubjectId(subjectId));
 
         studyProgramSubject.setSubject(subjectDetails);
         studyProgramSubject.setStudyProgram(studyProgramService.findById(id).orElse(null));
