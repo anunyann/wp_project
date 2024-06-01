@@ -22,4 +22,5 @@ public interface StudyProgramSubjectProfessorRepository extends JpaRepository<St
             "s.studyProgramSubject.mandatory) " +
             "FROM StudyProgramSubjectProfessor s")
     List<StudyProgramSubjectProfessorDTO> findAllCustomQuery();
+    boolean existsByStudyProgramSubjectId(String subjectId);
 }

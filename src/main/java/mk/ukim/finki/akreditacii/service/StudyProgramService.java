@@ -1,9 +1,6 @@
 package mk.ukim.finki.akreditacii.service;
 
-import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
-import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
-import mk.ukim.finki.akreditacii.repository.StudyProgramDetailsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

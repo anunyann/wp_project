@@ -28,6 +28,7 @@ public class StudyProgramSubject {
 
     private Short semester;
 
+    @Column(name = "\"order\"")
     private Float order;
 
     private String subjectGroup;
@@ -47,4 +48,5 @@ public class StudyProgramSubject {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }

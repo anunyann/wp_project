@@ -4,6 +4,7 @@ import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgram;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubjectProfessor;
@@ -70,4 +71,5 @@ public class DisplayServiceImpl implements DisplayService {
     public StudyProgramDetails getStudyProgramDetailsById(String program) {
         return this.programDetailsRepository.findById(program).orElseThrow(() -> new InvalidStudyProgram(program));
     }
+
 }
