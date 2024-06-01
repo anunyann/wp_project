@@ -4,11 +4,14 @@ import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 
+import mk.ukim.finki.akreditacii.service.ProfessorService;
 import mk.ukim.finki.akreditacii.service.*;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.Optional;
 
@@ -23,7 +26,6 @@ public class StudyProgramManagement {
 
 
     public StudyProgramManagement( StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
-
         this.studyProgramDetailsService = studyProgramDetailsService;
         this.accreditationService = accreditationService;
         this.professorService = professorService;

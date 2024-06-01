@@ -87,6 +87,9 @@
                     <a th:href="@{'/admin/subject/' + ${subjectDetail.id}} + '/edit'" class="btn btn-primary btn-sm mb-2">
                         <i class="fas fa-edit mr-1" th:text="#{EDIT}"></i>
                     </a>
+                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id}} + '/details'" class="btn btn-success btn-sm mb-2">
+                        <i class="fas fa-edit mr-1" th:text="#{DETAILS}"></i>
+                    </a>
                     <button type="button" class="btn btn-danger btn-sm">
                         <i class="fas fa-trash-alt mr-1" th:text="#{DELETE}"></i>
                     </button>

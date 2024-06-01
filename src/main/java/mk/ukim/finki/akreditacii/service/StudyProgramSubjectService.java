@@ -6,19 +6,17 @@ import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import java.util.List;
 
 public interface StudyProgramSubjectService {
-
-
-
-    StudyProgramSubject findById(String id);
+    List<StudyProgramSubject> findByStudyProgram(StudyProgramDetails studyProgramDetails);
+    StudyProgramSubject findById(String subjectId);
     StudyProgramSubject save(StudyProgramSubject studyProgramSubject);
     StudyProgramSubject edit(String subjectId, String name, Boolean mandatory, short semester);
 
+    void remove(String subjectId);
 
-    List<StudyProgramSubject> findAllByStudyProgram(String studyProgramId);
+    void add(String id, String subjectId, boolean mandatory, short semester, float order);
 
+    boolean hasAssociatedProfessors(String subjectId);
     void add(String id, String subjectId, boolean mandatory, short semester);
-
     List<StudyProgramSubject> findAllByStudyProgramCodeOrderBySemesterAscOrderAscSubjectIdAsc(String programCode);
-
 
 }
