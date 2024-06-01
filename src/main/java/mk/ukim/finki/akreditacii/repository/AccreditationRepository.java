@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface AccreditationRepository extends JpaRepository<Accreditation, String> {
     long countAccreditationsByIsActiveTrue();
+
     List<Accreditation> findAccreditationsByIsActiveTrue();
 
     Page<Accreditation> findAll(Pageable pageable);

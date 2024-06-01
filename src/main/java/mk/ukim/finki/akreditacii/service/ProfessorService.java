@@ -2,6 +2,7 @@ package mk.ukim.finki.akreditacii.service;
 
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
+import mk.ukim.finki.akreditacii.model.professor.dto.ProfessorNameAndCodeDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 public interface ProfessorService {
 
     Professor getProfessorById(String professorId);
+
+    List<ProfessorNameAndCodeDTO> findAllProfessorNameAndCode();
 
     Page<Professor> findAllWithPagination(int pageNum, int pageSize);
 
