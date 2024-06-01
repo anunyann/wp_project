@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.model.subject;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -26,6 +27,7 @@ public class StudyProgramSubjectProfessor {
     @ManyToOne
     private Professor professor;
 
+    @Column(name="\"order\"")
     private Float order;
 
     @Override

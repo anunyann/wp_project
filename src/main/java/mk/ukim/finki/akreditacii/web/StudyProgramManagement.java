@@ -6,23 +6,30 @@ import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 
 import mk.ukim.finki.akreditacii.service.ProfessorService;
 import mk.ukim.finki.akreditacii.service.*;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Optional;
+
+
 @RequestMapping("admin/study-programs")
 @Controller
 public class StudyProgramManagement {
+
     private final StudyProgramDetailsService studyProgramDetailsService;
     private final AccreditationService accreditationService;
     private final ProfessorService professorService;
 
-    public StudyProgramManagement(StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
+
+    public StudyProgramManagement( StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
         this.studyProgramDetailsService = studyProgramDetailsService;
         this.accreditationService = accreditationService;
         this.professorService = professorService;
+
     }
 
     @GetMapping
@@ -71,13 +78,16 @@ public class StudyProgramManagement {
 
     @GetMapping("/edit-form/{id}")
     public String editStudyProgram(Model model, @PathVariable String id) {
-        StudyProgramDetails studyProgramDetails = studyProgramDetailsService.findById(id).get();
-        model.addAttribute("studyProgramDetails", studyProgramDetails);
-        model.addAttribute("studyCycles", StudyCycle.values());
-        model.addAttribute("accreditations", accreditationService.findAll());
-        model.addAttribute("professors", professorService.findAll());
-
-        return "study_program/add_study_program.html";
+        Optional<StudyProgramDetails> optionalStudyProgramDetails = studyProgramDetailsService.findById(id);
+        if (optionalStudyProgramDetails.isPresent()) {
+            StudyProgramDetails studyProgramDetails = optionalStudyProgramDetails.get();
+            model.addAttribute("studyProgramDetails", studyProgramDetails);
+            model.addAttribute("studyCycles", StudyCycle.values());
+            model.addAttribute("accreditations", accreditationService.findAll());
+            model.addAttribute("professors", professorService.findAll());
+            return "study_program/add_study_program.html";
+        }
+        return null;
     }
 
     @PostMapping("/add")
@@ -116,4 +126,6 @@ public class StudyProgramManagement {
         this.studyProgramDetailsService.deleteById(id);
         return "redirect:/admin/study-programs";
     }
+
+
 }

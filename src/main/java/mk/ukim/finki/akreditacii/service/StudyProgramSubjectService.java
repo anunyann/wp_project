@@ -11,9 +11,13 @@ public interface StudyProgramSubjectService {
     StudyProgramSubject save(StudyProgramSubject studyProgramSubject);
     StudyProgramSubject edit(String subjectId, String name, Boolean mandatory, short semester);
 
+    List<StudyProgramSubject> findAllByStudyProgram(String studyProgramId);
     void remove(String subjectId);
 
     void add(String id, String subjectId, boolean mandatory, short semester, float order);
 
     boolean hasAssociatedProfessors(String subjectId);
+    void add(String id, String subjectId, boolean mandatory, short semester);
+    List<StudyProgramSubject> findAllByStudyProgramCodeOrderBySemesterAscOrderAscSubjectIdAsc(String programCode);
+
 }

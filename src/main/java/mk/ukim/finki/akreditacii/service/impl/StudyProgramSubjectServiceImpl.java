@@ -1,11 +1,11 @@
 package mk.ukim.finki.akreditacii.service.impl;
-
-import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgram;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgramSubjectId;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
-import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
+
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgram;
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
 import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
@@ -86,8 +86,42 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
     }
 
     @Override
+    public List<StudyProgramSubject> findAllByStudyProgram(String studyProgramId) {
+        return studyProgramSubjectRepository.findAllByStudyProgramCode(studyProgramId);
+    }
+
+    @Override
+    public void add(String id, String subjectId, boolean mandatory, short semester) {
+        StudyProgramSubject studyProgramSubject = new StudyProgramSubject();
+        studyProgramSubject.setId(subjectId);
+
+        String studyProgramSubjectId = id + "-" + subjectId;
+        studyProgramSubject.setId(studyProgramSubjectId);
+
+        SubjectDetails subjectDetails = subjectDetailsRepository.findById(subjectId).orElseThrow(() -> new InvalidSubjectId(subjectId));
+
+        studyProgramSubject.setSubject(subjectDetails);
+        studyProgramSubject.setStudyProgram(studyProgramService.findById(id).orElse(null));
+        studyProgramSubject.setMandatory(mandatory);
+        studyProgramSubject.setSemester(semester);
+        studyProgramSubject.setDependenciesOverride(null);
+        studyProgramSubject.setOrder(100f);
+
+        String prefix = subjectId.substring(0, 6);
+        studyProgramSubject.setSubjectGroup(prefix);
+
+        studyProgramSubjectRepository.save(studyProgramSubject);
+    }
+
+    @Override
     public boolean hasAssociatedProfessors(String subjectId) {
         return studyProgramSubjectProfessorRepository.existsByStudyProgramSubjectId(subjectId);
     }
+
+
+    public List<StudyProgramSubject> findAllByStudyProgramCodeOrderBySemesterAscOrderAscSubjectIdAsc(String programCode) {
+        return studyProgramSubjectRepository.findAllByStudyProgramCodeOrderBySemesterAscOrderAscSubjectIdAsc(programCode);
+    }
+
 
 }
