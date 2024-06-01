@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgram;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
 import mk.ukim.finki.akreditacii.model.subject.Subject;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@RequestMapping("admin/study-programs")
+@RequestMapping("admin/program")
 @Controller
 public class StudyProgramSubjectManagement {
 
@@ -29,7 +30,7 @@ public class StudyProgramSubjectManagement {
 
     @GetMapping("/{id}/edit-subjects")
     public String editSubjects(Model model, @PathVariable String id) {
-        StudyProgramDetails studyProgramDetails = studyProgramDetailsService.findById(id).get();
+        StudyProgramDetails studyProgramDetails = studyProgramDetailsService.findById(id).orElseThrow(() -> new InvalidStudyProgram(id));
         List<StudyProgramSubject> subjects = studyProgramSubjectService.findByStudyProgram(studyProgramDetails);
 
         model.addAttribute("studyProgramDetails", studyProgramDetails);
@@ -43,7 +44,7 @@ public class StudyProgramSubjectManagement {
         this.studyProgramSubjectService.edit(subjectId, name, mandatory, semester);
 
         redirectAttributes.addAttribute("id", id);
-        return "redirect:/admin/study-programs/" + id + "/edit-subjects";
+        return "redirect:/admin/program/{id}/edit-subjects".replace("{id}", id);
     }
 
     @GetMapping("/{id}/remove-subject/{subjectId}")
@@ -59,12 +60,12 @@ public class StudyProgramSubjectManagement {
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "An error occurred while removing the subject.");
         }
-        return "redirect:/admin/study-programs/" + id + "/edit-subjects";
+        return "redirect:/admin/program/{id}/edit-subjects".replace("{id}", id);
     }
 
     @GetMapping("{id}/add-subject")
     public String addSubjectForm(Model model, @PathVariable String id){
-        StudyProgramDetails studyProgramDetails = studyProgramDetailsService.findById(id).orElse(null);
+        StudyProgramDetails studyProgramDetails = studyProgramDetailsService.findById(id).orElseThrow(() -> new InvalidStudyProgram(id));
         List<Subject> subjects = subjectService.findAllSubjects();
 
         model.addAttribute("studyProgramDetails", studyProgramDetails);
@@ -75,16 +76,23 @@ public class StudyProgramSubjectManagement {
     }
 
     @PostMapping("{id}/add-subject")
-    public String addSubject(@PathVariable String id, @RequestParam String subjectId, @RequestParam boolean mandatory,  @RequestParam  short semester, @RequestParam float order, RedirectAttributes redirectAttributes) {
-        StudyProgramDetails studyProgramDetails = studyProgramDetailsService.findById(id).orElse(null);
-        if (studyProgramDetails != null) {
+    public String addSubject(@PathVariable String id, @RequestParam String subjectId, @RequestParam boolean mandatory,  @RequestParam  short semester, @RequestParam(required = false) Float order, RedirectAttributes redirectAttributes) {
+        StudyProgramDetails studyProgramDetails = studyProgramDetailsService.findById(id).orElseThrow(() -> new InvalidStudyProgram(id));
+
+        if (studyProgramDetails!=null){
+            if (order == null) {
+                redirectAttributes.addAttribute("id", id);
+                redirectAttributes.addFlashAttribute("error", "Order is required");
+                return "redirect:/admin/program/{id}/add-subject".replace("{id}", id);
+            }
 
             this.studyProgramSubjectService.add(id, subjectId, mandatory, semester, order);
-
             redirectAttributes.addAttribute("id", id);
-            return "redirect:/admin/study-programs/" + id + "/edit-subjects";
+
+            return "redirect:/admin/program/{id}/edit-subjects".replace("{id}", id);
+
         }
-        return "redirect:/admin/study-programs/" + id + "/edit-subjects";
+        return "redirect:/admin/program/{id}/edit-subjects".replace("{id}", id);
     }
 
 }

@@ -9,8 +9,11 @@
 <body class="bg-light">
 <div class="view-content my-5" layout:fragment="content">
     <h2 th:text="#{ADD_STUDY_PROGRAM_SUBJECT}"></h2>
-    <form th:action="@{'/admin/study-programs/' + ${studyProgramDetails?.id} + '/add-subject'}" method="post">
-    <div class="mb-3">
+    <div th:if="${error != null}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+    <form th:action="@{'/admin/program/' + ${studyProgramDetails?.id} + '/add-subject'}" method="post">
+        <div class="mb-3">
             <label for="subject" class="form-label"><b th:text="#{SUBJECT}"></b></label>
             <select id="subject" name="subjectId" class="form-select">
                 <option th:each="subject : ${subjects}" th:value="${subject.id}" th:text="${subject.getName()}"></option>
