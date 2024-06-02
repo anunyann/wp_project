@@ -24,9 +24,4 @@ public class SecurityConfiguration extends AuthConfig {
     }
 
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }
