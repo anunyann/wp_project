@@ -33,11 +33,4 @@ public class CasSecurityConfig extends AuthConfig {
         return http.build();
     }
 
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

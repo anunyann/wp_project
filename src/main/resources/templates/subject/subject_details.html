@@ -1,0 +1,213 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+>
+<meta charset="utf-8"/>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${subjectDetails.subject.name}"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<div class="pt-3" layout:fragment="content">
+    <style>
+
+        .info-table-data {
+            width: 300px;
+        }
+
+        .counter-cell-data {
+            width: 30px;
+            text-align: center;
+        }
+
+        .text-alert-custom {
+            color: crimson;
+        }
+    </style>
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <a href="/admin/subject/list" class="btn btn-primary"><i>Назад</i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="row main-div">
+        <div class="two-column-summary mb-4">
+            <div class="col">
+                <span>Код на предмет:</span>
+                <h5 class="d-inline" th:text="${subject.id}"></h5>
+            </div>
+            <div class="col mb-2">
+                <span>Име на предмет: </span>
+                <h5 class="d-inline" th:text="${subject.name}"></h5>
+            </div>
+        </div>
+        <!-- Subject Info & Details -->
+        <div class="col-12 mb-4">
+            <h3>Информации & Детали за предметот</h3>
+            <hr>
+            <div class="col-12">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                    <tr>
+                        <td class="info-table-data">Код на предмет</td>
+                        <td><span th:text="${subject.id}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Име на предмет</td>
+                        <td><span th:text="${subject.name}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Име на предмет (англиски)</td>
+                        <td><span th:text="${subjectDetails.nameEn}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Кредити</td>
+                        <td><span th:text="${subjectDetails.credits}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Семестар</td>
+                        <td><span th:text="${subject.semester}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>cycle</td>
+                        <td><span th:text="${subjectDetails.cycle}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Број на неделни ПРЕДАВАЊА</td>
+                        <td><span th:text="${subject.weeklyLecturesClasses}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Број на неделни АУДИТОРИСКИ</td>
+                        <td><span th:text="${subject.weeklyAuditoriumClasses}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Број на неделни ЛАБОРАТОРИСКИ</td>
+                        <td><span th:text="${subject.weeklyLabClasses}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Јазик на предавање</td>
+                        <td><span th:text="${subjectDetails.language}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Методи на учење</td>
+                        <td><span th:text="${subjectDetails.learningMethods}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Цели на предметот</td>
+                        <td><span th:text="${subjectDetails.goalsDescription}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Цели на предметот (англиски)</td>
+                        <td><span th:text="${subjectDetails.goalsDescriptionEn}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Содржина</td>
+                        <td><span th:text="${subjectDetails.content}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Содржина (англиски)</td>
+                        <td><span th:text="${subjectDetails.contentEn}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>qualityControl</td>
+                        <td><span th:text="${subjectDetails.qualityControl}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>accreditation year</td>
+                        <td><span th:text="${subjectDetails.accreditation.year}"></span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="text-danger">Предуслов</span></td>
+                        <td>
+                            За мастер студии нема предуслов (ДА СЕ СРЕДИ)
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Professors -->
+        <div class="col-12 mb-4">
+            <h3>Професори</h3>
+            <hr>
+            <div th:if="${numProfessors != 0}">
+                <!--     Number of professors       -->
+                <div class="col-12 mb-2">
+                    <span>Број на професори на предметот <b>"<span class="font-weight-bold"
+                                                                   th:text="${subject.name}"></span>"</b>: <b><span
+                            th:text="${numProfessors}"></span></b></span>
+                </div>
+                <!--     Professors as Table       -->
+                <div class="col-12">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <td class="counter-cell-data">#</td>
+                            <td>Име</td>
+                            <td>E-mail</td>
+                            <td>Код</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="professor, counter : ${professors}">
+                            <td class="counter-cell-data" th:text="${counter.index + 1}">Number</td>
+                            <td th:text="${professor.name}">Автор на книгата</td>
+                            <td th:text="${professor.email}">Автор на книгата</td>
+                            <td th:text="${professor.id}">Издавач на книгата</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h5 class="text-alert-custom" th:if="${numProfessors == 0}">Не се прикачени професори за предметот
+                "<span th:text="${subject.name}"></span>".</h5>
+        </div>
+        <!-- Study Programs -->
+        <div class="col-12 mb-4">
+            <h3>Студиски програми</h3>
+            <hr>
+            <div class="col-12 mb-2">
+                    <span>Број на студиски програми каде што предметот <b>"<span class="font-weight-bold"
+                                                                   th:text="${subject.name}"></span>"</b> е задолжителен:
+                        <b><span th:text="${studyProgramsNum}"></span></b></span>
+            </div>
+            <div class="col-12">
+                <span th:text="${studyPrograms}"></span>
+            </div>
+        </div>
+        <!-- Subject Grading -->
+        <div class="col-12 mb-4">
+            <h3>Начин на оценување</h3>
+            <hr>
+            <div class="col-12">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                    <tr>
+                        <td class="info-table-data">Поени од тестови</td>
+                        <td><span th:text="${subjectDetails.grading.testsPoints}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Поени од проекти</td>
+                        <td><span th:text="${subjectDetails.grading.projectPoints}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Поени од активности</td>
+                        <td><span th:text="${subjectDetails.grading.activityPoints}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Поени од exam</td>
+                        <td><span th:text="${subjectDetails.grading.examPoints}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Услов за потпис</td>
+                        <td><span th:text="${subjectDetails.grading.signatureCondition}"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
