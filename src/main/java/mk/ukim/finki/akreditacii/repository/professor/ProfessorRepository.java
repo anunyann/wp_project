@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+
 public interface ProfessorRepository extends JpaRepository<Professor, String> {
     @Query("SELECT p FROM Professor p " + "WHERE (:title IS NULL OR p.title = :title) " + "AND (:stringSearch = '' OR p.name ILIKE %:stringSearch% " + "OR p.email ILIKE %:stringSearch%)")
     Page<Professor> findAllFiltered(@Param("stringSearch") String stringSearch, @Param("title") ProfessorTitle title, Pageable pageable);
@@ -23,4 +24,7 @@ public interface ProfessorRepository extends JpaRepository<Professor, String> {
             "p.name) " +
             "FROM Professor p ")
     List<ProfessorNameAndCodeDTO> findAllNameAndCode();
+
+
+
 }
