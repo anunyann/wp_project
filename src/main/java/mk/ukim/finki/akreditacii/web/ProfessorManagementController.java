@@ -28,20 +28,19 @@ public class ProfessorManagementController {
     private final AccreditationService accreditationService;
     private final ProfessorAccreditationStatsService professorAccreditationStatsService;
 
-    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService, ProfessorResumeService professorResumeService) {
-    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService, AccreditationService accreditationService, ProfessorAccreditationStatsService professorAccreditationStatsService) {
-
-        this.professorService = professorService;
-        this.professorAcademicTitlesService = professorAcademicTitlesService;
+    public ProfessorManagementController(AcademicTitleService academicTitleService, EducationService educationService, ProfessorEducationService professorEducationService, ProfessorAcademicTitlesService professorAcademicTitlesService, ProfessorService professorService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService, ProfessorResumeService professorResumeService, AccreditationService accreditationService, ProfessorAccreditationStatsService professorAccreditationStatsService) {
         this.academicTitleService = academicTitleService;
         this.educationService = educationService;
         this.professorEducationService = professorEducationService;
+        this.professorAcademicTitlesService = professorAcademicTitlesService;
+        this.professorService = professorService;
         this.professorDetailsService = professorDetailsService;
         this.professorDeleteService = professorDeleteService;
         this.professorResumeService = professorResumeService;
         this.accreditationService = accreditationService;
         this.professorAccreditationStatsService = professorAccreditationStatsService;
     }
+
 
     @GetMapping(value = {"/{professorId}"})
     public String professorDetails(@PathVariable String professorId, Model model) {
@@ -216,15 +215,17 @@ public class ProfessorManagementController {
     /*RESUME*/
 
     @GetMapping("/{professorId}/resume/edit")
-    public String editResume(@PathVariable String professorId, Model model){
+    public String editResume(@PathVariable String professorId, Model model) {
         Professor professor = this.professorService.getProfessorById(professorId);
         model.addAttribute("professor", professor);
-        if(this.professorResumeService.findById(professorId).isPresent())
-            model.addAttribute("professorResume", this.professorResumeService.findById(professorId));
-        else {
+
+        Optional<ProfessorResume> professorResumeOptional = this.professorResumeService.findById(professorId);
+        if (professorResumeOptional.isPresent()) {
+            model.addAttribute("professorResume", professorResumeOptional.get());
+        } else {
             model.addAttribute("professorResume", new ProfessorResume());
-            model.addAttribute("professorId", professorId);
         }
+        model.addAttribute("professorId", professorId);
 
         return "professor/edit_professor_resume";
     }
@@ -249,6 +250,7 @@ public class ProfessorManagementController {
 
         return "professor/preview_professor_resume";
     }
+
 
     @GetMapping("/professor-stats")
     public String stats(Model model,
