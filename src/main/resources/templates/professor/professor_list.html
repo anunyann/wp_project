@@ -86,6 +86,12 @@
                 <td class="text-right d-flex flex-wrap justify-content-end">
                     <div class="col-3">
                         <a class="btn btn-sm btn-info m-1"
+                           th:href="@{'/admin/professor/{id}/resume' (id=${professor.getId()})}">
+                            <i class="fa fa-trash">Резиме</i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-sm btn-info m-1"
                            th:href="@{'/admin/professor/{id}' (id=${professor.getId()})}">
                             <i class="fa fa-trash" th:text="#{DETAILS}"></i>
                         </a>

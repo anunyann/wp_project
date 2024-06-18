@@ -1,5 +1,6 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidProfessorId;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.model.semester.SemesterType;
@@ -8,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("admin/professor")
@@ -21,21 +24,23 @@ public class ProfessorManagementController {
     private final ProfessorService professorService;
     private final ProfessorDetailsService professorDetailsService;
     private final ProfessorDeleteService professorDeleteService;
+    private final ProfessorResumeService professorResumeService;
     private final AccreditationService accreditationService;
     private final ProfessorAccreditationStatsService professorAccreditationStatsService;
 
-    public ProfessorManagementController(ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, AcademicTitleService academicTitleService, ProfessorEducationService professorEducationService, EducationService educationService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService, AccreditationService accreditationService, ProfessorAccreditationStatsService professorAccreditationStatsService) {
-
-        this.professorService = professorService;
-        this.professorAcademicTitlesService = professorAcademicTitlesService;
+    public ProfessorManagementController(AcademicTitleService academicTitleService, EducationService educationService, ProfessorEducationService professorEducationService, ProfessorAcademicTitlesService professorAcademicTitlesService, ProfessorService professorService, ProfessorDetailsService professorDetailsService, ProfessorDeleteService professorDeleteService, ProfessorResumeService professorResumeService, AccreditationService accreditationService, ProfessorAccreditationStatsService professorAccreditationStatsService) {
         this.academicTitleService = academicTitleService;
         this.educationService = educationService;
         this.professorEducationService = professorEducationService;
+        this.professorAcademicTitlesService = professorAcademicTitlesService;
+        this.professorService = professorService;
         this.professorDetailsService = professorDetailsService;
         this.professorDeleteService = professorDeleteService;
+        this.professorResumeService = professorResumeService;
         this.accreditationService = accreditationService;
         this.professorAccreditationStatsService = professorAccreditationStatsService;
     }
+
 
     @GetMapping(value = {"/{professorId}"})
     public String professorDetails(@PathVariable String professorId, Model model) {
@@ -206,6 +211,46 @@ public class ProfessorManagementController {
 
         return "redirect:/admin/professor/" + professorId;
     }
+
+    /*RESUME*/
+
+    @GetMapping("/{professorId}/resume/edit")
+    public String editResume(@PathVariable String professorId, Model model) {
+        Professor professor = this.professorService.getProfessorById(professorId);
+        model.addAttribute("professor", professor);
+
+        Optional<ProfessorResume> professorResumeOptional = this.professorResumeService.findById(professorId);
+        if (professorResumeOptional.isPresent()) {
+            model.addAttribute("professorResume", professorResumeOptional.get());
+        } else {
+            model.addAttribute("professorResume", new ProfessorResume());
+        }
+        model.addAttribute("professorId", professorId);
+
+        return "professor/edit_professor_resume";
+    }
+
+    @PostMapping("/{professorId}/resume/save")
+    public String saveResume (@PathVariable String professorId, @RequestParam(required = false) String resume, @RequestParam(value = "image", required = false) MultipartFile image){
+        this.professorResumeService.save(professorId, resume, image);
+
+        return "redirect:/admin/professor/" + professorId + "/resume";
+    }
+
+    @GetMapping("/{professorId}/resume")
+    public String viewResume(@PathVariable String professorId, Model model){
+        Professor professor = this.professorService.getProfessorById(professorId);
+        model.addAttribute("professor", professor);
+
+        Optional<ProfessorResume> professorResume = this.professorResumeService.findById(professor.getId());
+        if (professorResume.isEmpty())
+            return "redirect:/admin/professor/" + professorId + "/resume/edit";
+
+        model.addAttribute("professorResume", professorResume.get());
+
+        return "professor/preview_professor_resume";
+    }
+
 
     @GetMapping("/professor-stats")
     public String stats(Model model,
