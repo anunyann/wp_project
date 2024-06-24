@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Професори распределба</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <form th:action="@{/admin/user/test}" method="get" class="pb-3">
+        <div class="row">
+            <div class="col-12">
+                <h4>Filter allocations</h4>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select2" name="role">
+                    <option value="" th:selected="${param.role==null}">Филтрирање по role</option>
+                    <option th:each="role : ${userRoles}"
+                            th:value="${role.roleName()}"
+                            th:text="${role.name()}"
+                            th:selected="${param.id!=null && role.name() == param.role[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+
+        <div th:include="fragments/paging :: pageSection(${userPage})"></div>
+    </div>
+    </form>
+
+
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th class="text-primary" th:text="#{PROFESSOR_NAME}"></th>
+            <th class="text-primary" th:text="#{PROFESSOR_EMAIL}"></th>
+            <th class="text-primary" th:text="#{PROFESSOR_TITLE}"></th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user: ${userPage.getContent()}">
+            <td th:text="${user.getName()}"/>
+            <td th:text="${user.getEmail()}"></td>
+            <td th:text="${user.getRole()}"></td>
+            <td class="text-right d-flex flex-wrap justify-content-center">
+                <div class="col-6">
+                    <a class="btn btn-sm btn-info m-1"
+                       th:href="@{'/admin/user/{id}/edit' (id=${user.getId()})}">
+                        <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="btn btn-sm btn-danger m-1"
+                       th:href="@{'/admin/user/{id}/delete' (id=${user.getId()})}">
+                        <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
