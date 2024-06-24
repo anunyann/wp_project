@@ -24,13 +24,15 @@ public class SubjectController {
     private final DisplayService displayService;
     private final ProfessorService professorService;
     private final StudyProgramService studyProgramService;
+    private final SubjectAccreditationStatsService subjectAccreditationStatsService;
 
-    public SubjectController(SubjectDetailsService service, AccreditationService accreditationService, DisplayService displayService, ProfessorService professorService, StudyProgramService studyProgramService) {
+    public SubjectController(SubjectDetailsService service, AccreditationService accreditationService, DisplayService displayService, ProfessorService professorService, StudyProgramService studyProgramService, SubjectAccreditationStatsService subjectAccreditationStatsService) {
         this.service = service;
         this.accreditationService = accreditationService;
         this.displayService = displayService;
         this.professorService = professorService;
         this.studyProgramService = studyProgramService;
+        this.subjectAccreditationStatsService = subjectAccreditationStatsService;
     }
 
 
@@ -94,32 +96,29 @@ public class SubjectController {
                                      @RequestParam(required = false) String subjectCode,
                                      @RequestParam(required = false) String professorCode,
                                      @RequestParam(required = false) String studyProgramCode,
-                                     @RequestParam(required = false) String accreditationYear) {
+                                     @RequestParam(required = false) String accreditationYear,
+                                     @RequestParam(defaultValue = "1") Integer pageNumber,
+                                     @RequestParam(defaultValue = "10") Integer result) {
         //Dropdown menu attr
         model.addAttribute("subjectsDropdown", this.service.findAllSubjectNameAndCode());
         model.addAttribute("professorsDropdown", this.professorService.findAllProfessorNameAndCode());
-        List<StudyProgram> studyProgramsDropdown = this.studyProgramService.findAll().stream().sorted(Comparator.comparing(StudyProgram::getName)).toList();
-        model.addAttribute("studyProgramsDropdown", studyProgramsDropdown);
+        model.addAttribute("studyProgramsDropdown", this.studyProgramService.findAll().stream().sorted(Comparator.comparing(StudyProgram::getName)).toList());
         model.addAttribute("accreditationYearsDropdown", this.accreditationService.findAll());
 
-        //subjectCode, professorCode, studyProgramCode, accreditationYear
-        if ((subjectCode == null || subjectCode.isEmpty()) &&
-                (professorCode == null || professorCode.isEmpty()) &&
-                (studyProgramCode == null || studyProgramCode.isEmpty()) &&
-                (accreditationYear == null || accreditationYear.isEmpty())) {
-            model.addAttribute("emptyMessage", true);
-            return "subject/subject_statistics.html";
+        String selectedAccreditationYear;
+        if (accreditationYear == null || accreditationYear.isEmpty()) {
+            selectedAccreditationYear = this.accreditationService.findActiveAccreditation().getYear();
+        } else {
+            selectedAccreditationYear = accreditationYear;
         }
 
         model.addAttribute("subjectCode", subjectCode);
         model.addAttribute("professorCode", professorCode);
         model.addAttribute("studyProgramCode", studyProgramCode);
-        model.addAttribute("accreditationYear", accreditationYear);
+        model.addAttribute("aciveAccreditationYear", this.accreditationService.findActiveAccreditation().getYear());
 
-        model.addAttribute("defaultActiveYear", this.service.getActiveAccreditationYear().getYear());
-
-        List<SubjectStatisticsDTO> subjects = this.service.findSubjectsInfo(subjectCode, professorCode, studyProgramCode, accreditationYear);
-        model.addAttribute("subjects", subjects);
+        Page<SubjectAccreditationStats> subjects = this.subjectAccreditationStatsService.findAllWithPaginationAndFilters(pageNumber, result, subjectCode, professorCode, studyProgramCode, selectedAccreditationYear);
+        model.addAttribute("subjects", subjects.getContent());
 
         if (subjects.isEmpty()){
             model.addAttribute("emptyList", true);
