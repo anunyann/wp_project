@@ -5,10 +5,11 @@
 <meta charset="utf-8"/>
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Subject STATISTICS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <div class="pt-3" layout:fragment="content">
     <style>
@@ -76,116 +77,116 @@
             font-size: 18px;
         }
     </style>
-    <div class="row main-div">
-        <div class="row mb-3">
-            <div class="col-md-2">
-                <a href="/admin/subject/list" class="btn btn-primary"><i>Назад</i></a>
+    <div class="pt-3" >
+        <div class="row main-div">
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <a href="/admin/subject/list" class="btn btn-primary"><i>Назад</i></a>
+                </div>
             </div>
-        </div>
-        <hr>
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <h3>Статистика за предмети</h3>
+            <hr>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <h3>Статистика за предмети</h3>
+                </div>
             </div>
-        </div>
-        <form th:method="GET" th:action="@{'/admin/subject/statistics'}">
-            <div class="col-12 mb-4 d-flex justify-content-center align-items-center">
-                <div class="row w-100">
-                    <div class="col-md-5">
-                        <div class="mb-2 w-100">
-                            <!--subjectCode-->
-                            <label for="subjectCode" hidden="hidden">subjectCode</label>
-                            <select class="form-control filter-input w-100" name="subjectCode" id="subjectCode">
-                                <option value="">Избери предмет</option>
-                                <option th:each="subject : ${subjectsDropdown}"
-                                        th:value="${subject.code}"
-                                        th:text="${subject.name + ' (' + subject.code + ')'}"
-                                        th:selected="${subject.code == subjectCode}"></option>
-                            </select>
+            <form th:method="GET" th:action="@{'/admin/subject/statistics'}">
+                <div class="col-12 mb-4 d-flex justify-content-center align-items-center">
+                    <div class="row w-100">
+                        <div class="col-md-5">
+                            <div class="mb-2 w-100">
+                                <!--subjectCode-->
+                                <label for="subjectCode" hidden="hidden">subjectCode</label>
+                                <select class="form-control filter-input w-100" name="subjectCode" id="subjectCode">
+                                    <option value="">Избери предмет</option>
+                                    <option th:each="subject : ${subjectsDropdown}"
+                                            th:value="${subject.code}"
+                                            th:text="${subject.name + ' (' + subject.code + ')'}"
+                                            th:selected="${subject.code == subjectCode}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-2 w-100">
+                                <!--professorCode-->
+                                <label for="professorCode" hidden="hidden">professorCode</label>
+                                <select class="form-control filter-input w-100" name="professorCode" id="professorCode">
+                                    <option value="">Избери професор</option>
+                                    <option th:each="professor : ${professorsDropdown}"
+                                            th:value="${professor.code}"
+                                            th:text="${professor.name + ' (' + professor.code + ')'}"
+                                            th:selected="${professor.code == professorCode}"></option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-2 w-100">
-                            <!--professorCode-->
-                            <label for="professorCode" hidden="hidden">professorCode</label>
-                            <select class="form-control filter-input w-100" name="professorCode" id="professorCode">
-                                <option value="">Избери професор</option>
-                                <option th:each="professor : ${professorsDropdown}"
-                                        th:value="${professor.code}"
-                                        th:text="${professor.name + ' (' + professor.code + ')'}"
-                                        th:selected="${professor.code == professorCode}"></option>
-                            </select>
+                        <div class="d-flex justify-content-end flex-wrap col-md-5">
+                            <div class="mb-2 w-100">
+                                <!--studyProgramCode-->
+                                <label for="studyProgramCode" hidden="hidden">studyProgramCode</label>
+                                <select class="form-control filter-input w-100" name="studyProgramCode" id="studyProgramCode">
+                                    <option value="">Избери студиска програма</option>
+                                    <option th:each="sp : ${studyProgramsDropdown}"
+                                            th:value="${sp.code}"
+                                            th:text="${sp.name + ' (' + sp.code + ')'}"
+                                            th:selected="${sp.code == studyProgramCode}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-2 w-100">
+                                <!--accreditationYear-->
+                                <label for="accreditationYear" hidden="hidden">accreditationYear</label>
+                                <select class="form-control filter-input w-100" name="accreditationYear" id="accreditationYear" th:value="${accreditationYear}">
+                                    <option th:each="ay : ${accreditationYearsDropdown}" th:value="${ay.year}" th:text="${ay.year}"></option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-end flex-wrap col-md-5">
-                        <div class="mb-2 w-100">
-                            <!--studyProgramCode-->
-                            <label for="studyProgramCode" hidden="hidden">studyProgramCode</label>
-                            <select class="form-control filter-input w-100" name="studyProgramCode" id="studyProgramCode">
-                                <option value="">Избери студиска програма</option>
-                                <option th:each="sp : ${studyProgramsDropdown}"
-                                        th:value="${sp.code}"
-                                        th:text="${sp.name + ' (' + sp.code + ')'}"
-                                        th:selected="${sp.code == studyProgramCode}"></option>
-                            </select>
-                        </div>
-                        <div class="mb-2 w-100">
-                            <!--accreditationYear-->
-                            <label for="accreditationYear" hidden="hidden">accreditationYear</label>
-                            <select class="form-control filter-input w-100" name="accreditationYear" id="accreditationYear" th:value="${accreditationYear}">
-                                <option th:each="ay : ${accreditationYearsDropdown}" th:value="${ay.year}">
-                                    <label th:text="${ay.year}"></label>
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="row mb-2">
-                            <button type="submit" class="btn btn-primary filter-input w-100"><i>Пребарувај</i></button>
-                        </div>
-                        <div class="row">
-                            <a href="/admin/subject/statistics" class="btn btn-secondary filter-input w-100"><i>Обнови</i></a>
+                        <div class="col-md-2">
+                            <div class="row mb-2">
+                                <button type="submit" class="btn btn-primary filter-input w-100"><i>Пребарувај</i></button>
+                            </div>
+                            <div class="row">
+                                <a href="/admin/subject/statistics" class="btn btn-secondary filter-input w-100"><i>Обнови</i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
-        <hr>
-        <div class="col-12 mb-4">
-            <div class="col-12">
-                <div class="item-list">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th class="text-primary" th:text="SUBJECT NAME"></th>
-                            <th class="text-primary" th:text="PROFESSOR COUNT"></th>
-                            <th class="text-primary" th:text="PROFESSORS"></th>
-                            <th class="text-primary" th:text="ACCREDITATION YEAR"></th>
-                            <th class="text-primary" th:text="MANDATORY STUDY PROGRAMS"></th>
-                            <th class="text-primary" th:text="YEARS ACTIVE"></th>
-                            <th class="text-primary" th:text="FIRST TIME STUDENTS"></th>
-                            <th class="text-primary" th:text="RE ENROLLED TIME STUDENTS"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="subject : ${subjects}">
-                            <td th:text="${subject.name}"></td>
-                            <td th:text="${subject.numProfessors}"></td>
+            </form>
+            <hr>
+            <div class="col-12 mb-4">
+                <div class="col-12">
+                    <div class="item-list">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="text-primary" th:text="#{SUBJECT_NAME}"></th>
+                                <th class="text-primary" th:text="#{PROFESSOR_NUM}"></th>
+                                <th class="text-primary" th:text="#{PROFESSORS}"></th>
+                                <th class="text-primary" th:text="#{ACCREDITATION}"></th>
+                                <th class="text-primary" th:text="#{STUDY_PROGRAMS_MANDATORY}"></th>
+                                <th class="text-primary" th:text="#{DURATION_YEARS}"></th>
+                                <th class="text-primary" th:text="#{PROFESSORS}"></th>
+                                <th class="text-primary" th:text="#{PROFESSORS}"></th>
 
-                            <td th:text="${#numbers.formatDecimal(stat.getNumSubjectParts(), 1, 2)}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div th:include="fragments/paging :: pageSection(${subjects})"></div>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="subject : ${subjects.getContent()}">
+                                <td th:text="${subject.name}"></td>
+                                <td th:text="${subject.numProfessors}"></td>
+                                <td th:text="${#numbers.formatDecimal(subject.numProfessors, 1, 2)}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div th:include="fragments/paging :: pageSection(${subjects})"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12 mb-4" th:if="${emptyMessage}">
-            <div class="empty-message-div">
-                <a>Внеси филтер.</a>
+            <div class="col-12 mb-4" th:if="${emptyMessage}">
+                <div class="empty-message-div">
+                    <a>Внеси филтер.</a>
+                </div>
             </div>
-        </div>
-        <div class="col-12 mb-4" th:if="${emptyList}">
-            <div class="empty-message-div">
-                <a>Не се пронајдени резултати.</a>
+            <div class="col-12 mb-4" th:if="${emptyList}">
+                <div class="empty-message-div">
+                    <a>Не се пронајдени резултати.</a>
+                </div>
             </div>
         </div>
     </div>

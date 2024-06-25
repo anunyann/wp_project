@@ -118,7 +118,7 @@ public class SubjectController {
         model.addAttribute("aciveAccreditationYear", this.accreditationService.findActiveAccreditation().getYear());
 
         Page<SubjectAccreditationStats> subjects = this.subjectAccreditationStatsService.findAllWithPaginationAndFilters(pageNumber, result, subjectCode, professorCode, studyProgramCode, selectedAccreditationYear);
-        model.addAttribute("subjects", subjects.getContent());
+        model.addAttribute("subjects", subjects);
 
         if (subjects.isEmpty()){
             model.addAttribute("emptyList", true);
