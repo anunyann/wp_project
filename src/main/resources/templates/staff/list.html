@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" rel="stylesheet">
+  <script crossorigin="anonymous"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+
+  </script>
+  <script th:inline="javascript">
+    function cleanQueryFilters() {
+      window.location = "?";
+    }
+
+  </script>
+</head>
+<body>
+<div class="view-content my-5" layout:fragment="content">
+  <h3>Вработени на ФИНКИ</h3>
+  <div id="filters">
+    <form method="GET" th:action="@{/staff}">
+      <div class="d-flex flex-wrap justify-content-between">
+        <div class="col-md-3 col-sm-6 p-1">
+          <label class="mr-2 mb-0" for="role">Наставен кадар:</label>
+          <select class="form-control custom-select" id="role" name="role">
+            <option value="">Сите</option>
+            <option th:each="role : ${roleNames}" th:value="${role.key}" th:text="${role.value}">Role</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-sm-6 p-1 text-end">
+          <button class="btn btn-primary" type="submit">Пребарувај</button>
+          <button class="btn btn-outline-dark" id="resetFiltersBtn" th:onclick="cleanQueryFilters()" type="reset">
+            Ресетирај ги филтерите
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    <div th:each="staff : ${staffPage.content}">
+      <div class="col">
+        <div class="card">
+          <img th:src="@{/default.png}" alt="Слика на вработен" class="card-img-top"/>
+          <div class="card-body">
+            <h5 class="card-title"><a th:href="@{/staff/details/{id}(id=${staff.id})}"
+                                      class="text-decoration-none text-dark" th:text="${staff.name}">Име</a></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <nav>
+      <ul class="pagination">
+        <li th:if="${staffPage.hasPrevious()}" class="page-item">
+          <a th:href="@{/staff(page=${staffPage.number - 1}, size=${staffPage.size})}" class="page-link"
+             aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Претходна</span>
+          </a>
+        </li>
+        <li th:each="pageNumber : ${#numbers.sequence(0, staffPage.totalPages - 1)}" class="page-item"
+            th:classappend="${pageNumber == staffPage.number ? 'active' : ''}">
+          <a th:href="@{/staff(page=${pageNumber}, size=${staffPage.size})}" class="page-link"
+             th:text="${pageNumber + 1}"></a>
+        </li>
+        <li th:if="${staffPage.hasNext()}" class="page-item">
+          <a th:href="@{/staff(page=${staffPage.number + 1}, size=${staffPage.size})}" class="page-link"
+             aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Следна</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+package mk.ukim.finki.akreditacii.web;
+
+import mk.ukim.finki.akreditacii.model.User;
+import mk.ukim.finki.akreditacii.model.UserRole;
+import mk.ukim.finki.akreditacii.model.professor.Professor;
+import mk.ukim.finki.akreditacii.model.professor.ProfessorAcademicTitles;
+import mk.ukim.finki.akreditacii.model.professor.ProfessorDetails;
+import mk.ukim.finki.akreditacii.model.professor.ProfessorEducation;
+import mk.ukim.finki.akreditacii.service.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@Controller
+@RequestMapping("/staff")
+public class StaffController {
+    private final StaffService staffService;
+    private final ProfessorService professorService;
+    private final ProfessorAcademicTitlesService professorAcademicTitlesService;
+    private final ProfessorDetailsService professorDetailsService;
+    private final ProfessorEducationService professorEducationService;
+
+    public StaffController(StaffService staffService, ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, ProfessorDetailsService professorDetailsService, ProfessorEducationService professorEducationService) {
+        this.staffService = staffService;
+        this.professorService = professorService;
+        this.professorAcademicTitlesService = professorAcademicTitlesService;
+        this.professorDetailsService = professorDetailsService;
+        this.professorEducationService = professorEducationService;
+    }
+
+    @GetMapping
+    public String listStaff(@RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "10") int size,
+                            @RequestParam(required = false) UserRole role,
+                            Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> staffPage;
+
+        if (role != null) {
+            staffPage = staffService.findStaffByRole(role, pageable);
+        } else {
+            staffPage = staffService.findAllStaff(pageable);
+        }
+
+        List<UserRole> roles = Arrays.asList(
+                UserRole.PROFESSOR,
+                UserRole.ACADEMIC_AFFAIR_VICE_DEAN,
+                UserRole.SCIENCE_AND_COOPERATION_VICE_DEAN,
+                UserRole.FINANCES_VICE_DEAN,
+                UserRole.DEAN,
+                UserRole.STUDENT_ADMINISTRATION,
+                UserRole.STUDENT_ADMINISTRATION_MANAGER,
+                UserRole.FINANCE_ADMINISTRATION,
+                UserRole.FINANCE_ADMINISTRATION_MANAGER,
+                UserRole.LEGAL_ADMINISTRATION,
+                UserRole.ARCHIVE_ADMINISTRATION,
+                UserRole.ADMINISTRATION_MANAGER
+        );
+
+        Map<UserRole, String> roleNames = Stream.of(new Object[][]{
+                {UserRole.PROFESSOR, "Професори"},
+                {UserRole.ACADEMIC_AFFAIR_VICE_DEAN, "Продекан за настава"},
+                {UserRole.SCIENCE_AND_COOPERATION_VICE_DEAN, "Продекан за наука и соработка"},
+                {UserRole.FINANCES_VICE_DEAN, "Продекан за финансии"},
+                {UserRole.DEAN, "Декан"},
+                {UserRole.STUDENT_ADMINISTRATION, "Студентска администрација"},
+                {UserRole.STUDENT_ADMINISTRATION_MANAGER, "Раководител на студентска администрација"},
+                {UserRole.FINANCE_ADMINISTRATION, "Финансиска администрација"},
+                {UserRole.FINANCE_ADMINISTRATION_MANAGER, "Раководител на финансиска администрација"},
+                {UserRole.LEGAL_ADMINISTRATION, "Правна администрација"},
+                {UserRole.ARCHIVE_ADMINISTRATION, "Архивска администрација"},
+                {UserRole.ADMINISTRATION_MANAGER, "Раководител на администрација"}
+        }).collect(Collectors.toMap(data -> (UserRole) data[0], data -> (String) data[1]));
+
+
+        model.addAttribute("roles", roles);
+        model.addAttribute("roleNames", roleNames);
+        model.addAttribute("staffPage", staffPage);
+        return "staff/list";
+    }
+
+    @GetMapping("/details/{id}")
+    public String staffDetails(@PathVariable String id, Model model) {
+        User staff = staffService.findById(id);
+        model.addAttribute("staff", staff);
+
+        Map<UserRole, String> roleNames = Stream.of(new Object[][]{
+                {UserRole.PROFESSOR, "Професори"},
+                {UserRole.ACADEMIC_AFFAIR_VICE_DEAN, "Продекан за настава"},
+                {UserRole.SCIENCE_AND_COOPERATION_VICE_DEAN, "Продекан за наука и соработка"},
+                {UserRole.FINANCES_VICE_DEAN, "Продекан за финансии"},
+                {UserRole.DEAN, "Декан"},
+                {UserRole.STUDENT_ADMINISTRATION, "Студентска администрација"},
+                {UserRole.STUDENT_ADMINISTRATION_MANAGER, "Раководител на студентска администрација"},
+                {UserRole.FINANCE_ADMINISTRATION, "Финансиска администрација"},
+                {UserRole.FINANCE_ADMINISTRATION_MANAGER, "Раководител на финансиска администрација"},
+                {UserRole.LEGAL_ADMINISTRATION, "Правна администрација"},
+                {UserRole.ARCHIVE_ADMINISTRATION, "Архивска администрација"},
+                {UserRole.ADMINISTRATION_MANAGER, "Раководител на администрација"}
+        }).collect(Collectors.toMap(data -> (UserRole) data[0], data -> (String) data[1]));
+
+        model.addAttribute("roleNames", roleNames);
+
+        boolean isProfessor = staff.getRole() == UserRole.PROFESSOR;
+        model.addAttribute("isProfessor", isProfessor);
+
+        if (isProfessor) {
+            Professor professor = professorService.getProfessorById(id);
+            model.addAttribute("professor", professor);
+
+
+            List<ProfessorDetails> professorDetails = professorDetailsService.findAll();
+            model.addAttribute("professorDetails", professorDetails);
+
+            ProfessorAcademicTitles academicTitles = professorAcademicTitlesService.findByProfessor(professor);
+            model.addAttribute("academicTitles", academicTitles);
+
+            List<ProfessorEducation> professorEducation = professorEducationService.listEducationByProfessor(professor);
+            model.addAttribute("professorEducation", professorEducation);
+        }
+
+        return "staff/details";
+    }
+}
