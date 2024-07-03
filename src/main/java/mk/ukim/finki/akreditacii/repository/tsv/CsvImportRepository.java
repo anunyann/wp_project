@@ -17,11 +17,11 @@ import java.util.List;
 @Repository
 public class CsvImportRepository implements ImportRepository {
 
-
     private CsvMapper mapper = new CsvMapper();
+
     @Override
-    public <T> List<T> readRooms(MultipartFile file, Class<T> clazz) {
-        List<T> rooms = new ArrayList<>();
+    public <T> List<T> readFile(MultipartFile file, Class<T> clazz) {
+        List<T> enrollments = new ArrayList<>();
         CsvSchema schema = mapper.schemaFor(clazz)
                 .withHeader()
                 .withLineSeparator("\n")
@@ -33,22 +33,23 @@ public class CsvImportRepository implements ImportRepository {
                     .with(schema)
                     .readValues(br);
             while (r.hasNext()) {
-                rooms.add(r.nextValue());
+                enrollments.add(r.nextValue());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return rooms;
+        return enrollments;
     }
 
     @Override
-    public <T> void writeRooms(Class<T> clazz, List<T> invalidRooms, OutputStream outputStream) throws IOException {
-        CsvSchema schema = mapper.schemaFor(clazz)
+    public <T> void writeToOutputStream(Class<T> clazz, List<T> invalidEnrollments, OutputStream outputStream) throws IOException{
+        CsvSchema schema=mapper.schemaFor(clazz)
                 .withHeader()
                 .withLineSeparator("\n")
                 .withColumnSeparator('\t');
-        mapper.writer(schema).writeValue(outputStream, invalidRooms);
+        mapper.writer(schema).writeValue(outputStream,invalidEnrollments);
         outputStream.flush();
+
     }
 
 }

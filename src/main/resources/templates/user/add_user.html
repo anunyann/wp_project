@@ -1,0 +1,41 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="container" layout:fragment="content">
+
+    <form method="POST" th:action="@{/admin/user/add-user}">
+
+        <label for="name" th:text="#{PROFESSOR_NAME}"></label>
+        <input class="form-control" id="name" name="name" required="required"
+               th:value="${user?.name}">
+
+        <label for="id" th:text="#{ID}"></label>
+        <input class="form-control" id="id" name="id" required="required"
+               th:value="${user?.id}">
+
+
+        <label for="email" th:text="#{PROFESSOR_EMAIL}"></label>
+        <input class="form-control" id="email" name="email" required="required"
+               th:value="${user?.email}">
+
+        <label for="role">Звање</label>
+        <select class="form-control" id="role" name="role" >
+            <option>---Select one---</option>
+            <option
+                    th:each="role : ${userRoles}"
+                    th:selected="${user != null ? user.role.equals(role) : false}"
+                    th:text="${role}"
+                    th:value="${role}">
+            </option>
+        </select>
+
+
+        <button class="btn btn-primary " th:text="#{SUBMIT}" type="submit"></button>
+    </form>
+</div>
+</body>
+</html>
