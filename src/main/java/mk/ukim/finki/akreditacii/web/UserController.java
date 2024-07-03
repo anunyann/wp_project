@@ -12,10 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,32 +28,35 @@ public class UserController {
         this.importRepository = importRepository;
     }
 
+
     @GetMapping
     public String pageableUser(Model model,
-                                    @RequestParam(defaultValue = "1") Integer pageNum,
-                                    @RequestParam(defaultValue = "10") Integer results,
-                                    @RequestParam(required = false) String searchString,
-                                    @RequestParam(required = false) String roleFilter){
+                               @RequestParam(defaultValue = "1") Integer pageNum,
+                               @RequestParam(defaultValue = "10") Integer results,
+                               @RequestParam(required = false) String name,
+                               @RequestParam(required = false) String email,
+                               @RequestParam(required = false) String id,
+                               @RequestParam(required = false) String role) {
         Page<User> userPage;
 
-
-        if (searchString == null && roleFilter == null) {
-            userPage = userService
-                    .findAllWithPagination(pageNum, results);
+        if (name == null || id == null || email == null || role == null) {
+            userPage = userService.findAllWithPagination(pageNum, results);
         } else {
-            userPage = userService
-                    .findAllWithPaginationFiltered(pageNum, results,
-                            searchString, roleFilter);
+            userPage = userService.findAllWithPaginationAndFilters(pageNum,results,name,email,id,role);
 
-            model.addAttribute("searchString", searchString);
-            model.addAttribute("roleFilter", roleFilter);
+            model.addAttribute("name", name);
+            model.addAttribute("email", email);
+            model.addAttribute("id", id);
 
         }
         model.addAttribute("userPage", userPage);
+        model.addAttribute("users", userService.findAll());
         model.addAttribute("userRoles", UserRole.values());
 
-        return "user/user_list";
+        return "user/list";
+
     }
+
 
     @GetMapping(value = {"/add-user"})
     public String addProfessor(Model model) {
@@ -85,7 +87,7 @@ public class UserController {
 
     @PostMapping("/import")
     public void importUsers(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
-        List<UserDto> users = importRepository.readEnrolments(file, UserDto.class);
+        List<UserDto> users = importRepository.readFile(file, UserDto.class);
 
         List<UserDto> invalidEnrollments = userService.importStudents(users);
 
@@ -94,31 +96,27 @@ public class UserController {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
         try (OutputStream outputStream = response.getOutputStream()) {
-            importRepository.writeEnrollments(UserDto.class, invalidEnrollments, outputStream);
+            importRepository.writeToOutputStream(UserDto.class, invalidEnrollments, outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    @GetMapping("/sample-tsv")
+    public void sampleTsv(HttpServletResponse response) {
+        List<UserDto> example = new ArrayList<>();
+        example.add(new UserDto("test4.test4", "Test4", "test4@test4.com", UserRole.STUDENT));
 
-//    @GetMapping("/export")
-//    public void export(HttpServletResponse response,
-//                       @RequestParam(required = false) String id,
-//                       @RequestParam(required = false) String name,
-//                       @RequestParam(required = false) String email,
-//                       @RequestParam(required = false) String role)
-//    {
-//        String tsv = userService.toTsv(userService.list(id, name, email, role).getContent());
-//
-//        response.setContentType("text/tab-separated-values");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"schedule_import.tsv\"");
-//
-//        try (BufferedWriter outputStream = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()))) {
-//            outputStream.write(tsv);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+        String fileName = "users_example.tsv";
+        response.setContentType("text/tab-separated-values");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+        try (OutputStream outputStream = response.getOutputStream()) {
+            importRepository.writeToOutputStream(UserDto.class, example, outputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

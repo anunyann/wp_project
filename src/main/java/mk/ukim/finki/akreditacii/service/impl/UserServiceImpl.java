@@ -1,19 +1,17 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
-import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.akreditacii.model.User;
 import mk.ukim.finki.akreditacii.model.UserDto;
 import mk.ukim.finki.akreditacii.model.UserRole;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidId;
 import mk.ukim.finki.akreditacii.repository.UserRepository;
-import mk.ukim.finki.akreditacii.repository.import_repository.ImportRepository;
 import mk.ukim.finki.akreditacii.service.UserService;
+import mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,13 +37,26 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(pageRequest);
     }
 
+
     @Override
-    public Page<User> findAllWithPaginationFiltered(Integer pageNum, Integer results, String stringSearch, String filteredRole) {
+    public Page<User> findAllWithPaginationAndFilters(Integer pageNum,
+                                                      Integer results,
+                                                      String id,
+                                                      String email,
+                                                      String name,
+                                                      String role) {
+
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
 
-        return userRepository.findAllFiltered(stringSearch,
-                !filteredRole.equals("") ? UserRole.valueOf(filteredRole) : null,
-                pageRequest);
+        Specification<User> spec = Specification.where(
+                FieldFilterSpecification.filterEquals(User.class, "id", id)
+                        .and(FieldFilterSpecification.filterEquals(User.class, "email", email))
+                        .and(FieldFilterSpecification.filterContainsText(User.class, "name", name))
+                        .and(FieldFilterSpecification.filterContainsText(User.class, "email", email))
+                        .and(FieldFilterSpecification.filterEquals(User.class, "role", role))
+        );
+
+        return userRepository.findAll(spec, pageRequest);
     }
 
     @Override
@@ -90,50 +101,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-//    @Override
-//    public String toTsv(List<User> users) {
-//        StringBuilder sb = new StringBuilder();
-//        users.forEach(user -> {
-//            processGroup(sb, user);
-//        });
-//        return sb.toString();
-//    }
-
-//    @Override
-//    public Page<User> list(String id, String name, String email, String role) {
-//        return null;
-//    }
-
-//    @Override
-//    public Page<User> list(String id, String name, String email, String role) {
-//        return null;
-//    }
-
-//    @Override
-//    public Page<User> list(String id, String name, String email, String role) {
-//        Page<User> page = userService.list(id, name, email, role);
-//        doExport(response, page.getContent().stream()
-//                .map(it -> new UserDto(it,
-//                        coursePreferenceRepository.findById(it.getJoinedSubject().getAbbreviation()).orElse(null))
-//                )
-//                .collect(Collectors.toList()));
-//
-//    }
-
-//    public void doExport(HttpServletResponse response, List<UserDto> data) {
-//        String fileName = "courses.tsv";
-//        response.setContentType("text/tab-separated-values");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-//
-//        try (OutputStream outputStream = response.getOutputStream()) {
-//            importRepository.writeEnrollments(UserDto.class, data, outputStream);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-
     public void processGroup (StringBuilder sb, User user) {
         sb.append(user.getId()).append("\t");
         sb.append(user.getName()).append("\t");
@@ -141,6 +108,5 @@ public class UserServiceImpl implements UserService {
         sb.append(user.getRole().roleName()).append("\t");
         sb.append("\n");
     }
-
 
 }

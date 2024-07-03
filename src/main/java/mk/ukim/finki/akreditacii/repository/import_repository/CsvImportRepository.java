@@ -19,7 +19,7 @@ public class CsvImportRepository implements ImportRepository {
     private CsvMapper mapper = new CsvMapper();
 
     @Override
-    public <T> List<T> readEnrolments(MultipartFile file, Class<T> clazz) {
+    public <T> List<T> readFile(MultipartFile file, Class<T> clazz) {
         List<T> enrollments = new ArrayList<>();
         CsvSchema schema = mapper.schemaFor(clazz)
                 .withHeader()
@@ -41,30 +41,7 @@ public class CsvImportRepository implements ImportRepository {
     }
 
     @Override
-    public <T> List<T> readPreferences(MultipartFile file, Class<T> clazz) {
-        List<T> preferences = new ArrayList<>();
-        CsvSchema schema = mapper.schemaFor(clazz)
-                .withHeader()
-                .withLineSeparator("\n")
-                .withColumnSeparator('\t');
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            MappingIterator<T> r = mapper
-                    .reader(clazz)
-                    .with(schema)
-                    .readValues(br);
-            while (r.hasNext()) {
-                preferences.add(r.nextValue());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return preferences;
-    }
-
-
-    @Override
-    public <T> void writeEnrollments(Class<T> clazz, List<T> invalidEnrollments, OutputStream outputStream) throws IOException{
+    public <T> void writeToOutputStream(Class<T> clazz, List<T> invalidEnrollments, OutputStream outputStream) throws IOException{
         CsvSchema schema=mapper.schemaFor(clazz)
                 .withHeader()
                 .withLineSeparator("\n")
@@ -72,16 +49,6 @@ public class CsvImportRepository implements ImportRepository {
         mapper.writer(schema).writeValue(outputStream,invalidEnrollments);
         outputStream.flush();
 
-    }
-
-    @Override
-    public <T> void writePreferences(Class<T> clazz, List<T> invalidPreferences, OutputStream outputStream) throws IOException {
-        CsvSchema schema = mapper.schemaFor(clazz)
-                .withHeader()
-                .withLineSeparator("\n")
-                .withColumnSeparator('\t');
-        mapper.writer(schema).writeValue(outputStream, invalidPreferences);
-        outputStream.flush();
     }
 
 }
