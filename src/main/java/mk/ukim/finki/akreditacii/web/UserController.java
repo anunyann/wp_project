@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.akreditacii.model.User;
 import mk.ukim.finki.akreditacii.model.UserDto;
 import mk.ukim.finki.akreditacii.model.UserRole;
-import mk.ukim.finki.akreditacii.repository.import_repository.ImportRepository;
+import mk.ukim.finki.akreditacii.repository.ImportRepository;
 import mk.ukim.finki.akreditacii.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
