@@ -31,7 +31,7 @@ public class RestRoomController {
     public void importRooms(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
         try {
 
-            List<Room> rooms = importRepository.readRooms(file, Room.class);
+            List<Room> rooms = importRepository.readFile(file, Room.class);
 
 
             List<Room> importedRooms = roomService.importData(rooms);
@@ -42,7 +42,7 @@ public class RestRoomController {
             response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
             try (OutputStream outputStream = response.getOutputStream()) {
-                importRepository.writeRooms(Room.class, importedRooms, outputStream);
+                importRepository.writeToOutputStream(Room.class, importedRooms, outputStream);
             }
 
         } catch (IOException e) {

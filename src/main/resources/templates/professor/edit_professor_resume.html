@@ -1,0 +1,43 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="container mb-4" layout:fragment="content">
+    <form method="POST" enctype="multipart/form-data"
+          th:action="@{/admin/professor/{professorId}/resume/save (professorId=${professorId})}">
+
+        <input type="hidden" id="professorId" name="professorId" th:value="${professorId}">
+
+        <h3>Промени биографија на професор: <span th:text="${professor.getName()}"></span></h3>
+
+        <div class="row mb-4">
+            <label class="mb-2" for="image">Додади слика</label>
+
+            <div th:if="${professorResume.resume != null}" class="col-lg-2">
+                <img th:src="@{'data:image/jpeg;base64, '+${professorResume?.generateBase64Image()}}" alt="Post Image" class="w-100 h-initial">
+                <a th:text="${professor.email}"></a>
+            </div>
+            <input class="form-control" type="file" id="image" name="image" accept="image/*" required>
+        </div>
+
+        <div class="row mb-4">
+            <label class="mb-2" for="resume">Додади биографија</label>
+            <textarea th:text="${professorResume?.resume}" class="form-control" id="resume" name="resume" rows="8" required></textarea>
+            </div>
+
+        <div class="row mb-4 ">
+            <div class="col-md-2">
+                <button class="btn btn-primary w-50" type="submit"><i>Зачувај</i></button>
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-2 d-flex justify-content-end">
+                <a class="btn btn-primary w-50" th:href="@{/admin/professor}"><i>Назад</i></a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Акредитации</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <form th:action="@{/admin/user}" method="get" class="pb-3">
+        <h3>Корисници</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <select class="form-control" id="userRoles" name="role">
+                    <option value="" selected>Search by role</option>
+                    <option th:each="r : ${userRoles}" th:value="${r.name()}"
+                            th:text="${r.name()}"
+                            th:selected="${param.role!=null && r.name() == param.role[0]}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-control" id="user" name="id">
+                    <option value="" selected>Search by name and id</option>
+                    <option th:each="user : ${users}" th:value="${user.id}"
+                            th:text="${user.name + ' (' + user.id + ')'}"
+                            th:selected="${param.id!=null && user.id == param.id[0]}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-control" id="email" name="email">
+                    <option value="" selected>Search by email</option>
+                    <option th:each="user : ${users}" th:value="${email}"
+                            th:text="${user.email}"
+                            th:selected="${param.email!=null && user.email == param.email[0]}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+                <a th:href="@{/admin/user/sample-tsv}"
+                   class="btn  btn-secondary mt-2 mb-2">Template</a>
+            </div>
+        </div>
+
+    </form>
+
+    <form th:action="@{/admin/user/import}" method="post"
+          enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-10">
+                <div class="form-group mt-1">
+                    <input class="form-control" type="file" name="file" id="file" required>
+                </div>
+            </div>
+            <div class="col-2">
+                <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+            </div>
+            <hr/>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="item-list">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th class="text-primary" th:text="#{PROFESSOR_NAME}"></th>
+                    <th class="text-primary" th:text="#{PROFESSOR_EMAIL}"></th>
+                    <th class="text-primary" th:text="#{PROFESSOR_TITLE}"></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user: ${userPage.getContent()}">
+                    <td th:text="${user.getName()}"/>
+                    <td th:text="${user.getEmail()}"></td>
+                    <td th:text="${user.getRole()}"></td>
+                    <td class="text-right d-flex flex-wrap justify-content-center">
+                        <div class="col-6">
+                            <a class="btn btn-sm btn-info m-1"
+                               th:href="@{'/admin/user/{id}/edit' (id=${user.getId()})}">
+                                <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a class="btn btn-sm btn-danger m-1"
+                               th:href="@{'/admin/user/{id}/delete' (id=${user.getId()})}">
+                                <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:include="fragments/paging :: pageSection(${userPage})"></div>
+        </div>
+    </div>
+
+    <div class="col mb-3">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 text-center">
+                <a class="btn btn-block btn-primary" href="/admin/user/add-user">Додади корисник</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

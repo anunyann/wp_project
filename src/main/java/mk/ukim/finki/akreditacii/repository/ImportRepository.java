@@ -7,10 +7,8 @@ import java.io.OutputStream;
 import java.util.List;
 
 public interface ImportRepository {
+    <T> List<T> readFile(MultipartFile file, Class<T> entityType);
 
-
-    <T> List<T> readRooms(MultipartFile file, Class<T> clazz);
-
-    <T> void writeRooms(Class<T> clazz, List<T> invalidRooms, OutputStream outputStream) throws IOException;
+    <T> void writeToOutputStream(Class<T> entityType, List<T> enrollments, OutputStream outputStream) throws IOException;
 
 }

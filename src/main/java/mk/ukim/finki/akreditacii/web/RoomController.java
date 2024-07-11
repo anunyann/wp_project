@@ -139,7 +139,7 @@ public class RoomController {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
         try (OutputStream outputStream = response.getOutputStream()) {
-            importRepository.writeRooms(RoomDto.class, data, outputStream);
+            importRepository.writeToOutputStream(RoomDto.class, data, outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,0 +1,39 @@
+<html lang="en" layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body class="bg-light">
+<h3 th:text="resume"></h3>
+<div class="container pb-4" layout:fragment="content" >
+    <div class="row mb-4 mt-4">
+        <div class="col-md-12">
+            <h3><span th:text="${professor.getName()}"></span></h3>
+        </div>
+    </div>
+    <div class="row mb-4 ">
+        <div class="col-md-2">
+            <a class="btn btn-primary w-50" th:href="@{/admin/professor/{professorId}/resume/edit (professorId=${professorId})}"><i>Промени</i></a>
+        </div>
+        <div class="col-md-8"></div>
+        <div class="col-md-2 d-flex justify-content-end">
+            <a class="btn btn-primary w-50 " th:href="@{/admin/professor}"><i>Назад</i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="row mb-4 h-100">
+        <div class="col-lg-2">
+            <img th:src="@{'data:image/jpeg;base64, '+${professorResume.generateBase64Image()}}" alt="Post Image" class="w-100 h-initial">
+            <a th:text="${professor.email}"></a>
+        </div>
+        <div class="col-lg-10">
+            <h3>Резиме</h3>
+            <p th:text="${professorResume.resume}"></p>
+        </div>
+    </div>
+    <br>
+</div>
+
+</body>
+</html>
