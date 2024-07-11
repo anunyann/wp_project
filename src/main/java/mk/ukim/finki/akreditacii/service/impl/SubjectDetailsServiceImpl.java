@@ -10,11 +10,9 @@ import mk.ukim.finki.akreditacii.model.subject.dto.StudyProgramSubjectProfessorD
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectAllocationStatsDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectNameAndCodeDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
-import mk.ukim.finki.akreditacii.repository.AccreditationRepository;
-import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
-import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
-import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
+import mk.ukim.finki.akreditacii.repository.*;
 import mk.ukim.finki.akreditacii.service.SubjectDetailsService;
+import mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
 import static mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecification.*;
 import static org.springframework.data.jpa.domain.Specification.where;
 
@@ -34,12 +33,14 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
     private final StudyProgramSubjectRepository studyProgramSubjectRepository;
     private final StudyProgramSubjectProfessorRepository professorRepository;
     private final AccreditationRepository accreditationRepository;
+    private final SubjectAccreditationStatsRepository subjectAccreditationStatsRepository;
 
-    public SubjectDetailsServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository, AccreditationRepository accreditationRepository) {
+    public SubjectDetailsServiceImpl(SubjectDetailsRepository subjectDetailsRepository, StudyProgramSubjectRepository studyProgramSubjectRepository, StudyProgramSubjectProfessorRepository professorRepository, AccreditationRepository accreditationRepository, SubjectAccreditationStatsRepository subjectAccreditationStatsRepository) {
         this.subjectDetailsRepository = subjectDetailsRepository;
         this.studyProgramSubjectRepository = studyProgramSubjectRepository;
         this.professorRepository = professorRepository;
         this.accreditationRepository = accreditationRepository;
+        this.subjectAccreditationStatsRepository = subjectAccreditationStatsRepository;
     }
 
 

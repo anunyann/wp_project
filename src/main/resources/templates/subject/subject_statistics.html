@@ -1,93 +1,29 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.w3.org/1999/xhtml"
+<html lang="en"
       layout:decorate="~{layout}"
->
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8"/>
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Subject STATISTICS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:inline="javascript">
+        function cleanQueryFilters() {
+            window.location = "?";
+        }
+    </script>
+    <title></title>
+
 </head>
-<div class="pt-3" layout:fragment="content">
-    <style>
-        .counter-cell-data {
-            width: 30px;
-            text-align: center;
-            align-items: center;
-        }
+<body layout:fragment="content">
+<div class="view-content my-5" >
+    <h3 th:text="#{PROFESSOR_STATS}"></h3>
 
-        .info-cell-data {
-            text-align: center;
-            vertical-align: center;
-            horiz-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .big-cell-data {
-            min-width: 300px;
-        }
-
-        .medium-cell-data {
-            min-width: 150px;
-        }
-
-        .small-cell-data {
-            min-width: 50px;
-        }
-
-        .table-cell-data-span {
-            display: inline-flex;
-        }
-
-        .link-data{
-            text-decoration: none;
-            color: black;
-        }
-
-        .link-data:hover {
-            color: #1a7dc4;
-            text-decoration: underline #1a7dc4;
-            transition: 0.2s;
-        }
-
-        .filter-button {
-            height: 40px;
-            width: 110px;
-        }
-
-        .filter-input {
-            height: 40px;
-        }
-
-        .empty-message-div {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: red;
-        }
-
-        .empty-message-div a {
-            font-weight: bold;
-            font-size: 18px;
-        }
-    </style>
-    <div class="row main-div">
-        <div class="row mb-3">
-            <div class="col-md-2">
-                <a href="/admin/subject/list" class="btn btn-primary"><i>Назад</i></a>
-            </div>
-        </div>
-        <hr>
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <h3>Статистика за предмети</h3>
-            </div>
-        </div>
+    <div id="filters">
         <form th:method="GET" th:action="@{'/admin/subject/statistics'}">
             <div class="col-12 mb-4 d-flex justify-content-center align-items-center">
                 <div class="row w-100">
@@ -95,23 +31,23 @@
                         <div class="mb-2 w-100">
                             <!--subjectCode-->
                             <label for="subjectCode" hidden="hidden">subjectCode</label>
-                            <select class="form-control filter-input w-100" name="subjectCode" id="subjectCode" th:value="${subjectCode}">
+                            <select class="form-control filter-input w-100" name="subjectCode" id="subjectCode">
                                 <option value="">Избери предмет</option>
-                                <option th:each="subject : ${subjectsDropdown}" th:value="${subject.code}">
-                                    <label th:text="${subject.name}"></label>
-                                    (<label th:text="${subject.code}"></label>)
-                                </option>
+                                <option th:each="subject : ${subjectsDropdown}"
+                                        th:value="${subject.code}"
+                                        th:text="${subject.name + ' (' + subject.code + ')'}"
+                                        th:selected="${subject.code == subjectCode}"></option>
                             </select>
                         </div>
                         <div class="mb-2 w-100">
                             <!--professorCode-->
                             <label for="professorCode" hidden="hidden">professorCode</label>
-                            <select class="form-control filter-input w-100" name="professorCode" id="professorCode" th:value="${professorCode}">
+                            <select class="form-control filter-input w-100" name="professorCode" id="professorCode">
                                 <option value="">Избери професор</option>
-                                <option th:each="professor : ${professorsDropdown}" th:value="${professor.code}">
-                                    <label th:text="${professor.name}"></label>
-                                    (<label th:text="${professor.code}"></label>)
-                                </option>
+                                <option th:each="professor : ${professorsDropdown}"
+                                        th:value="${professor.code}"
+                                        th:text="${professor.name + ' (' + professor.code + ')'}"
+                                        th:selected="${professor.code == professorCode}"></option>
                             </select>
                         </div>
                     </div>
@@ -119,21 +55,19 @@
                         <div class="mb-2 w-100">
                             <!--studyProgramCode-->
                             <label for="studyProgramCode" hidden="hidden">studyProgramCode</label>
-                            <select class="form-control filter-input w-100" name="studyProgramCode" id="studyProgramCode" th:value="${studyProgramCode}">
+                            <select class="form-control filter-input w-100" name="studyProgramCode" id="studyProgramCode">
                                 <option value="">Избери студиска програма</option>
-                                <option th:each="sp : ${studyProgramsDropdown}" th:value="${sp.code}">
-                                    <label th:text="${sp.name}"></label>
-                                    (<label th:text="${sp.code}"></label>)
-                                </option>
+                                <option th:each="sp : ${studyProgramsDropdown}"
+                                        th:value="${sp.code}"
+                                        th:text="${sp.name + ' (' + sp.code + ')'}"
+                                        th:selected="${sp.code == studyProgramCode}"></option>
                             </select>
                         </div>
                         <div class="mb-2 w-100">
                             <!--accreditationYear-->
                             <label for="accreditationYear" hidden="hidden">accreditationYear</label>
                             <select class="form-control filter-input w-100" name="accreditationYear" id="accreditationYear" th:value="${accreditationYear}">
-                                <option th:each="ay : ${accreditationYearsDropdown}" th:value="${ay.year}" th:selected="${ay.year} == ${defaultActiveYear}">
-                                    <label th:text="${ay.year}"></label>
-                                </option>
+                                <option th:each="ay : ${accreditationYearsDropdown}" th:value="${ay.year}" th:text="${ay.year}"></option>
                             </select>
                         </div>
                     </div>
@@ -148,75 +82,62 @@
                 </div>
             </div>
         </form>
-        <hr>
-        <div class="col-12 mb-4">
-            <div class="col-12">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <td class="counter-cell-data">#</td>
-                        <td class="info-cell-data">Име</td>
-                        <td class="info-cell-data">Професори</td>
-                        <td class="info-cell-data">Број на професори</td>
-                        <td class="info-cell-data">
-                            <a>Студиски програми</a>
-                            <a>(задолжителен)</a>
-                        </td>
-                        <td class="info-cell-data">Години активен</td>
-                        <td class="info-cell-data">
-                            <a>Студенти</a>
-                            <a>(прв пат)</a>
-                        </td>
-                        <td class="info-cell-data">
-                            <a>Студенти</a>
-                            <a>(повеќе пати)</a>
-                        </td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="subject, counter  : ${subjects}">
-                        <td class="counter-cell-data" th:text="${counter.index + 1}">Number</td>
-                        <td class="medium-cell-data info-cell-data">
-                            <a class="link-data"
-                               th:text="${subject.subjectCode}"
-                               th:href="@{'/admin/subject/{subjectId}/details'(subjectId=${subject.subjectCode})}"></a>
-                        </td>
-                        <td class="big-cell-data info-cell-data">
-                            <span class="table-cell-data-span" th:each="pCode, counter : ${subject.professorCodes}">
-                                <a class="link-data" th:href="@{'/admin/professor/' + ${pCode}}" th:text="${pCode}">Professor</a>
-                                <a th:unless="${counter.last}">, </a>
-                            </span>
-                        </td>
-                        <td class="small-cell-data info-cell-data" th:text="${subject.professorNumber}">Num Professors</td>
-                        <td class="big-cell-data info-cell-data">
-                            <span class="table-cell-data-span"
-                                  th:each="pCode, counter : ${subject.mandatoryStudyPrograms}">
-                                <a th:text="${pCode}">Mandatory study programs</a>
-                                <a th:unless="${counter.last}">,</a>
-                            </span>
-                        </td>
-                        <td class="small-cell-data info-cell-data" th:text="${subject.yearsActive}">Years active</td>
-                        <td class="small-cell-data info-cell-data" th:text="${subject.numberOfFirstTimeStudents}">Students(first
-                            enroll)
-                        </td>
-                        <td class="medium-cell-data info-cell-data" th:text="${subject.numberOfReEnrollmentStudents}">Students(re
-                            enroll)
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-12 mb-4" th:if="${emptyMessage}">
-            <div class="empty-message-div">
-                <a>Внеси филтер.</a>
-            </div>
-        </div>
-        <div class="col-12 mb-4" th:if="${emptyList}">
-            <div class="empty-message-div">
-                <a>Не се пронајдени резултати.</a>
-            </div>
+    </div>
+
+    <div class="item-list">
+        <table class="table table-striped table-bordered text-center align-middle">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th class="text-primary" th:text="#{SUBJECT_NAME}"></th>
+                <th class="text-primary" th:text="#{ACCREDITATION}"></th>
+                <th class="text-primary" th:text="#{YEARS_ACTIVE}"></th>
+                <th class="text-primary" th:text="#{PROFESSOR_NUM}"></th>
+                <th class="text-primary" th:text="#{PROFESSORS}"></th>
+                <th class="text-primary" th:text="#{STUDY_PROGRAMS_MANDATORY}"></th>
+                <th class="text-primary" th:text="#{STUDENTS_NUM_FIRST_TIME}"></th>
+                <th class="text-primary" th:text="#{STUDENTS_NUM_RE_ENROLL}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="subject, rowStat : ${subjects.getContent()}">
+                <td th:text="${rowStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{'/admin/subject/{subjectId}/details'(subjectId=${subject.id})}"
+                       th:text="${subject.subjectName}"
+                       style="text-decoration: none;"></a>
+                </td>
+                <td th:text="${subject.accreditationYear != null ? subject.accreditationYear : '/'}"></td>
+                <td th:text="${subject.yearsActive != null ? subject.yearsActive : '/'}"></td>
+                <td th:text="${subject.numProfessors != null ? subject.numProfessors : '/'}"></td>
+                <td>
+                    <a th:if="${subject.getProfessors.isEmpty()}">/</a>
+                    <ul th:unless="${subject.getProfessors.isEmpty()}" class="list-unstyled">
+                        <li th:each="professor : ${subject.getProfessors}">
+                            <a th:text="${professor}"
+                               th:href="@{'/admin/professor/{professorId}'(professorId=${professor})}"
+                               style="text-decoration: none;"></a>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <a th:if="${subject.getMandatoryStudyPrograms.isEmpty()}">Предметот не е задолжителен</a>
+                    <ul th:unless="${subject.getMandatoryStudyPrograms.isEmpty()}" class="list-unstyled">
+                        <li th:each="program : ${subject.getMandatoryStudyPrograms}">
+                            <a th:text="${program}"></a>
+                        </li>
+                    </ul>
+                </td>
+                <td th:text="${subject.firstTimeStudents != null ? subject.firstTimeStudents : '/'}"></td>
+                <td th:text="${subject.reEnrolledStudents != null ? subject.reEnrolledStudents : '/'}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="d-inline-flex align-items-center justify-content-center w-100">
+            <div th:include="fragments/subjects_paging :: pageSection(${subjects})"></div>
         </div>
     </div>
+
 </div>
+</body>
 </html>
