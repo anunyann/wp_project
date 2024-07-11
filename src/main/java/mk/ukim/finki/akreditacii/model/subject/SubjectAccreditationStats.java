@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Entity
 @Table(name = "stats_per_subject_view")
 @Immutable
@@ -48,4 +52,31 @@ public class SubjectAccreditationStats {
 
     @Column(name = "re_enrolled_students")
     private Integer reEnrolledStudents;
+
+    public List<String> getProfessors() {
+
+        if (this.professors == null || this.professors.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.asList(this.professors.split(","));
+    }
+
+    public List<String> getAllStudyPrograms() {
+
+        if (this.allStudyPrograms == null || this.allStudyPrograms.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.asList(this.allStudyPrograms.split(","));
+    }
+
+    public List<String> getMandatoryStudyPrograms() {
+
+        if (this.mandatoryStudyPrograms == null || this.mandatoryStudyPrograms.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.asList(this.mandatoryStudyPrograms.split(","));
+    }
 }

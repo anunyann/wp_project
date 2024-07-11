@@ -21,7 +21,7 @@ public class FieldFilterSpecification {
     }
 
     public static <T> Specification<T> filterEquals(Class<T> clazz, String field, String value) {
-        if (value == null) {
+        if (value == null || value.isEmpty()) {
             return null;
         }
         return (root, query, criteriaBuilder) ->

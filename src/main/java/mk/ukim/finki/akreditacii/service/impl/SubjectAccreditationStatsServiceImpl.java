@@ -36,11 +36,11 @@ public class SubjectAccreditationStatsServiceImpl implements SubjectAccreditatio
         }
 
         Specification<SubjectAccreditationStats> spec = Specification.where(
-                FieldFilterSpecification.filterEquals(SubjectAccreditationStats.class, "id", subjectCode)
+                FieldFilterSpecification.filterEquals(SubjectAccreditationStats.class, "id", subjectCode))
                         .and(FieldFilterSpecification.filterContainsText(SubjectAccreditationStats.class, "professors", professorCode))
                         .and(FieldFilterSpecification.filterContainsText(SubjectAccreditationStats.class, "allStudyPrograms", studyProgramCode))
-                        .and(FieldFilterSpecification.filterEquals(SubjectAccreditationStats.class, "accreditationYear", selectedAccreditationYear))
-        );
+                        .and(FieldFilterSpecification.filterEquals(SubjectAccreditationStats.class, "accreditationYear", selectedAccreditationYear));
+
 
         Page<SubjectAccreditationStats> page = subjectAccreditationStatsRepository.findAll(spec, pageRequest);
 

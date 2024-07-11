@@ -4,8 +4,6 @@ package mk.ukim.finki.akreditacii.web;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.*;
-import mk.ukim.finki.akreditacii.model.subject.dto.SubjectNameAndCodeDTO;
-import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
 import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -97,8 +95,8 @@ public class SubjectController {
                                      @RequestParam(required = false) String professorCode,
                                      @RequestParam(required = false) String studyProgramCode,
                                      @RequestParam(required = false) String accreditationYear,
-                                     @RequestParam(defaultValue = "1") Integer pageNumber,
-                                     @RequestParam(defaultValue = "10") Integer result) {
+                                     @RequestParam(defaultValue = "1") Integer pageNum,
+                                     @RequestParam(defaultValue = "10") Integer results) {
         //Dropdown menu attr
         model.addAttribute("subjectsDropdown", this.service.findAllSubjectNameAndCode());
         model.addAttribute("professorsDropdown", this.professorService.findAllProfessorNameAndCode());
@@ -117,7 +115,7 @@ public class SubjectController {
         model.addAttribute("studyProgramCode", studyProgramCode);
         model.addAttribute("aciveAccreditationYear", this.accreditationService.findActiveAccreditation().getYear());
 
-        Page<SubjectAccreditationStats> subjects = this.subjectAccreditationStatsService.findAllWithPaginationAndFilters(pageNumber, result, subjectCode, professorCode, studyProgramCode, selectedAccreditationYear);
+        Page<SubjectAccreditationStats> subjects = this.subjectAccreditationStatsService.findAllWithPaginationAndFilters(pageNum, results, subjectCode, professorCode, studyProgramCode, selectedAccreditationYear);
         model.addAttribute("subjects", subjects);
 
         if (subjects.isEmpty()){
