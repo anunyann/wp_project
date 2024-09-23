@@ -25,8 +25,6 @@ public class SubjectDetails {
     @Column(name = "id")
     private String id;
 
-    private String copyOfSubjectDetailsId;
-
     @Column(nullable = false)
     private String name;
 
