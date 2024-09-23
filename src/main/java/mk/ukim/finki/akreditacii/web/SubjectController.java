@@ -112,13 +112,14 @@ public class SubjectController {
 
         model.addAttribute("subjectCode", subjectCode);
         model.addAttribute("professorCode", professorCode);
+        model.addAttribute("accreditationYear", selectedAccreditationYear);
         model.addAttribute("studyProgramCode", studyProgramCode);
         model.addAttribute("aciveAccreditationYear", this.accreditationService.findActiveAccreditation().getYear());
 
         Page<SubjectAccreditationStats> subjects = this.subjectAccreditationStatsService.findAllWithPaginationAndFilters(pageNum, results, subjectCode, professorCode, studyProgramCode, selectedAccreditationYear);
         model.addAttribute("subjects", subjects);
 
-        if (subjects.isEmpty()){
+        if (subjects.isEmpty()) {
             model.addAttribute("emptyList", true);
         }
 
@@ -132,6 +133,24 @@ public class SubjectController {
         List<Professor> subjectProfessors = service.getSubjectProfessors(subjectId);
         List<Book> mandatoryBooks = sd.getBibliography().getBooks();
         List<Book> additionalBooks = sd.getBibliography().getElectiveBooks();
+
+
+        model.addAttribute("sd", sd);
+        model.addAttribute("subjectStudyPrograms", subjectStudyPrograms);
+        model.addAttribute("subjectProfessors", subjectProfessors);
+        model.addAttribute("mandatoryBooks", mandatoryBooks);
+        model.addAttribute("additionalBooks", additionalBooks);
+        return "subject/edit_subject";
+    }
+
+
+    @GetMapping("/subject/add")
+    public String editSubject(Model model) {
+        SubjectDetails sd = new SubjectDetails();
+        List<StudyProgramSubject> subjectStudyPrograms = List.of();
+        List<Professor> subjectProfessors = List.of();
+        List<Book> mandatoryBooks = List.of();
+        List<Book> additionalBooks = List.of();
 
 
         model.addAttribute("sd", sd);

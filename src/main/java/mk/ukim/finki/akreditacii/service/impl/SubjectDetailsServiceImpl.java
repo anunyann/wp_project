@@ -1,18 +1,18 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
-import mk.ukim.finki.akreditacii.model.subject.*;
+import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
+import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubjectProfessor;
+import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 import mk.ukim.finki.akreditacii.model.subject.dto.StudyProgramSubjectProfessorDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectAllocationStatsDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectNameAndCodeDTO;
 import mk.ukim.finki.akreditacii.model.subject.dto.SubjectStatisticsDTO;
 import mk.ukim.finki.akreditacii.repository.*;
 import mk.ukim.finki.akreditacii.service.SubjectDetailsService;
-import mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +22,6 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.isNull;
 import static mk.ukim.finki.akreditacii.service.specifications.FieldFilterSpecification.*;
 import static org.springframework.data.jpa.domain.Specification.where;
 
@@ -48,26 +47,32 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
     public void updateSubject(SubjectDetails updatedDetails) {
 
         SubjectDetails existingDetails = subjectDetailsRepository.findById(updatedDetails.getId())
-                .orElseThrow(() -> new EntityNotFoundException("SubjectDetails not found"));
+                .orElse(new SubjectDetails());
 
-        existingDetails.getSubject().setName(updatedDetails.getSubject().getName());
+        existingDetails.setName(updatedDetails.getName());
         existingDetails.setId(updatedDetails.getId());
         existingDetails.setNameEn(updatedDetails.getNameEn());
-        existingDetails.getSubject().setId(updatedDetails.getSubject().getId());
+        existingDetails.setId(updatedDetails.getId());
         existingDetails.setCycle(updatedDetails.getCycle());
         existingDetails.setDefaultSemester(updatedDetails.getDefaultSemester());
-        existingDetails.getSubject().setSemester(updatedDetails.getSubject().getSemester());
+        existingDetails.setSemester(updatedDetails.getSemester());
         existingDetails.setCredits(updatedDetails.getCredits());
         existingDetails.setObligationDuration(updatedDetails.getObligationDuration());
         existingDetails.getObligationDuration().setExerciseHours(updatedDetails.getObligationDuration().getExerciseHours());
         existingDetails.getObligationDuration().setSelfLearningHours(updatedDetails.getObligationDuration().getSelfLearningHours());
         existingDetails.getObligationDuration().setProjectHours(updatedDetails.getObligationDuration().getProjectHours());
         existingDetails.getObligationDuration().setHomeworkHours(updatedDetails.getObligationDuration().getHomeworkHours());
-        existingDetails.getGrading().setTestsPoints(updatedDetails.getGrading().getTestsPoints());
-        existingDetails.getGrading().setProjectPoints(updatedDetails.getGrading().getProjectPoints());
-        existingDetails.getGrading().setActivityPoints(updatedDetails.getGrading().getActivityPoints());
-        existingDetails.getGrading().setExamPoints(updatedDetails.getGrading().getExamPoints());
-        existingDetails.getGrading().setSignatureCondition(updatedDetails.getGrading().getSignatureCondition());
+        if (existingDetails.getGrading() == null) {
+            existingDetails.setGrading(updatedDetails.getGrading());
+        } else {
+            existingDetails.getGrading().setTestsPoints(updatedDetails.getGrading().getTestsPoints());
+            existingDetails.getGrading().setProjectPoints(updatedDetails.getGrading().getProjectPoints());
+            existingDetails.getGrading().setActivityPoints(updatedDetails.getGrading().getActivityPoints());
+            existingDetails.getGrading().setExamPoints(updatedDetails.getGrading().getExamPoints());
+            existingDetails.getGrading().setSignatureCondition(updatedDetails.getGrading().getSignatureCondition());
+        }
+
+
         existingDetails.setLanguage(updatedDetails.getLanguage());
         existingDetails.setQualityControl(updatedDetails.getQualityControl());
         existingDetails.setGoalsDescription(updatedDetails.getGoalsDescription());
@@ -94,9 +99,10 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
                                                               String filteredAccreditation) {
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
 
+        Specification<SubjectDetails> spec = Specification.where(filterContainsText(SubjectDetails.class, "name", nameSearch))
+                .and(filterEqualsV(SubjectDetails.class, "accreditation.year", filteredAccreditation));
 
-        return subjectDetailsRepository.findAllFiltered(nameSearch, filteredAccreditation, pageRequest);
-
+        return subjectDetailsRepository.findAll(spec, pageRequest);
     }
 
     @Override

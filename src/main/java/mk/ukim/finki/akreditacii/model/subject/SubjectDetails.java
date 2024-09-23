@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.accreditation.Accreditation;
+import mk.ukim.finki.akreditacii.model.semester.SemesterType;
 import org.hibernate.Hibernate;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "subject")
 public class SubjectDetails {
 
     @Id
@@ -24,6 +26,20 @@ public class SubjectDetails {
     private String id;
 
     private String copyOfSubjectDetailsId;
+
+    @Column(nullable = false)
+    private String name;
+
+    private String abbreviation;
+
+    @Enumerated(EnumType.STRING)
+    private SemesterType semester;
+
+    private Integer weeklyLecturesClasses;
+
+    private Integer weeklyAuditoriumClasses;
+
+    private Integer weeklyLabClasses;
 
     @ManyToOne
     @JoinColumn(name = "id", insertable = false, updatable = false)
