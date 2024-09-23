@@ -84,7 +84,7 @@
             <td th:text="${subjectDetail.id}">Code</td>
             <td th:text="${subjectDetail.getName()}">Name</td>
 
-            <td th:text="${subjectDetail.accreditation.year}">Acreditation</td>
+            <td th:text="${subjectDetail.accreditation?.year}">Acreditation</td>
             <td>
                 <div class="btn-group-vertical" role="group">
                     <a th:href="@{'/admin/subject/' + ${subjectDetail.id}} + '/edit'" class="btn btn-primary btn-sm mb-2">
