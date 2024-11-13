@@ -46,13 +46,6 @@ public class TeacherSubjectAllocations {
     private Float numberOfLabGroups;
 
 
-    @Deprecated
-    private Integer totalLectureStudents;
-    @Deprecated
-    private Integer totalExerciseStudents;
-    @Deprecated
-    private Integer totalLabStudents;
-
     @Column(length = 4_000)
     private String validationMessage;
 

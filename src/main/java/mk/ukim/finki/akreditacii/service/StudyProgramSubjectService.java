@@ -9,7 +9,8 @@ public interface StudyProgramSubjectService {
     List<StudyProgramSubject> findByStudyProgram(StudyProgramDetails studyProgramDetails);
     StudyProgramSubject findById(String subjectId);
     StudyProgramSubject save(StudyProgramSubject studyProgramSubject);
-    StudyProgramSubject edit(String subjectId, String name, Boolean mandatory, short semester);
+
+    StudyProgramSubject edit(String subjectId, String name, Boolean mandatory, short semester, String subjectGroup, Float order);
 
     List<StudyProgramSubject> findAllByStudyProgram(String studyProgramId);
     void remove(String subjectId);

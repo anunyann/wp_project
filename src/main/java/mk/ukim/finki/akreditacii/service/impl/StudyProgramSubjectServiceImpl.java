@@ -1,11 +1,11 @@
 package mk.ukim.finki.akreditacii.service.impl;
-import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgramSubjectId;
-import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
-import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
-import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgram;
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidStudyProgramSubjectId;
+import mk.ukim.finki.akreditacii.model.exceptions.InvalidSubjectId;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
+import mk.ukim.finki.akreditacii.model.subject.StudyProgramSubject;
+import mk.ukim.finki.akreditacii.model.subject.SubjectDetails;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
 import mk.ukim.finki.akreditacii.repository.SubjectDetailsRepository;
@@ -46,13 +46,16 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
     }
 
     @Override
-    public StudyProgramSubject edit(String studyProgramSubjectId, String name, Boolean mandatory, short semester) {
+    public StudyProgramSubject edit(String studyProgramSubjectId, String name, Boolean mandatory, short semester,
+                                    String subjectGroup, Float order) {
         StudyProgramSubject subject = findById(studyProgramSubjectId);
 
 
         subject.getSubject().getSubject().setName(name);
         subject.setMandatory(mandatory);
         subject.setSemester(semester);
+        subject.setSubjectGroup(subjectGroup);
+        subject.setOrder(order);
 
         studyProgramSubjectRepository.save(subject);
         return subject;
@@ -70,7 +73,7 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
         String studyProgramSubjectId = id + "-" + subjectId;
         studyProgramSubject.setId(studyProgramSubjectId);
 
-        SubjectDetails subjectDetails = subjectDetailsRepository.findById(subjectId).orElseThrow(()-> new InvalidSubjectId(subjectId));
+        SubjectDetails subjectDetails = subjectDetailsRepository.findById(subjectId).orElseThrow(() -> new InvalidSubjectId(subjectId));
 
         studyProgramSubject.setSubject(subjectDetails);
         studyProgramSubject.setStudyProgram(studyProgramService.findById(id).orElseThrow(() -> new InvalidStudyProgram(id)));
