@@ -46,9 +46,10 @@ public class StudyProgramSubjectManagement {
                                     @RequestParam short semester,
                                     @RequestParam(required = false) String subjectGroup,
                                     @RequestParam(required = false) Float order,
+                                    @RequestParam(required = false) String dependenciesOverride,
                                     RedirectAttributes redirectAttributes) {
 
-        this.studyProgramSubjectService.edit(subjectId, name, mandatory, semester, subjectGroup, order);
+        this.studyProgramSubjectService.edit(subjectId, name, mandatory, semester, subjectGroup, order, dependenciesOverride);
 
         redirectAttributes.addAttribute("id", id);
         return "redirect:/admin/program/{id}/edit-subjects".replace("{id}", id);

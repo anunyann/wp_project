@@ -47,7 +47,7 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
 
     @Override
     public StudyProgramSubject edit(String studyProgramSubjectId, String name, Boolean mandatory, short semester,
-                                    String subjectGroup, Float order) {
+                                    String subjectGroup, Float order, String dependenciesOverride) {
         StudyProgramSubject subject = findById(studyProgramSubjectId);
 
 
@@ -56,6 +56,7 @@ public class StudyProgramSubjectServiceImpl implements StudyProgramSubjectServic
         subject.setSemester(semester);
         subject.setSubjectGroup(subjectGroup);
         subject.setOrder(order);
+        subject.setDependenciesOverride(dependenciesOverride);
 
         studyProgramSubjectRepository.save(subject);
         return subject;

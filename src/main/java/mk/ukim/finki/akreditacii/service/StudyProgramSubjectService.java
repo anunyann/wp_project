@@ -10,7 +10,7 @@ public interface StudyProgramSubjectService {
     StudyProgramSubject findById(String subjectId);
     StudyProgramSubject save(StudyProgramSubject studyProgramSubject);
 
-    StudyProgramSubject edit(String subjectId, String name, Boolean mandatory, short semester, String subjectGroup, Float order);
+    StudyProgramSubject edit(String subjectId, String name, Boolean mandatory, short semester, String subjectGroup, Float order, String dependenciesOverride);
 
     List<StudyProgramSubject> findAllByStudyProgram(String studyProgramId);
     void remove(String subjectId);
