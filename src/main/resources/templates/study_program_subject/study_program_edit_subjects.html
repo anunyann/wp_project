@@ -81,6 +81,7 @@
                 <th><b th:text="#{SEMESTER}"></b></th>
                 <th><b>Group</b></th>
                 <th><b>Order</b></th>
+                <th><b>Dependency</b></th>
                 <th><b>Action</b></th>
             </tr>
             </thead>
@@ -116,6 +117,10 @@
                     <td>
                         <input type="number" class="form-control" name="order"
                                th:value="${subject.getOrder()}"/>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" name="dependenciesOverride"
+                               th:value="${subject.getDependenciesOverride()}"/>
                     </td>
                     <td>
                         <input type="hidden" name="subjectId" th:value="${subject.id}"/>
