@@ -34,6 +34,8 @@
                 <th><b th:text="#{SUBJECT}"></b></th>
                 <th><b th:text="#{MANDATORY}"></b></th>
                 <th><b th:text="#{SEMESTER}"></b></th>
+                <th><b>Group</b></th>
+                <th><b>Order</b></th>
                 <th><b>Action</b></th>
             </tr>
             </thead>
@@ -60,6 +62,14 @@
                                     th:selected="${subject.getSemester() == i}">
                             </option>
                         </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="subjectGroup"
+                               th:value="${subject.getSubjectGroup()}"/>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" name="order"
+                               th:value="${subject.getOrder()}"/>
                     </td>
                     <td>
                         <input type="hidden" name="subjectId" th:value="${subject.id}"/>
