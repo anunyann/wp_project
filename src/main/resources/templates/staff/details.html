@@ -17,7 +17,7 @@
       <h3 th:text="${staff.name}">Име на вработен</h3>
       <img th:src="@{/default.png}" alt="Staff Image" style="width: 160px; height: 220px; object-fit: cover;" />
       <p class="mt-2">
-        <span th:text="${staff.email}"></span>
+        <a th:href="'mailto:' + ${staff.email}" th:text="${staff.email}"></a>
       </p>
       <div>
         <div th:if="${regularConsultations.size() > 0}">
