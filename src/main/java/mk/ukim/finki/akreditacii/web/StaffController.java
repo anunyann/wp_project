@@ -41,11 +41,11 @@ public class StaffController {
     }
 
     @GetMapping
-    public String listStaff(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "24") int size,
+    public String listStaff(@RequestParam(defaultValue = "1") int pageNum,
+                            @RequestParam(defaultValue = "20") int results,
                             @RequestParam(required = false) UserRole role,
                             Model model) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(pageNum - 1, results);
         Page<User> staffPage;
 
         if (role != null) {

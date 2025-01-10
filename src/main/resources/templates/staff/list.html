@@ -40,7 +40,7 @@
     </form>
   </div>
 
-  <div class="row row-cols-1 row-cols-md-6 row-cols-lg-8 row-cols-sm-4 g-4">
+  <div class="row row-cols-md-5 row-cols-lg-8 row-cols-sm-4 g-4">
     <div th:each="staff : ${staffPage.content}">
       <div class="col">
         <div class="d-flex flex-column align-items-center">
@@ -53,30 +53,31 @@
     </div>
   </div>
 
-  <div class="d-flex justify-content-center mt-4">
-    <nav>
-      <ul class="pagination">
-        <li th:if="${staffPage.hasPrevious()}" class="page-item">
-          <a th:href="@{/staff(page=${staffPage.number - 1}, size=${staffPage.size})}" class="page-link"
-             aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Претходна</span>
-          </a>
-        </li>
-        <li th:each="pageNumber : ${#numbers.sequence(0, staffPage.totalPages - 1)}" class="page-item"
-            th:classappend="${pageNumber == staffPage.number ? 'active' : ''}">
-          <a th:href="@{/staff(page=${pageNumber}, size=${staffPage.size})}" class="page-link"
-             th:text="${pageNumber + 1}"></a>
-        </li>
-        <li th:if="${staffPage.hasNext()}" class="page-item">
-          <a th:href="@{/staff(page=${staffPage.number + 1}, size=${staffPage.size})}" class="page-link"
-             aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Следна</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+  <div class="mt-4">
+<!--    <nav>-->
+<!--      <ul class="pagination">-->
+<!--        <li th:if="${staffPage.hasPrevious()}" class="page-item">-->
+<!--          <a th:href="@{/staff(page=${staffPage.number - 1}, size=${staffPage.size})}" class="page-link"-->
+<!--             aria-label="Previous">-->
+<!--            <span aria-hidden="true">&laquo;</span>-->
+<!--            <span class="sr-only">Претходна</span>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--        <li th:each="pageNumber : ${#numbers.sequence(0, staffPage.totalPages - 1)}" class="page-item"-->
+<!--            th:classappend="${pageNumber == staffPage.number ? 'active' : ''}">-->
+<!--          <a th:href="@{/staff(page=${pageNumber}, size=${staffPage.size})}" class="page-link"-->
+<!--             th:text="${pageNumber + 1}"></a>-->
+<!--        </li>-->
+<!--        <li th:if="${staffPage.hasNext()}" class="page-item">-->
+<!--          <a th:href="@{/staff(page=${staffPage.number + 1}, size=${staffPage.size})}" class="page-link"-->
+<!--             aria-label="Next">-->
+<!--            <span aria-hidden="true">&raquo;</span>-->
+<!--            <span class="sr-only">Следна</span>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </nav>-->
+    <div th:include="fragments/paging :: pageSection(${staffPage})"></div>
   </div>
 
 </div>
