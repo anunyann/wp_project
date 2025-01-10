@@ -12,8 +12,8 @@
 </head>
 <body>
 <div class="view-content my-5" layout:fragment="content">
-  <div class="d-flex flex-wrap gap-5">
-    <div class="d-flex flex-column align-items-center me-4">
+  <div class="row">
+    <div class="col-3 d-flex flex-column align-items-center">
       <h3 th:text="${staff.name}">Име на вработен</h3>
       <img th:src="@{/default.png}" alt="Staff Image" style="width: 160px; height: 220px; object-fit: cover;" />
       <p class="mt-2">
@@ -49,24 +49,28 @@
       </div>
 
 
-    <div class="flex-grow-1">
+    <div class="col-9">
       <div th:if="${isProfessor}">
         <div class="mt-4">
-          <h5 class="">Резиме:</h5>
-          <p>
-            <strong>Титула:</strong> <span th:text="${professor.title}">Титула</span><br />
-            <strong>Академска Титула:</strong>
-            <span th:if="${academicTitles != null}" th:text="${academicTitles.academicTitle}">Академска Титула</span>
-            <span th:unless="${academicTitles != null}">Нема достапни информации</span><br />
-          </p>
-          <h5>Лични податоци:</h5>
-          <ul>
-            <li th:each="detail : ${professorDetails}" th:text="${detail.birthDay}"></li>
-            <li th:each="detail : ${professorDetails}" th:text="${detail.currentTitle}"></li>
-            <li th:each="detail : ${professorDetails}" th:text="${detail.degree}"></li>
-            <li th:each="detail : ${professorDetails}" th:text="${detail.degreeTitle}"></li>
-          </ul>
-          <h5>Едукација:</h5>
+          <h4 class="">Резиме</h4>
+          <div>
+            <p th:text="${resume?.resume}"></p>
+          </div>
+<!--          <p>-->
+<!--            <strong>Титула:</strong> <span th:text="${professor.title}">Титула</span><br />-->
+<!--            <strong>Академска Титула:</strong>-->
+<!--            <span th:if="${academicTitles != null}" th:text="${academicTitles.academicTitle}">Академска Титула</span>-->
+<!--            <span th:unless="${academicTitles != null}">Нема достапни информации</span><br />-->
+<!--          </p>-->
+          <h5>Лични податоци</h5>
+          <div th:if="${professorDetails!=null}">
+            <p th:text="${professorDetails?.birthDay}"></p>
+            <strong>CURRENT TITLE</strong><p th:text="${professorDetails?.currentTitle.academicTitle.getTitle().name()}"></p>
+            <strong>DEGREE</strong><p th:text="${professorDetails?.degree}"></p>
+            <strong>DEGREE TITLE</strong><p th:text="${professorDetails?.degreeTitle}"></p>
+          </div>
+          <span th:unless="${professorDetails!=null}">Нема достапни информации</span>
+          <h5 class="mt-3">Едукација</h5>
           <ul>
             <li th:each="education : ${professorEducation}" th:text="${education.education.degree}"></li>
             <li th:each="education : ${professorEducation}" th:text="${education.education.institution}"></li>

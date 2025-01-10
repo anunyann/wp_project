@@ -13,4 +13,6 @@ public interface ProfessorDetailsService {
     List<ProfessorDetails> findAll();
 
     void deleteById(String id);
+
+    ProfessorDetails getByProfessorId(String id);
 }

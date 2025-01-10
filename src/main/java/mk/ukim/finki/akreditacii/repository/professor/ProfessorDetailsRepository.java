@@ -10,4 +10,6 @@ public interface ProfessorDetailsRepository extends JpaRepository<ProfessorDetai
     List<ProfessorDetails> findAll();
 
     void deleteById(String id);
+
+    ProfessorDetails findProfessorDetailsByProfessorId(String professorId);
 }

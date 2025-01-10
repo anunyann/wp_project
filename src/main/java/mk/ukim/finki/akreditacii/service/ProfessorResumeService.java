@@ -9,4 +9,6 @@ public interface ProfessorResumeService {
     Optional<ProfessorResume> findById(String id);
     ProfessorResume save(String professorId, String resume, MultipartFile image);
     ProfessorResume update(ProfessorResume obj);
+
+    ProfessorResume getByProfessorId(String id);
 }

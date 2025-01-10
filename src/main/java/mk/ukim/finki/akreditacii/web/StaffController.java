@@ -1,13 +1,11 @@
 package mk.ukim.finki.akreditacii.web;
 
+import lombok.AllArgsConstructor;
 import mk.ukim.finki.akreditacii.model.User;
 import mk.ukim.finki.akreditacii.model.UserRole;
 import mk.ukim.finki.akreditacii.model.consultations.Consultation;
 import mk.ukim.finki.akreditacii.model.consultations.ConsultationType;
-import mk.ukim.finki.akreditacii.model.professor.Professor;
-import mk.ukim.finki.akreditacii.model.professor.ProfessorAcademicTitles;
-import mk.ukim.finki.akreditacii.model.professor.ProfessorDetails;
-import mk.ukim.finki.akreditacii.model.professor.ProfessorEducation;
+import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/staff")
 public class StaffController {
     private final StaffService staffService;
@@ -34,15 +33,8 @@ public class StaffController {
     private final ProfessorDetailsService professorDetailsService;
     private final ProfessorEducationService professorEducationService;
     private final ConsultationService consultationService;
+    private final ProfessorResumeService professorResumeService;
 
-    public StaffController(StaffService staffService, ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, ProfessorDetailsService professorDetailsService, ProfessorEducationService professorEducationService, ConsultationService consultationService) {
-        this.staffService = staffService;
-        this.professorService = professorService;
-        this.professorAcademicTitlesService = professorAcademicTitlesService;
-        this.professorDetailsService = professorDetailsService;
-        this.professorEducationService = professorEducationService;
-        this.consultationService = consultationService;
-    }
 
     @GetMapping
     public String listStaff(@RequestParam(defaultValue = "1") int pageNum,
@@ -129,8 +121,12 @@ public class StaffController {
             model.addAttribute("professor", professor);
 
 
-            List<ProfessorDetails> professorDetails = professorDetailsService.findAll();
+            ProfessorDetails professorDetails = professorDetailsService.getByProfessorId(id);
             model.addAttribute("professorDetails", professorDetails);
+
+            ProfessorResume resume = professorResumeService.getByProfessorId(id);
+            model.addAttribute("resume", resume);
+
 
             ProfessorAcademicTitles academicTitles = professorAcademicTitlesService.findByProfessor(professor);
             model.addAttribute("academicTitles", academicTitles);

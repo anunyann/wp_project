@@ -64,4 +64,9 @@ public class ProfessorResumeServiceImpl implements ProfessorResumeService {
 
         return this.professorResumeRepository.save(professorResume);
     }
+
+    @Override
+    public ProfessorResume getByProfessorId(String id) {
+        return professorResumeRepository.findByProfessorId(id);
+    }
 }
