@@ -26,8 +26,9 @@
       <div class="d-flex flex-wrap mb-3">
         <div class="col-md-3 col-sm-6 p-1">
           <select class="form-control custom-select" id="role" name="role">
-            <option value="">Сите</option>
-            <option th:each="role : ${roleNames}" th:value="${role.key}" th:text="${role.value}">Role</option>
+            <option value="" th:selected="${param.role==null}">Сите</option>
+            <option th:each="role : ${roleNames}" th:value="${role.key}" th:text="${role.value}"
+                    th:selected="${param.role!=null && role.key.name() == param.role[0]}"></option>
           </select>
         </div>
         <div class="col-md-6 col-sm-6 p-1">
