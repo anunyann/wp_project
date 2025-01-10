@@ -55,29 +55,6 @@
   </div>
 
   <div class="mt-4">
-<!--    <nav>-->
-<!--      <ul class="pagination">-->
-<!--        <li th:if="${staffPage.hasPrevious()}" class="page-item">-->
-<!--          <a th:href="@{/staff(page=${staffPage.number - 1}, size=${staffPage.size})}" class="page-link"-->
-<!--             aria-label="Previous">-->
-<!--            <span aria-hidden="true">&laquo;</span>-->
-<!--            <span class="sr-only">Претходна</span>-->
-<!--          </a>-->
-<!--        </li>-->
-<!--        <li th:each="pageNumber : ${#numbers.sequence(0, staffPage.totalPages - 1)}" class="page-item"-->
-<!--            th:classappend="${pageNumber == staffPage.number ? 'active' : ''}">-->
-<!--          <a th:href="@{/staff(page=${pageNumber}, size=${staffPage.size})}" class="page-link"-->
-<!--             th:text="${pageNumber + 1}"></a>-->
-<!--        </li>-->
-<!--        <li th:if="${staffPage.hasNext()}" class="page-item">-->
-<!--          <a th:href="@{/staff(page=${staffPage.number + 1}, size=${staffPage.size})}" class="page-link"-->
-<!--             aria-label="Next">-->
-<!--            <span aria-hidden="true">&raquo;</span>-->
-<!--            <span class="sr-only">Следна</span>-->
-<!--          </a>-->
-<!--        </li>-->
-<!--      </ul>-->
-<!--    </nav>-->
     <div th:include="fragments/paging :: pageSection(${staffPage})"></div>
   </div>
 
