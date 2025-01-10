@@ -23,15 +23,14 @@
   <h3>Вработени на ФИНКИ</h3>
   <div id="filters">
     <form method="GET" th:action="@{/staff}">
-      <div class="d-flex flex-wrap justify-content-between">
+      <div class="d-flex flex-wrap mb-3">
         <div class="col-md-3 col-sm-6 p-1">
-          <label class="mr-2 mb-0" for="role">Наставен кадар:</label>
           <select class="form-control custom-select" id="role" name="role">
             <option value="">Сите</option>
             <option th:each="role : ${roleNames}" th:value="${role.key}" th:text="${role.value}">Role</option>
           </select>
         </div>
-        <div class="col-md-6 col-sm-6 p-1 text-end">
+        <div class="col-md-6 col-sm-6 p-1">
           <button class="btn btn-primary" type="submit">Пребарувај</button>
           <button class="btn btn-outline-dark" id="resetFiltersBtn" th:onclick="cleanQueryFilters()" type="reset">
             Ресетирај ги филтерите
@@ -41,15 +40,14 @@
     </form>
   </div>
 
-  <div class="row row-cols-1 row-cols-md-4 g-4">
+  <div class="row row-cols-1 row-cols-md-6 row-cols-lg-8 row-cols-sm-4 g-4">
     <div th:each="staff : ${staffPage.content}">
       <div class="col">
-        <div class="card">
-          <img th:src="@{/default.png}" alt="Слика на вработен" class="card-img-top"/>
-          <div class="card-body">
-            <h5 class="card-title"><a th:href="@{/staff/details/{id}(id=${staff.id})}"
-                                      class="text-decoration-none text-dark" th:text="${staff.name}">Име</a></h5>
-          </div>
+        <div class="d-flex flex-column align-items-center">
+          <img th:src="@{/default.png}" alt="Слика на вработен" style="width: 70px; height: 100px; object-fit: cover;" />
+          <h6 class="mt-2">
+            <a th:href="@{/staff/details/{id}(id=${staff.id})}" class="text-decoration-none text-dark" th:text="${staff.name}">Име</a>
+          </h6>
         </div>
       </div>
     </div>
