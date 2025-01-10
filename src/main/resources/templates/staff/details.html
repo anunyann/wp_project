@@ -12,49 +12,73 @@
 </head>
 <body>
 <div class="view-content my-5" layout:fragment="content">
-  <h3 th:text="${staff.name}">Име на вработен</h3>
-  <div class="card" style="width: 18rem;">
-    <img th:src="@{/default.png}" class="card-img-top" alt="Staff Image"/>
-    <div class="card-body">
-      <h5 class="card-title" th:text="${staff.name}">Име</h5>
-      <p class="card-text">
-        <strong>Улога:</strong> <span th:text="${roleNames[staff.role]}">Улога</span><br/>
-        <strong>Е-маил Адреса:</strong> <span th:text="${staff.email}">Е-маил адреса</span>
+  <div class="d-flex flex-wrap gap-5">
+    <div class="d-flex flex-column align-items-center me-4">
+      <h3 th:text="${staff.name}">Име на вработен</h3>
+      <img th:src="@{/default.png}" alt="Staff Image" style="width: 160px; height: 220px; object-fit: cover;" />
+      <p class="mt-2">
+        <span th:text="${staff.email}"></span>
       </p>
-      <a href="/staff" class="btn btn-primary">Назад кон сите вработени</a>
-    </div>
-  </div>
-  <div th:if="${isProfessor}">
-    <div class="card mt-4">
-      <div class="card-body">
-        <h5 class="card-title">Информации за професор:</h5>
-        <p class="card-text">
-          <strong>Титула:</strong> <span th:text="${professor.title}">Титула</span><br/>
-          <strong>Академска Титула:</strong> <span th:if="${academicTitles != null}"
-                                                   th:text="${academicTitles.academicTitle}">Академска Титула</span><span
-                th:unless="${academicTitles != null}">Нема достапни информации</span><br/>
-        <h5>Лични податоци:</h5>
-        <ul>
-          <li th:each="detail : ${professorDetails}" th:text="${detail.birthDay}"></li>
-          <li th:each="detail : ${professorDetails}" th:text="${detail.currentTitle}"></li>
-          <li th:each="detail : ${professorDetails}" th:text="${detail.degree}"></li>
-          <li th:each="detail : ${professorDetails}" th:text="${detail.degreeTitle}"></li>
+      <div>
+        <div th:if="${regularConsultations.size() > 0}">
+          <strong>Редовни консултации: </strong>
+          <div th:each="consultation : ${regularConsultations}" class="mt-2">
+            <p>
+              <span>Ден:</span> <span th:text="${consultation.getMacedonianDayOfWeek()}"></span><br />
+              <span>Час:</span> <span th:text="${consultation.startTime}"></span> - <span th:text="${consultation.endTime}"></span><br />
+              <span>Училница:</span>
+              <span th:text="${consultation.room.name + (consultation.online != null && consultation.online ? ', Онлајн' : '')}"></span><br>
+              <span th:text="${consultation.studentInstructions}"></span>
+            </p>
+          </div>
+        </div>
 
-        </ul>
-        <h5>Едукација:</h5>
-        <ul>
-          <li th:each="education : ${professorEducation}" th:text="${education.education.degree}"></li>
-          <li th:each="education : ${professorEducation}" th:text="${education.education.institution}"></li>
-          <li th:each="education : ${professorEducation}" th:text="${education.education.area}"></li>
-          <li th:each="education : ${professorEducation}" th:text="${education.education.discipline}"></li>
-          <li th:each="education : ${professorEducation}" th:text="${education.education.field}"></li>
-          <li th:each="education : ${professorEducation}" th:text="${education.education.finishingYear}"></li>
-        </ul>
-        </p>
+        <div th:if="${irregularConsultations.size() > 0}">
+          <strong>Дополнителни консултации: </strong>
+          <div th:each="consultation : ${irregularConsultations}" class="mt-2">
+            <p>
+              <span>Ден:</span> <span th:text="${consultation.getMacedonianDayOfWeek()}"></span><br />
+              <span>Час:</span> <span th:text="${consultation.startTime}"></span> - <span th:text="${consultation.endTime}"></span><br />
+              <span>Училница:</span>
+              <span th:text="${consultation.room.name + (consultation.online != null && consultation.online ? ', Онлајн' : '')}"></span><br>
+              <span th:text="${consultation.studentInstructions}"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+    <div class="flex-grow-1">
+      <div th:if="${isProfessor}">
+        <div class="mt-4">
+          <h5 class="">Резиме:</h5>
+          <p>
+            <strong>Титула:</strong> <span th:text="${professor.title}">Титула</span><br />
+            <strong>Академска Титула:</strong>
+            <span th:if="${academicTitles != null}" th:text="${academicTitles.academicTitle}">Академска Титула</span>
+            <span th:unless="${academicTitles != null}">Нема достапни информации</span><br />
+          </p>
+          <h5>Лични податоци:</h5>
+          <ul>
+            <li th:each="detail : ${professorDetails}" th:text="${detail.birthDay}"></li>
+            <li th:each="detail : ${professorDetails}" th:text="${detail.currentTitle}"></li>
+            <li th:each="detail : ${professorDetails}" th:text="${detail.degree}"></li>
+            <li th:each="detail : ${professorDetails}" th:text="${detail.degreeTitle}"></li>
+          </ul>
+          <h5>Едукација:</h5>
+          <ul>
+            <li th:each="education : ${professorEducation}" th:text="${education.education.degree}"></li>
+            <li th:each="education : ${professorEducation}" th:text="${education.education.institution}"></li>
+            <li th:each="education : ${professorEducation}" th:text="${education.education.area}"></li>
+            <li th:each="education : ${professorEducation}" th:text="${education.education.discipline}"></li>
+            <li th:each="education : ${professorEducation}" th:text="${education.education.field}"></li>
+            <li th:each="education : ${professorEducation}" th:text="${education.education.finishingYear}"></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
 </body>
 </html>

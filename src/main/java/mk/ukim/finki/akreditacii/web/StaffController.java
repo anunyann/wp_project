@@ -2,6 +2,8 @@ package mk.ukim.finki.akreditacii.web;
 
 import mk.ukim.finki.akreditacii.model.User;
 import mk.ukim.finki.akreditacii.model.UserRole;
+import mk.ukim.finki.akreditacii.model.consultations.Consultation;
+import mk.ukim.finki.akreditacii.model.consultations.ConsultationType;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorAcademicTitles;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorDetails;
@@ -31,13 +33,15 @@ public class StaffController {
     private final ProfessorAcademicTitlesService professorAcademicTitlesService;
     private final ProfessorDetailsService professorDetailsService;
     private final ProfessorEducationService professorEducationService;
+    private final ConsultationService consultationService;
 
-    public StaffController(StaffService staffService, ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, ProfessorDetailsService professorDetailsService, ProfessorEducationService professorEducationService) {
+    public StaffController(StaffService staffService, ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, ProfessorDetailsService professorDetailsService, ProfessorEducationService professorEducationService, ConsultationService consultationService) {
         this.staffService = staffService;
         this.professorService = professorService;
         this.professorAcademicTitlesService = professorAcademicTitlesService;
         this.professorDetailsService = professorDetailsService;
         this.professorEducationService = professorEducationService;
+        this.consultationService = consultationService;
     }
 
     @GetMapping
@@ -113,8 +117,12 @@ public class StaffController {
 
         model.addAttribute("roleNames", roleNames);
 
-        boolean isProfessor = staff.getRole() == UserRole.PROFESSOR;
+        boolean isProfessor = staff.getRole().isProfessor();
         model.addAttribute("isProfessor", isProfessor);
+        List<Consultation> regularConsultations = consultationService.listNextWeekConsultationsByProfessor(id, ConsultationType.WEEKLY);
+        List<Consultation> irregularConsultations = consultationService.listNextWeekConsultationsByProfessor(id, ConsultationType.ONE_TIME);
+        model.addAttribute("regularConsultations", regularConsultations);
+        model.addAttribute("irregularConsultations", irregularConsultations);
 
         if (isProfessor) {
             Professor professor = professorService.getProfessorById(id);
