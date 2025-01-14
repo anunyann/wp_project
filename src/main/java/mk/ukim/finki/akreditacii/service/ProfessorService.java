@@ -17,7 +17,7 @@ public interface ProfessorService {
 
     Page<Professor> findAllWithPaginationFiltered(Integer pageNum, Integer results, String stringSearch, String filteredTitle);
 
-    Professor save(String id, String name, String email, ProfessorTitle title);
+    Professor save(String id, String name, String email, ProfessorTitle title, Short orderingRank);
 
     void deleteById(String id);
 

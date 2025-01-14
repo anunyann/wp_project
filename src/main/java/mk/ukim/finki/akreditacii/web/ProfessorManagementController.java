@@ -1,6 +1,5 @@
 package mk.ukim.finki.akreditacii.web;
 
-import mk.ukim.finki.akreditacii.model.exceptions.InvalidProfessorId;
 import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.model.semester.SemesterType;
@@ -112,11 +111,20 @@ public class ProfessorManagementController {
     }
 
     @PostMapping("/add-professor")
-    public String addProfessor(@RequestParam String name, @RequestParam String id, @RequestParam String dateOfBirth, @RequestParam String email, @RequestParam ProfessorTitle title, @RequestParam EducationDegree degree) {
+    public String addProfessor(@RequestParam String name,
+                               @RequestParam String id,
+                               @RequestParam(required = false) String dateOfBirth,
+                               @RequestParam String email,
+                               @RequestParam Short orderingRank,
+                               @RequestParam ProfessorTitle title,
+                               @RequestParam EducationDegree degree) {
 
-        LocalDate dateOfBirthParsed = LocalDate.parse(dateOfBirth);
-        professorService.save(id, name, email, title);
-        ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.getProfessorById(id), 1F, degree, title.toString(), dateOfBirthParsed, null);
+        LocalDate dateOfBirthParsed = null;
+        if (dateOfBirth != null)
+            dateOfBirthParsed = LocalDate.parse(dateOfBirth);
+        professorService.save(id, name, email, title, orderingRank);
+        ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.getProfessorById(id),
+                (float) orderingRank, degree, title.toString(), dateOfBirthParsed, null);
         professorDetailsService.save(professorDetails);
 
 
@@ -231,14 +239,14 @@ public class ProfessorManagementController {
     }
 
     @PostMapping("/{professorId}/resume/save")
-    public String saveResume (@PathVariable String professorId, @RequestParam(required = false) String resume, @RequestParam(value = "image", required = false) MultipartFile image){
+    public String saveResume(@PathVariable String professorId, @RequestParam(required = false) String resume, @RequestParam(value = "image", required = false) MultipartFile image) {
         this.professorResumeService.save(professorId, resume, image);
 
         return "redirect:/admin/professor/" + professorId + "/resume";
     }
 
     @GetMapping("/{professorId}/resume")
-    public String viewResume(@PathVariable String professorId, Model model){
+    public String viewResume(@PathVariable String professorId, Model model) {
         Professor professor = this.professorService.getProfessorById(professorId);
         model.addAttribute("professor", professor);
 
