@@ -34,7 +34,7 @@
         <select class="form-control" id="title" name="title">
             <option
 
-                    th:selected="${title !=null ? professorDetails.getCurrentTitle().equals(title):false}"
+                    th:selected="${title !=null ? professorDetails?.getProfessor()?.getTitle()?.equals(title):false}"
                     th:each="title : ${professorTitles}"
                     th:text="${title}"
                     th:value="${title}">
