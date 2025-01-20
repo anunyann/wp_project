@@ -79,14 +79,14 @@
                     <div class="col-5 me-2">
                         <a th:href="@{'/admin/study-programs/{studyProgramId}/documents/download/{id}' (studyProgramId=${studyProgramId}, id=${spAccDocument.getId()})}"
                            class="btn btn-sm btn-outline-dark m-1">
-                            <i class="fa fa-trash" th:text="#{DOWNLOAD}"></i>
+                            <i th:text="#{DOWNLOAD}"></i>
                         </a>
                     </div>
 
                     <div class="col-5 me-2">
                         <a th:href="@{'/admin/study-programs/{studyProgramId}/documents/delete/{id}' (studyProgramId=${studyProgramId}, id=${spAccDocument.getId()})}"
                            class="btn btn-sm btn-danger m-1">
-                            <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                            <i th:text="#{DELETE}"></i>
                         </a>
                     </div>
                 </td>

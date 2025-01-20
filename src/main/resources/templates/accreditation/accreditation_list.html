@@ -37,19 +37,19 @@
             <div class="col-3">
                 <a th:href="@{'/admin/accreditations/edit-form/{id}' (id=${acc.getYear()})}"
                    class="btn btn-sm btn-info m-1">
-                    <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                    <i th:text="#{EDIT}"></i>
                 </a>
             </div>
             <div class="col-3">
                 <a th:href="@{'/admin/accreditations/delete/{id}' (id=${acc.getYear()})}"
                    class="btn btn-sm btn-danger m-1">
-                    <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                    <i th:text="#{DELETE}"></i>
                 </a>
             </div>
             <div class="col-3">
                 <a th:href="@{'/admin/accreditations/activate/{id}' (id=${acc.getYear()})}"
                    class="btn btn-sm btn-success m-1">
-                    <i class="fa fa-trash" th:text="#{ACTIVATE}"></i>
+                    <i th:text="#{ACTIVATE}"></i>
                 </a>
             </div>
         </td>

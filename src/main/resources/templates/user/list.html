@@ -82,13 +82,13 @@
                         <div class="col-6">
                             <a class="btn btn-sm btn-info m-1"
                                th:href="@{'/admin/user/{id}/edit' (id=${user.getId()})}">
-                                <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                                <i th:text="#{EDIT}"></i>
                             </a>
                         </div>
                         <div class="col-6">
                             <a class="btn btn-sm btn-danger m-1"
                                th:href="@{'/admin/user/{id}/delete' (id=${user.getId()})}">
-                                <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                                <i th:text="#{DELETE}"></i>
                             </a>
                         </div>
                     </td>

@@ -135,31 +135,31 @@
                         <div class="col-3">
                             <a th:href="@{'/admin/study-programs/edit-form/{id}' (id=${spDetails.getId()})}"
                                class="btn btn-sm btn-info m-1">
-                                <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                                <i th:text="#{EDIT}"></i>
                             </a>
                         </div>
                         <div class="col-3">
                             <a th:href="@{'/admin/study-programs/delete/{id}' (id=${spDetails.getId()})}"
                                class="btn btn-sm btn-danger m-1">
-                                <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                                <i th:text="#{DELETE}"></i>
                             </a>
                         </div>
                         <div class="col-3">
                             <a th:href="@{'/admin/study-programs/{id}/documents' (id=${spDetails.getId()})}"
                                class="btn btn-sm btn-outline-dark m-1">
-                                <i class="fa fa-trash" th:text="#{DOCUMENTS}"></i>
+                                <i th:text="#{DOCUMENTS}"></i>
                             </a>
                         </div>
                         <div class="col-3">
                             <a th:href="@{'/admin/program/{id}/edit-subjects' (id=${spDetails.getId()})}"
                                class="btn btn-sm btn-info m-1">
-                                <i class="fa fa-trash" th:text="#{EDIT_STUDY_PROGRAM_SUBJECTS}"></i>
+                                <i th:text="#{EDIT_STUDY_PROGRAM_SUBJECTS}"></i>
                             </a>
                         </div>
                     </div>
                     <div class="col-3">
                         <a th:href="@{'/programs/' + ${spDetails.getId()} + '/edit-professors'}" class="btn btn-sm btn-outline-dark m-1">
-                            <i class="fa fa-trash" th:text="#{EDIT_STUDY_PROGRAM_PROFESSORS}"></i>
+                            <i th:text="#{EDIT_STUDY_PROGRAM_PROFESSORS}"></i>
                         </a>
                     </div>
                 </td>
