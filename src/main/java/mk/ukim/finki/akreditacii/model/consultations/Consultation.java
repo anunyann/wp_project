@@ -59,9 +59,7 @@ public class Consultation {
                 DayOfWeek.TUESDAY, "вторник",
                 DayOfWeek.WEDNESDAY, "среда",
                 DayOfWeek.THURSDAY, "четврток",
-                DayOfWeek.FRIDAY, "петок",
-                DayOfWeek.SATURDAY, "сабота",
-                DayOfWeek.SUNDAY, "недела"
+                DayOfWeek.FRIDAY, "петок"
         );
         return daysInMacedonian.getOrDefault(this.weeklyDayOfWeek, "Непознат ден");
     }

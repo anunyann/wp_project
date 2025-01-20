@@ -65,7 +65,7 @@
           <h5>Лични податоци</h5>
           <div th:if="${professorDetails!=null}">
             <p th:text="${professorDetails?.birthDay}"></p>
-            <strong>CURRENT TITLE</strong><p th:text="${professorDetails?.currentTitle.academicTitle.getTitle().name()}"></p>
+            <strong>CURRENT TITLE</strong><p th:text="${professorDetails?.currentTitle?.academicTitle?.getTitle().name()}"></p>
             <strong>DEGREE</strong><p th:text="${professorDetails?.degree}"></p>
             <strong>DEGREE TITLE</strong><p th:text="${professorDetails?.degreeTitle}"></p>
           </div>
