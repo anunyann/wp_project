@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="container" layout:fragment="content">
-  <form method="POST">
+  <form method="post" th:action="@{'/admin/professor/'+${professorId}+'/titles'}">
 
         <label th:text="#{INSTITUTION}" for="institution"></label>
         <input class="form-control" type="text" id="institution" name="institution" required="required"

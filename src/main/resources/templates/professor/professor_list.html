@@ -87,25 +87,25 @@
                     <div class="col-3">
                         <a class="btn btn-sm btn-info m-1"
                            th:href="@{'/admin/professor/{id}/resume' (id=${professor.getId()})}">
-                            <i class="fa fa-trash">Резиме</i>
+                            <i>Резиме</i>
                         </a>
                     </div>
                     <div class="col-3">
                         <a class="btn btn-sm btn-info m-1"
                            th:href="@{'/admin/professor/{id}' (id=${professor.getId()})}">
-                            <i class="fa fa-trash" th:text="#{DETAILS}"></i>
+                            <i th:text="#{DETAILS}"></i>
                         </a>
                     </div>
                     <div class="col-3">
-                        <a class="btn btn-sm btn-info m-1"
+                        <a class="btn btn-sm btn-warning m-1"
                            th:href="@{'/admin/professor/{id}/edit' (id=${professor.getId()})}">
-                            <i class="fa fa-trash" th:text="#{EDIT}"></i>
+                            <i th:text="#{EDIT}"></i>
                         </a>
                     </div>
                     <div class="col-3">
                         <a class="btn btn-sm btn-danger m-1"
                            th:href="@{'/admin/professor/{id}/delete' (id=${professor.getId()})}">
-                            <i class="fa fa-trash" th:text="#{DELETE}"></i>
+                            <i th:text="#{DELETE}"></i>
                         </a>
                     </div>
                 </td>
