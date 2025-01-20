@@ -1,11 +1,11 @@
 package mk.ukim.finki.akreditacii.web;
 
+import lombok.AllArgsConstructor;
 import mk.ukim.finki.akreditacii.model.User;
 import mk.ukim.finki.akreditacii.model.UserRole;
-import mk.ukim.finki.akreditacii.model.professor.Professor;
-import mk.ukim.finki.akreditacii.model.professor.ProfessorAcademicTitles;
-import mk.ukim.finki.akreditacii.model.professor.ProfessorDetails;
-import mk.ukim.finki.akreditacii.model.professor.ProfessorEducation;
+import mk.ukim.finki.akreditacii.model.consultations.Consultation;
+import mk.ukim.finki.akreditacii.model.consultations.ConsultationType;
+import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/staff")
 public class StaffController {
     private final StaffService staffService;
@@ -31,21 +32,16 @@ public class StaffController {
     private final ProfessorAcademicTitlesService professorAcademicTitlesService;
     private final ProfessorDetailsService professorDetailsService;
     private final ProfessorEducationService professorEducationService;
+    private final ConsultationService consultationService;
+    private final ProfessorResumeService professorResumeService;
 
-    public StaffController(StaffService staffService, ProfessorService professorService, ProfessorAcademicTitlesService professorAcademicTitlesService, ProfessorDetailsService professorDetailsService, ProfessorEducationService professorEducationService) {
-        this.staffService = staffService;
-        this.professorService = professorService;
-        this.professorAcademicTitlesService = professorAcademicTitlesService;
-        this.professorDetailsService = professorDetailsService;
-        this.professorEducationService = professorEducationService;
-    }
 
     @GetMapping
-    public String listStaff(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "12") int size,
+    public String listStaff(@RequestParam(defaultValue = "1") int pageNum,
+                            @RequestParam(defaultValue = "20") int results,
                             @RequestParam(required = false) UserRole role,
                             Model model) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(pageNum - 1, results);
         Page<User> staffPage;
 
         if (role != null) {
@@ -113,16 +109,24 @@ public class StaffController {
 
         model.addAttribute("roleNames", roleNames);
 
-        boolean isProfessor = staff.getRole() == UserRole.PROFESSOR;
+        boolean isProfessor = staff.getRole().isProfessor();
         model.addAttribute("isProfessor", isProfessor);
+        List<Consultation> regularConsultations = consultationService.listNextWeekConsultationsByProfessor(id, ConsultationType.WEEKLY);
+        List<Consultation> irregularConsultations = consultationService.listNextWeekConsultationsByProfessor(id, ConsultationType.ONE_TIME);
+        model.addAttribute("regularConsultations", regularConsultations);
+        model.addAttribute("irregularConsultations", irregularConsultations);
 
         if (isProfessor) {
             Professor professor = professorService.getProfessorById(id);
             model.addAttribute("professor", professor);
 
 
-            List<ProfessorDetails> professorDetails = professorDetailsService.findAll();
+            ProfessorDetails professorDetails = professorDetailsService.getByProfessorId(id);
             model.addAttribute("professorDetails", professorDetails);
+
+            ProfessorResume resume = professorResumeService.getByProfessorId(id);
+            model.addAttribute("resume", resume);
+
 
             ProfessorAcademicTitles academicTitles = professorAcademicTitlesService.findByProfessor(professor);
             model.addAttribute("academicTitles", academicTitles);
