@@ -71,14 +71,16 @@
           </div>
           <span th:unless="${professorDetails!=null}">Нема достапни информации</span>
           <h5 class="mt-3">Едукација</h5>
-          <ul>
-            <li th:each="education : ${professorEducation}" th:text="${education.education.degree}"></li>
-            <li th:each="education : ${professorEducation}" th:text="${education.education.institution}"></li>
-            <li th:each="education : ${professorEducation}" th:text="${education.education.area}"></li>
-            <li th:each="education : ${professorEducation}" th:text="${education.education.discipline}"></li>
-            <li th:each="education : ${professorEducation}" th:text="${education.education.field}"></li>
-            <li th:each="education : ${professorEducation}" th:text="${education.education.finishingYear}"></li>
-          </ul>
+          <div th:each="education : ${professorEducation}">
+            <ul>
+              <li th:text="${education?.education?.degree}"></li>
+              <li th:text="${education?.education?.institution}"></li>
+              <li th:text="${education?.education?.area}"></li>
+              <li th:text="${education?.education?.discipline}"></li>
+              <li th:text="${education?.education?.field}"></li>
+              <li th:text="${education?.education?.finishingYear}"></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
