@@ -60,7 +60,7 @@ public class RoomController {
         }
         model.addAttribute("types",RoomType.values());
         model.addAttribute("rooms", roomPage);
-        return "room/room.html";
+        return "room/room";
     }
 
     @PostMapping("/admin/rooms/delete/{name}")
@@ -73,7 +73,7 @@ public class RoomController {
     public String editRoomPage(@PathVariable String name,Model model) {
         model.addAttribute("room", roomService.findByName(name));
         model.addAttribute("types",RoomType.values());
-        return "room/edit_room.html";
+        return "room/edit_room";
     }
     @PostMapping("/admin/rooms/edit/{name}")
     public String editRoom(
@@ -91,7 +91,7 @@ public class RoomController {
         Room room = new Room();
         model.addAttribute("types",RoomType.values());
         model.addAttribute("room", room);
-        return "room/add_room.html";
+        return "room/add_room";
     }
     @PostMapping("/admin/rooms/add")
     public String saveRoom(
