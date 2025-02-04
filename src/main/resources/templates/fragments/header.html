@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <body>
 <header class="p-3 text-bg-dark" th:fragment="header">
 
@@ -21,16 +21,15 @@
             <li><a href="/admin/user" class="nav-link px-2 text-white">Корисници</a></li>
         </ul>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" class="form-control form-control-dark text-bg-white"
-                   th:placeholder="#{SEARCH}"
-                   aria-label="Search" on
-            >
-        </form>
-
         <div class="text-end">
-            <button type="button" class="btn btn-outline-light me-2" th:text="#{LOGIN}">Login</button>
-            <button type="button" class="btn btn-warning" th:text="#{SIGN_UP}">Sign-up</button>
+            <th:block sec:authorize="isAnonymous()">
+                <a class="btn btn-outline-light me-2">Најави се</a>
+            </th:block>
+
+            <th:block sec:authorize="isAuthenticated()">
+                    <span class="text-white me-2" sec:authentication="name">
+                    </span>
+            </th:block>
         </div>
     </div>
 </header>
