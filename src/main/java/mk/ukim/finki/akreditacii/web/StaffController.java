@@ -2,6 +2,7 @@ package mk.ukim.finki.akreditacii.web;
 
 import lombok.AllArgsConstructor;
 import mk.ukim.finki.akreditacii.model.User;
+import mk.ukim.finki.akreditacii.model.UserProfessorView;
 import mk.ukim.finki.akreditacii.model.UserRole;
 import mk.ukim.finki.akreditacii.model.consultations.Consultation;
 import mk.ukim.finki.akreditacii.model.consultations.ConsultationType;
@@ -42,7 +43,7 @@ public class StaffController {
                             @RequestParam(required = false) UserRole role,
                             Model model) {
         Pageable pageable = PageRequest.of(pageNum - 1, results);
-        Page<User> staffPage;
+        Page<UserProfessorView> staffPage;
 
         if (role != null) {
             staffPage = staffService.findStaffByRole(role, pageable);
