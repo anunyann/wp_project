@@ -12,5 +12,5 @@ public interface StaffService {
 
     Page<UserProfessorView> findStaffByRole(UserRole role, Pageable pageable);
 
-    User findById(String id);
+    UserProfessorView findById(String id);
 }

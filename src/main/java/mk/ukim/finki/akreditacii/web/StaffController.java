@@ -90,25 +90,8 @@ public class StaffController {
 
     @GetMapping("/details/{id}")
     public String staffDetails(@PathVariable String id, Model model) {
-        User staff = staffService.findById(id);
+        UserProfessorView staff = staffService.findById(id);
         model.addAttribute("staff", staff);
-
-        Map<UserRole, String> roleNames = Stream.of(new Object[][]{
-                {UserRole.PROFESSOR, "Професори"},
-                {UserRole.ACADEMIC_AFFAIR_VICE_DEAN, "Продекан за настава"},
-                {UserRole.SCIENCE_AND_COOPERATION_VICE_DEAN, "Продекан за наука и соработка"},
-                {UserRole.FINANCES_VICE_DEAN, "Продекан за финансии"},
-                {UserRole.DEAN, "Декан"},
-                {UserRole.STUDENT_ADMINISTRATION, "Студентска администрација"},
-                {UserRole.STUDENT_ADMINISTRATION_MANAGER, "Раководител на студентска администрација"},
-                {UserRole.FINANCE_ADMINISTRATION, "Финансиска администрација"},
-                {UserRole.FINANCE_ADMINISTRATION_MANAGER, "Раководител на финансиска администрација"},
-                {UserRole.LEGAL_ADMINISTRATION, "Правна администрација"},
-                {UserRole.ARCHIVE_ADMINISTRATION, "Архивска администрација"},
-                {UserRole.ADMINISTRATION_MANAGER, "Раководител на администрација"}
-        }).collect(Collectors.toMap(data -> (UserRole) data[0], data -> (String) data[1]));
-
-        model.addAttribute("roleNames", roleNames);
 
         boolean isProfessor = staff.getRole().isProfessor();
         model.addAttribute("isProfessor", isProfessor);

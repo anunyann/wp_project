@@ -49,8 +49,8 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public User findById(String id) {
-        return userRepository.findById(id)
+    public UserProfessorView findById(String id) {
+        return userProfessorViewRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
     }
 }
