@@ -4,7 +4,6 @@ import mk.ukim.finki.akreditacii.model.exceptions.InvalidId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
 import mk.ukim.finki.akreditacii.model.professor.dto.ProfessorNameAndCodeDTO;
-import mk.ukim.finki.akreditacii.model.subject.dto.SubjectNameAndCodeDTO;
 import mk.ukim.finki.akreditacii.repository.professor.ProfessorRepository;
 import mk.ukim.finki.akreditacii.service.ProfessorService;
 import org.springframework.data.domain.Page;
@@ -60,8 +59,8 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Professor save(String id, String name, String email, ProfessorTitle title) {
-        Professor professor = new Professor(id, name, email, title);
+    public Professor save(String id, String name, String email, ProfessorTitle title, Short orderingRank) {
+        Professor professor = new Professor(id, name, email, title, orderingRank);
         return professorRepository.save(professor);
     }
 

@@ -74,7 +74,7 @@
                 <th class="text-primary" th:text="#{PROFESSOR_NAME}"></th>
                 <th class="text-primary" th:text="#{PROFESSOR_EMAIL}"></th>
                 <th class="text-primary" th:text="#{PROFESSOR_TITLE}"></th>
-
+                <th class="text-primary" text="Ordering Rank"></th>
             </tr>
             </thead>
             <tbody>
@@ -83,6 +83,7 @@
                 </td>
                 <td th:text="${professor.getEmail()}"></td>
                 <td th:text="${professor.getTitle()}"></td>
+                <td th:text="${professor.getOrderingRank()}"></td>
                 <td class="text-right d-flex flex-wrap justify-content-end">
                     <div class="col-3">
                         <a class="btn btn-sm btn-info m-1"

@@ -45,6 +45,7 @@ public class TeacherSubjectAllocations {
     private Float numberOfExerciseGroups;
     private Float numberOfLabGroups;
 
+
     @Column(length = 4_000)
     private String validationMessage;
 

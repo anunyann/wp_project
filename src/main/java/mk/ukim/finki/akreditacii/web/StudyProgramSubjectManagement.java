@@ -39,9 +39,17 @@ public class StudyProgramSubjectManagement {
         return "study_program_subject/study_program_edit_subjects";
     }
     @PostMapping("/{id}/edit-subjects")
-    public String saveEditedSubject(@PathVariable String id, @RequestParam String subjectId, @RequestParam String name, @RequestParam boolean mandatory, @RequestParam  short semester, RedirectAttributes redirectAttributes) {
+    public String saveEditedSubject(@PathVariable String id,
+                                    @RequestParam String subjectId,
+                                    @RequestParam String name,
+                                    @RequestParam boolean mandatory,
+                                    @RequestParam short semester,
+                                    @RequestParam(required = false) String subjectGroup,
+                                    @RequestParam(required = false) Float order,
+                                    @RequestParam(required = false) String dependenciesOverride,
+                                    RedirectAttributes redirectAttributes) {
 
-        this.studyProgramSubjectService.edit(subjectId, name, mandatory, semester);
+        this.studyProgramSubjectService.edit(subjectId, name, mandatory, semester, subjectGroup, order, dependenciesOverride);
 
         redirectAttributes.addAttribute("id", id);
         return "redirect:/admin/program/{id}/edit-subjects".replace("{id}", id);

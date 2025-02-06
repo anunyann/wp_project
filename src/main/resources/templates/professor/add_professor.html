@@ -18,7 +18,7 @@
                th:value="${professor?.id}">
 
         <label for="dateOfBirth" th:text="#{DATE_OF_BIRTH}"></label>
-        <input class="form-control" id="dateOfBirth" name="dateOfBirth" required="required"
+        <input class="form-control" id="dateOfBirth" name="dateOfBirth"
                th:value="${professorDetails?.birthDay}"
                type="date"/>
 
@@ -26,9 +26,15 @@
         <input class="form-control" id="email" name="email" required="required"
                th:value="${professor?.email}">
 
+        <label for="email" text="Ordering Rank"></label>
+        <input class="form-control" id="orderingRank" name="orderingRank" required="required"
+               th:value="${professor?.orderingRank}">
+
         <label for="title" th:text="#{DEGREE_TITLE}"></label>
         <select class="form-control" id="title" name="title">
             <option
+
+                    th:selected="${title !=null ? professorDetails?.getProfessor()?.getTitle()?.equals(title):false}"
                     th:each="title : ${professorTitles}"
                     th:text="${title}"
                     th:value="${title}">
