@@ -6,6 +6,7 @@ import mk.ukim.finki.akreditacii.model.professor.dto.ProfessorNameAndCodeDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProfessorService {
 
@@ -22,4 +23,5 @@ public interface ProfessorService {
     void deleteById(String id);
 
     List<Professor> findAll();
+
 }

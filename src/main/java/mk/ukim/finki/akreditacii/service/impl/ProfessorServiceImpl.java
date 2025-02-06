@@ -15,6 +15,7 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,5 +74,6 @@ public class ProfessorServiceImpl implements ProfessorService {
     public List<Professor> findAll() {
         return professorRepository.findAll();
     }
+
 }
 
