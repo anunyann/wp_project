@@ -36,7 +36,9 @@
         <div>
             <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-primary"
                th:href="@{'/admin/professor/{id}/titles' (id=${professor.getId()})}"
-               th:text="${academicTitle== null ? 'Додади': 'Измени'}"></a>
+               th:text="${academicTitle== null ? 'Додади': 'Измени'}"
+               th:if="${professor.getName()!=null && professor.getEmail()!=null && professor.getTitle()!=null && professorDetails != null  }"
+            ></a>
             <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-danger"
                th:href="@{'/admin/professor/{professorId}/titles/{titleId}/delete'(professorId=${professor.getId()}, titleId=${academicTitle?.getId()})}"
                th:if="${academicTitle!= null}" th:text="#{DELETE}"></a>
@@ -72,7 +74,9 @@
         <h4 class="text-center">Образование</h4>
         <form th:action="@{'/admin/professor/{id}/education/add' (id=${professor.getId()})}"
               method="get">
-            <button class="btn btn-md btn-primary" type="submit" title="Додади">
+            <button class="btn btn-md btn-primary" type="submit" title="Додади"
+                    th:if="${professor.getName()!=null && professor.getEmail()!=null && professor.getTitle()!=null && professorDetails != null  }"
+            >
                 <i class="fas fa-plus"></i>
             </button>
         </form>

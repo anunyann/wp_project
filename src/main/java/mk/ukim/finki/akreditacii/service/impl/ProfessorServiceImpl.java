@@ -29,7 +29,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public Page<Professor> findAllWithPagination(int pageNum, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize);
-        return professorRepository.findAll(pageRequest);
+        return professorRepository.findAllByOrderByNameAsc(pageRequest);
     }
 
     @Override
