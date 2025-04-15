@@ -4,7 +4,6 @@ import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 
-import mk.ukim.finki.akreditacii.service.ProfessorService;
 import mk.ukim.finki.akreditacii.service.*;
 
 import org.springframework.data.domain.Page;
@@ -44,23 +43,26 @@ public class StudyProgramManagement {
 
 
         Page<StudyProgramDetails> studyProgramDetailsPage;
-        if (nameSearch == null && filteredAccreditation == null && filteredStudyCycle == null &&
-                filteredDurationInYears == null && filteredOnEnglish == null) {
-            studyProgramDetailsPage = studyProgramDetailsService
-                    .findAllWithPagination(pageNum, results);
+        String selectedAccreditationYear;
+        if (filteredAccreditation == null) {
+            selectedAccreditationYear = this.accreditationService.findActiveAccreditation().getYear();
+            nameSearch = "";
+            filteredStudyCycle = "";
+            filteredDurationInYears = "";
         } else {
+            selectedAccreditationYear = filteredAccreditation;
+
             studyProgramDetailsPage = studyProgramDetailsService
                     .findAllWithPaginationFiltered(pageNum, results,
-                            nameSearch, filteredAccreditation, filteredStudyCycle,
+                            nameSearch, selectedAccreditationYear, filteredStudyCycle,
                             filteredDurationInYears, filteredOnEnglish);
-
+            System.out.println(studyProgramDetailsPage.getContent());
             model.addAttribute("text", nameSearch);
-            model.addAttribute("accreditation", filteredAccreditation);
+            model.addAttribute("accreditation", selectedAccreditationYear);
             model.addAttribute("studyCycle", filteredStudyCycle);
             model.addAttribute("durationInYears", filteredDurationInYears);
             model.addAttribute("onEnglish", filteredOnEnglish != null);
 
-        }
         model.addAttribute("studyProgramDetailsPage", studyProgramDetailsPage);
         model.addAttribute("accreditations", accreditationService.findAll());
         model.addAttribute("studyCycles", StudyCycle.values());

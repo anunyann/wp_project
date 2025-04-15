@@ -44,7 +44,7 @@
                         <option th:each="acc : ${accreditations}"
                                 th:value="${acc.getYear()}"
                                 th:text="${acc.getYear()}"
-                                th:selected="${accreditation == acc.getYear() || acc.getIsActive()}">
+                                th:selected="${accreditation != null ? accreditation == acc.getYear() : acc.getYear() == '2023'}">
                         </option>
                     </select>
                 </div>

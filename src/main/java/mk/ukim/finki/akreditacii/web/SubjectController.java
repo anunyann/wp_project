@@ -104,7 +104,7 @@ public class SubjectController {
         model.addAttribute("accreditationYearsDropdown", this.accreditationService.findAll());
 
         String selectedAccreditationYear;
-        if (accreditationYear == null || accreditationYear.isEmpty()) {
+        if (accreditationYear == null) {
             selectedAccreditationYear = this.accreditationService.findActiveAccreditation().getYear();
         } else {
             selectedAccreditationYear = accreditationYear;
@@ -115,7 +115,6 @@ public class SubjectController {
         model.addAttribute("accreditationYear", selectedAccreditationYear);
         model.addAttribute("studyProgramCode", studyProgramCode);
         model.addAttribute("aciveAccreditationYear", this.accreditationService.findActiveAccreditation().getYear());
-
         Page<SubjectAccreditationStats> subjects = this.subjectAccreditationStatsService.findAllWithPaginationAndFilters(pageNum, results, subjectCode, professorCode, studyProgramCode, selectedAccreditationYear);
         model.addAttribute("subjects", subjects);
 
