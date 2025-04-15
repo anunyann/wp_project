@@ -54,9 +54,9 @@ public class RoomController {
             roomPage =  roomService.findAllWithPaginationFiltered(pageNum,results,nameSearch,locationDescriptionSearch,equipmentDescriptionSearch,participantsSearch,typeSearch);
             model.addAttribute("nameSearch", nameSearch);
             model.addAttribute("locationDescriptionSearch", locationDescriptionSearch);
+            model.addAttribute("equipmentDescriptionSearch", equipmentDescriptionSearch);
             model.addAttribute("participantsSearch", participantsSearch);
             model.addAttribute("typeSearch",typeSearch);
-
         }
         model.addAttribute("types",RoomType.values());
         model.addAttribute("rooms", roomPage);

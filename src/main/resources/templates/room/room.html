@@ -22,31 +22,30 @@
 
                         <div class="col-md-2 col-sm-4 p-1">
                             <label class="small">Пребарај по име</label>
-                            <input type="nameSearch" placeholder="Пребарај..." id="nameSearch" class="form-control" name="nameSearch">
+                            <input type="nameSearch" placeholder="Пребарај..." id="nameSearch" class="form-control" name="nameSearch" th:value="${nameSearch}">
                         </div>
 
                         <div class="col-md-2 col-sm-8 p-1">
                             <label class="small">Пребарај по локација</label>
-                            <input type="text" placeholder="Пребарај..." id="locationDescriptionSearch" class="form-control" name="locationDescriptionSearch">
+                            <input type="text" placeholder="Пребарај..." id="locationDescriptionSearch" class="form-control" name="locationDescriptionSearch" th:value="${locationDescriptionSearch}">
                         </div>
 
                         <div class="col-md-2 col-sm-8 p-1">
                             <label class="small">Пребарај по опрема</label>
-                            <input type="text" placeholder="Пребарај..." id="equipmentDescriptionSearch" class="form-control" name="equipmentDescriptionSearch">
+                            <input type="text" placeholder="Пребарај..." id="equipmentDescriptionSearch" class="form-control" name="equipmentDescriptionSearch" th:value="${equipmentDescriptionSearch}">
                         </div>
 
                         <div class="col-md-2 col-sm-8 p-1">
                             <label class="small">Учесници</label>
-                            <input type="number" id="participantsSearch" class="form-control" name="participantsSearch">
+                            <input type="number" id="participantsSearch" class="form-control" name="participantsSearch" th:value="${participantsSearch}">
                         </div>
 
                         <div class="col-md-2 col-sm-8 p-1">
                             <label for="typeSearch">Тип на соба</label>
                             <div class="form-group">
                                 <select id="typeSearch" name="typeSearch" class="form-control">
-                                    <!-- Default non-selectable option -->
-                                    <option value="" selected="selected" disabled="disabled">Одбери тип на соба</option>
-                                    <option th:each="type : ${types}" th:value="${type}" th:text="${type}"></option>
+                                    <option value="" selected>Одбери тип на соба</option>
+                                    <option th:each="type : ${types}" th:value="${type}" th:text="${type}" th:selected="${type != null && type != '' && type == typeSearch}">></option>
                                 </select>
                             </div>
                         </div>
@@ -165,41 +164,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div>
-                <form id="perPageForm" th:action="@{/admin/rooms}" method="get">
-                    <label>Резултати по страна:</label>
-                    <input type="number" id="perPageInput" name="results" min="1" th:value="${rooms.size}" onchange="this.form.submit()">
-                    <!-- Hidden inputs for maintaining filter states -->
-                    <input type="hidden" name="nameSearch" th:value="${nameSearch}" />
-                    <input type="hidden" name="locationDescriptionSearch" th:value="${locationDescriptionSearch}" />
-                    <input type="hidden" name="equipmentDescriptionSearch" th:value="${equipmentDescriptionSearch}" />
-                    <input type="hidden" name="participantsSearch" th:value="${participantsSearch}" />
-                    <input type="hidden" name="typeSearch" th:value="${typeSearch}" />
-                </form>
-            </div>
-            <div>
-                <ul class="pagination mt-4">
-                    <li class="page-item" th:class="${rooms.number + 1 == 1} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=1, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Прва</a>
-                    </li>
-                    <li class="page-item" th:class="${rooms.number + 1 == 1} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Претходна</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(1, rooms.totalPages)}" th:class="${rooms.number + 1 == i} ? 'active' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${i}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}" th:text="${i}"></a>
-                    </li>
-                    <li class="page-item" th:class="${rooms.number + 1 >= rooms.totalPages} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.number + 2}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Наредна</a>
-                    </li>
-                    <li class="page-item" th:class="${rooms.number + 1 >= rooms.totalPages} ? 'disabled' : ''">
-                        <a class="page-link" th:href="@{/admin/rooms(pageNum=${rooms.totalPages}, results=${rooms.size}, nameSearch=${nameSearch}, locationDescriptionSearch=${locationDescriptionSearch}, equipmentDescriptionSearch=${equipmentDescriptionSearch}, participantsSearch=${participantsSearch}, typeSearch=${typeSearch})}">Последна</a>
-                    </li>
-                </ul>
-            </div>
-
-
-
-
+            <div th:include="fragments/paging :: pageSection(${rooms})"></div>
         </div>
     </div>
 </div>
