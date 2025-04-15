@@ -273,8 +273,8 @@ public class ProfessorManagementController {
 
         String selectedAccreditation;
         StudyCycle selectedCycle = null;
-
-        if (accreditation == null || accreditation.isEmpty()) {
+        //deleted accreditation.isEmpty
+        if (accreditation == null) {
             selectedAccreditation = accreditationService.findActiveAccreditation().getYear();
         } else {
             selectedAccreditation = accreditation;

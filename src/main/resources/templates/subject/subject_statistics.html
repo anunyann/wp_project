@@ -67,7 +67,7 @@
                             <!--accreditationYear-->
                             <label for="accreditationYear" hidden="hidden">accreditationYear</label>
                             <select class="form-control filter-input w-100" name="accreditationYear" id="accreditationYear" th:value="${accreditationYear}">
-                                <option th:each="ay : ${accreditationYearsDropdown}" th:value="${ay.year}" th:text="${ay.year}"></option>
+                                <option th:each="ay : ${accreditationYearsDropdown}" th:value="${ay.year}" th:text="${ay.year} th:selected="${accreditationYear != null ? accreditationYear == ay.year : ay.year == '2023'}"></option>
                             </select>
                         </div>
                     </div>
