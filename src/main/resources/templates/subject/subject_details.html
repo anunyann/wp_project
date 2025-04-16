@@ -174,7 +174,10 @@
                         <b><span th:text="${studyProgramsNum}"></span></b></span>
             </div>
             <div class="col-12">
-                <span th:text="${studyPrograms}"></span>
+                <ul>
+                    <li th:each="program : ${studyPrograms}"
+                        th:text="${program.name} + ' - ' + ${program.code}"></li>
+                </ul>
             </div>
         </div>
         <!-- Subject Grading -->

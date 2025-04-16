@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +44,7 @@ public class SubjectController {
     ) {
         Page<SubjectDetails> subjectDetailsListPage;
 
-        if (nameSearch == null && filteredAccreditation == null) {
+        if (nameSearch == "" && filteredAccreditation == "") {
             subjectDetailsListPage = service.findAllWithPagination(pageNum, results);
 
         } else {
@@ -76,7 +77,7 @@ public class SubjectController {
         model.addAttribute("numProfessors", this.service.getSubjectProfessors(subjectId).size());
 
         // Study programs where it is mandatory StudyProgramSubject, comma separated list of study program codes
-        model.addAttribute("studyPrograms", "this.service.getStudyProgramsWhereSubjectIsMandatorySeparatedWithComma(subjectId)");
+        model.addAttribute("studyPrograms", this.service.getStudyProgramsWhereSubjectIsMandatory(subjectId));
         model.addAttribute("studyProgramsNum", this.service.getStudyProgramsWhereSubjectIsMandatory(subjectId).size());
 
         // Get all books for given subject
@@ -216,9 +217,19 @@ public class SubjectController {
     }
 
     @PostMapping("/update-subject")
-    public String updateSubject(@ModelAttribute SubjectDetails subjectDetails) {
-        this.service.updateSubject(subjectDetails);
+    public String updateSubject(@ModelAttribute SubjectDetails subjectDetails, RedirectAttributes redirectAttributes) {
+        try {
+            this.service.updateSubject(subjectDetails);
+            redirectAttributes.addFlashAttribute("successMessage", "Subject details updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update subject details. Please try again.");
+        }
         return "redirect:/admin/subject/list";
     }
+        @GetMapping("/subject/{subjectId}/delete")
+        public String deleteSubject(@PathVariable String subjectId) {
+            this.service.deleteById(subjectId);
+            return "redirect:/admin/subject/list";
+        }
 
 }

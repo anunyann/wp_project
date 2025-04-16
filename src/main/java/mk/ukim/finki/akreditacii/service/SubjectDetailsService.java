@@ -17,6 +17,8 @@ public interface SubjectDetailsService {
 
     void updateSubject(SubjectDetails sd);
 
+    void deleteById(String id);
+
     Optional<SubjectDetails> findSubjectById(String id);
 
     Page<SubjectDetails> findAllWithPagination(Integer pageNum, Integer pageSize);

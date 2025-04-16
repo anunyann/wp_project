@@ -11,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.Optional;
-
 
 @RequestMapping("admin/study-programs")
 @Controller
@@ -23,12 +21,10 @@ public class StudyProgramManagement {
     private final AccreditationService accreditationService;
     private final ProfessorService professorService;
 
-
-    public StudyProgramManagement( StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
+    public StudyProgramManagement(StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
         this.studyProgramDetailsService = studyProgramDetailsService;
         this.accreditationService = accreditationService;
         this.professorService = professorService;
-
     }
 
     @GetMapping
@@ -41,7 +37,6 @@ public class StudyProgramManagement {
                                                    @RequestParam(required = false) String filteredDurationInYears,
                                                    @RequestParam(required = false) String filteredOnEnglish) {
 
-
         Page<StudyProgramDetails> studyProgramDetailsPage;
         String selectedAccreditationYear;
         if (filteredAccreditation == null) {
@@ -49,19 +44,24 @@ public class StudyProgramManagement {
             nameSearch = "";
             filteredStudyCycle = "";
             filteredDurationInYears = "";
-        } else {
-            selectedAccreditationYear = filteredAccreditation;
-
             studyProgramDetailsPage = studyProgramDetailsService
                     .findAllWithPaginationFiltered(pageNum, results,
                             nameSearch, selectedAccreditationYear, filteredStudyCycle,
                             filteredDurationInYears, filteredOnEnglish);
-            System.out.println(studyProgramDetailsPage.getContent());
-            model.addAttribute("text", nameSearch);
-            model.addAttribute("accreditation", selectedAccreditationYear);
-            model.addAttribute("studyCycle", filteredStudyCycle);
-            model.addAttribute("durationInYears", filteredDurationInYears);
-            model.addAttribute("onEnglish", filteredOnEnglish != null);
+        } else {
+            selectedAccreditationYear = filteredAccreditation;
+            studyProgramDetailsPage = studyProgramDetailsService
+                    .findAllWithPaginationFiltered(pageNum, results,
+                            nameSearch, selectedAccreditationYear, filteredStudyCycle,
+                            filteredDurationInYears, filteredOnEnglish);
+        }
+
+        System.out.println(studyProgramDetailsPage.getContent());
+        model.addAttribute("text", nameSearch);
+        model.addAttribute("accreditation", selectedAccreditationYear);
+        model.addAttribute("studyCycle", filteredStudyCycle);
+        model.addAttribute("durationInYears", filteredDurationInYears);
+        model.addAttribute("onEnglish", filteredOnEnglish != null);
 
         model.addAttribute("studyProgramDetailsPage", studyProgramDetailsPage);
         model.addAttribute("accreditations", accreditationService.findAll());
@@ -122,12 +122,10 @@ public class StudyProgramManagement {
         return "redirect:/admin/study-programs";
     }
 
-
     @GetMapping("/delete/{id}")
     public String deleteStudyProgram(@PathVariable String id) {
         this.studyProgramDetailsService.deleteById(id);
         return "redirect:/admin/study-programs";
     }
-
 
 }

@@ -39,14 +39,15 @@ public class UserController {
                                @RequestParam(required = false) String role) {
         Page<User> userPage;
 
-        if (name == null || id == null || email == null || role == null) {
+        if (name == null && id == null && email == null && role == null) {
             userPage = userService.findAllWithPagination(pageNum, results);
         } else {
-            userPage = userService.findAllWithPaginationAndFilters(pageNum,results,name,email,id,role);
+            userPage = userService.findAllWithPaginationAndFilters(pageNum,results,id,email,name,role);
 
             model.addAttribute("name", name);
             model.addAttribute("email", email);
             model.addAttribute("id", id);
+            model.addAttribute("role", role);
 
         }
         model.addAttribute("userPage", userPage);
