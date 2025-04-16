@@ -30,7 +30,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Page<Room> findAllWithPagination(Integer pageNum, Integer results) {
 
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, results, Sort.by("name"));
         return roomRepository.findAll(pageRequest);
     }
     @Override
@@ -41,7 +41,7 @@ public class RoomServiceImpl implements RoomService {
                                                     Long participantsSearch,
                                                     RoomType typeSearch) {
 
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, results, Sort.by("name"));
 
 
         return roomRepository.findAllFiltered(nameSearch,locationDescriptionSearch,equipmentDescriptionSearch,participantsSearch,typeSearch,pageRequest);
