@@ -5,39 +5,40 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rooms</title>
+    <title>Edit Room</title>
 </head>
 <body>
 
-<div class="container justify-content-lg-center" layout:fragment="content">
-    <div class="d-flex justify-content-center">
-        <div class="row ">
-            <h1 class="mb-4">Промена</h1>
+<div class="container mt-5" layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <h1 class="text-center mb-4">Промена</h1>
 
-            <form th:action="@{/admin/rooms/edit/{name} (name=${room.name})}" method="post">
-                <label>Име</label>
-                <div class="form-group ">
-                    <input type="text" name="newName"  th:value="${room.name}">
+            <form th:action="@{/admin/rooms/edit/{name} (name=${room.name})}" method="post" class="needs-validation" novalidate>
+                <!-- Room Name -->
+                <div class="mb-3">
+                    <label for="newName" class="form-label">Име</label>
+                    <input type="text" id="newName" name="newName" class="form-control" th:value="${room.name}" required>
                 </div>
 
-                <label>Локација</label>
-                <div class="form-group">
-                    <input type="text" name="locationDescription" th:value="${room.locationDescription}" />
+                <div class="mb-3">
+                    <label for="locationDescription" class="form-label">Локација</label>
+                    <input type="text" id="locationDescription" name="locationDescription" class="form-control" th:value="${room.locationDescription}" required>
                 </div>
 
-                <label>Опрема</label>
-                <div class="form-group">
-                    <input type="text" name="equipmentDescription" th:value="${room.equipmentDescription}" />
+                <div class="mb-3">
+                    <label for="equipmentDescription" class="form-label">Опрема</label>
+                    <input type="text" id="equipmentDescription" name="equipmentDescription" class="form-control" th:value="${room.equipmentDescription}" required>
                 </div>
 
-                <label>Број на слушатели</label>
-                <div class="form-group">
-                    <input type="number" name="capacity"  th:value="${room.capacity}" />
+                <div class="mb-3">
+                    <label for="capacity" class="form-label">Број на Слушатели</label>
+                    <input type="number" id="capacity" name="capacity" class="form-control" th:value="${room.capacity}" required>
                 </div>
 
-                <label for="type">Тип на соба</label>
-                <div class="form-group">
-                    <select id="type" name="type" th:value="${room.type}">
+                <div class="mb-3">
+                    <label for="type" class="form-label">Тип на соба</label>
+                    <select id="type" name="type" class="form-select" th:value="${room.type}" required>
                         <option th:each="type : ${types}"
                                 th:value="${type}"
                                 th:text="${type}"
@@ -45,7 +46,9 @@
                     </select>
                 </div>
 
-                <button type="submit">Зачувај</button>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Зачувај</button>
+                </div>
             </form>
 
         </div>
