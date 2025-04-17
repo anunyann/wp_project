@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
 
         Specification<User> spec = Specification.where(null);
         if (id != null) {
-            System.out.println("Ulava ID e: " + id);
             spec = spec.and(FieldFilterSpecification.filterEquals(User.class, "id", id));
         }
         if (email != null) {

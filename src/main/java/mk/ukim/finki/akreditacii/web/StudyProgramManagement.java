@@ -55,8 +55,6 @@ public class StudyProgramManagement {
                             nameSearch, selectedAccreditationYear, filteredStudyCycle,
                             filteredDurationInYears, filteredOnEnglish);
         }
-
-        System.out.println(studyProgramDetailsPage.getContent());
         model.addAttribute("text", nameSearch);
         model.addAttribute("accreditation", selectedAccreditationYear);
         model.addAttribute("studyCycle", filteredStudyCycle);

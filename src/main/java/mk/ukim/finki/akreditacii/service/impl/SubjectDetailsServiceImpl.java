@@ -104,7 +104,7 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
                                                               String filteredAccreditation) {
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
 
-        Specification<SubjectDetails> spec = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
+        Specification<SubjectDetails> spec = Specification.where(null);
         if (nameSearch != null && !nameSearch.isEmpty()) {
             spec = spec.and(filterContainsText(SubjectDetails.class, "name", nameSearch));
         }
