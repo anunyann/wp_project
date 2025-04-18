@@ -28,6 +28,7 @@ public class ProfessorDetailsServiceImpl implements ProfessorDetailsService {
 
     @Override
     public ProfessorDetails save(ProfessorDetails professorDetails) {
+
         return professorDetailsRepository.save(professorDetails);
     }
 

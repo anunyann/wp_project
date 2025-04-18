@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="mt-5 mb-5"
-            th:if="${professor.getName()==null || professor.getEmail()==null || professor.getTitle()==null || professorDetails == null  }"
+            th:if="${professorDetails == null  }"
     >
         <h4>Додате детали за професорот пред да додадате академски титули и образование.</h4>
     </div>
@@ -44,7 +44,7 @@
             <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-primary"
                th:href="@{'/admin/professor/{id}/titles' (id=${professor.getId()})}"
                th:text="${academicTitle== null ? 'Додади': 'Измени'}"
-               th:if="${professor.getName()!=null && professor.getEmail()!=null && professor.getTitle()!=null && professorDetails != null  }"
+               th:if="${professorDetails != null  }"
             ></a>
             <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-danger"
                th:href="@{'/admin/professor/{professorId}/titles/{titleId}/delete'(professorId=${professor.getId()}, titleId=${academicTitle?.getId()})}"
@@ -82,7 +82,7 @@
         <form th:action="@{'/admin/professor/{id}/education/add' (id=${professor.getId()})}"
               method="get">
             <button class="btn btn-md btn-primary" type="submit" title="Додади"
-                    th:if="${professor.getName()!=null && professor.getEmail()!=null && professor.getTitle()!=null && professorDetails != null  }"
+                    th:if="${professorDetails != null  }"
             >
                 <i class="fas fa-plus"></i>
             </button>

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProfessorRepository extends JpaRepository<Professor, String> {
@@ -26,6 +27,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, String> {
             "FROM Professor p ")
     List<ProfessorNameAndCodeDTO> findAllNameAndCode();
 
-
+    Optional<Professor> findByIdIsNotAndEmail(String id,String email);
 
 }
