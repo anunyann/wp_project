@@ -3,35 +3,51 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
+
+    <style>
+        .readonly{
+            background-color: lightgray;
+        }
+        .readonly:focus{
+            background-color: lightgray;
+        }
+    </style>
 </head>
 <body>
-<div class="container" layout:fragment="content">
+<div class="container mt-4" layout:fragment="content">
+    <div class="alert alert-danger" role="alert" th:if="${error!=null}" th:text="${error}"></div>
 
     <form method="POST" th:action="@{/admin/professor/add-professor}">
-
         <label for="name" th:text="#{PROFESSOR_NAME}"></label>
-        <input class="form-control" id="name" name="name" required="required"
-               th:value="${professor?.name}">
+        <input class="form-control mb-3" id="name" name="name" required="required"
+               th:value="${professor?.name ?: param.name}"/>
 
         <label for="id" th:text="#{ID}"></label>
-        <input class="form-control" id="id" name="id" required="required"
-               th:value="${professor?.id}">
+        <input class="form-control mb-3" id="id" name="id" required="required"
+               th:value="${professor?.id   ?: param.id}" th:readonly="${professor?.id != null}"
+               th:classappend="${professor?.id != null} ? ' readonly'"
+        />
 
         <label for="dateOfBirth" th:text="#{DATE_OF_BIRTH}"></label>
-        <input class="form-control" id="dateOfBirth" name="dateOfBirth"
-               th:value="${professorDetails?.birthDay}"
+        <input class="form-control mb-3" id="dateOfBirth" name="dateOfBirth"
+               th:value="${professorDetails?.birthDay ?: param.dateOfBirth}"
                type="date"/>
 
         <label for="email" th:text="#{PROFESSOR_EMAIL}"></label>
-        <input class="form-control" id="email" name="email" required="required"
-               th:value="${professor?.email}">
+        <input class="form-control mb-3" id="email" name="email" required="required"
+               th:value="${professor?.email  ?: param.email}"
 
-        <label for="email" text="Ordering Rank"></label>
-        <input class="form-control" id="orderingRank" name="orderingRank" required="required"
-               th:value="${professor?.orderingRank}">
+        <label for="orderingRank" text="">Ordering Rank</label>
+        <input class="form-control mb-3" id="orderingRank" name="orderingRank" required="required"
+               th:value="${professor?.orderingRank ?: param.orderingRank}"
+        >
 
         <label for="title" th:text="#{DEGREE_TITLE}"></label>
-        <select class="form-control" id="title" name="title">
+        <select class="form-control mb-3" id="title" name="title" required="required">
+            <option value=""
+                    th:text="Title"
+                    th:selected="${professorDetails == null or professorDetails.professor.title == null}">
+            </option>
             <option
 
                     th:selected="${title !=null ? professorDetails?.getProfessor()?.getTitle()?.equals(title):false}"
@@ -42,7 +58,11 @@
         </select>
 
         <label for="degree" th:text="#{EDUCATION_DEGREE}"></label>
-        <select class="form-control" id="degree" name="degree">
+        <select class="form-control mb-3" id="degree" name="degree" required="required">
+            <option value=""
+                    th:text="Degree"
+                    th:selected="${professorDetails == null or professorDetails.degree == null}">
+            </option>
             <option
                     th:each="degree : ${educationDegrees}"
                     th:selected="${professorDetails!=null ? professorDetails.getDegree().equals(degree):false}"
@@ -52,7 +72,7 @@
         </select>
 
 
-        <button class="btn btn-primary " th:text="#{SUBMIT}" type="submit"></button>
+        <button class="btn btn-primary mb-3" th:text="#{SUBMIT}" type="submit"></button>
     </form>
 </div>
 </body>

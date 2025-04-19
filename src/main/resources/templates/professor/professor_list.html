@@ -20,9 +20,12 @@
     </script>
 </head>
 <body>
+
 <div class="view-content my-5" layout:fragment="content">
     <h3 th:text="#{PROFESSORS}"></h3>
-
+    <div class="alert alert-success" role="alert" th:if="${success!=null}">
+        Успешно зачуван професор.
+    </div>
     <div id="filters">
         <form method="GET" th:action="@{/admin/professor}">
             <div class="d-flex flex-wrap justify-content-between">
@@ -104,10 +107,36 @@
                         </a>
                     </div>
                     <div class="col-3">
-                        <a class="btn btn-sm btn-danger m-1"
-                           th:href="@{'/admin/professor/{id}/delete' (id=${professor.getId()})}">
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-sm btn-danger m-1" data-bs-toggle="modal" th:data-bs-target="${'#delete_' + professor.getId()}">
                             <i th:text="#{DELETE}"></i>
-                        </a>
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade"  th:id="'delete_' + ${professor.getId()}" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalLabel' + ${professor.getId()}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" th:id="'exampleModalLabel' + ${professor.getId()}">Бришење на професор</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Сигурни ли сте дека сакате да го избришите професорот?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-sm m-1 btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <a class="btn btn-sm btn-danger m-1"
+                                           th:href="@{'/admin/professor/{id}/delete' (id=${professor.getId()})}">
+                                            <i th:text="#{DELETE}"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </td>
             </tr>
@@ -125,5 +154,11 @@
     </div>
 </div>
 
+
+<script>
+    $(document).ready(function(){
+        $("#success-modal").modal('show');
+    });
+</script>
 </body>
 </html>

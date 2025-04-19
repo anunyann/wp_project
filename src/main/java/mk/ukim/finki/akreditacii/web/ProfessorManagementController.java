@@ -1,6 +1,7 @@
 package mk.ukim.finki.akreditacii.web;
 
 import mk.ukim.finki.akreditacii.model.StudyCycle;
+import mk.ukim.finki.akreditacii.model.exceptions.EmailAlreadyExists;
 import mk.ukim.finki.akreditacii.model.professor.*;
 import mk.ukim.finki.akreditacii.model.semester.SemesterType;
 import mk.ukim.finki.akreditacii.service.*;
@@ -10,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -65,11 +68,14 @@ public class ProfessorManagementController {
                                     @RequestParam(defaultValue = "1") Integer pageNum,
                                     @RequestParam(defaultValue = "10") Integer results,
                                     @RequestParam(required = false) String searchString,
-                                    @RequestParam(required = false) String titleFilter
+                                    @RequestParam(required = false) String titleFilter,
+                                    @RequestParam(required = false) String success
     ) {
         Page<Professor> professorPage;
 
-
+        if(success!=null && !success.isEmpty()){
+            model.addAttribute("success","Успешно променети детали за професор.");
+        }
         if (searchString == null && titleFilter == null) {
             professorPage = professorService
                     .findAllWithPagination(pageNum, results);
@@ -98,8 +104,10 @@ public class ProfessorManagementController {
     }
 
     @GetMapping(value = {"/{id}/edit"})
-    public String editProfessor(@PathVariable String id, Model model) {
-
+    public String editProfessor(@PathVariable String id,@RequestParam(required = false) String error, Model model) {
+        if(error!=null && !error.isEmpty()){
+            model.addAttribute("error",error);
+        }
         Professor professor = professorService.getProfessorById(id);
         ProfessorDetails professorDetails = professorDetailsService.findById(id);
         model.addAttribute("professor", professor);
@@ -117,18 +125,31 @@ public class ProfessorManagementController {
                                @RequestParam String email,
                                @RequestParam Short orderingRank,
                                @RequestParam ProfessorTitle title,
-                               @RequestParam EducationDegree degree) {
+                               @RequestParam EducationDegree degree
+                               ) {
 
         LocalDate dateOfBirthParsed = null;
-        if (dateOfBirth != null)
+        if (dateOfBirth != null && !dateOfBirth.isEmpty())
             dateOfBirthParsed = LocalDate.parse(dateOfBirth);
-        professorService.save(id, name, email, title, orderingRank);
-        ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.getProfessorById(id),
-                (float) orderingRank, degree, title.toString(), dateOfBirthParsed, null);
-        professorDetailsService.save(professorDetails);
+        email=email.trim();
+        try{
+            professorService.save(id, name, email, title, orderingRank);
+            ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.getProfessorById(id),
+                    (float) orderingRank, degree, title.toString(), dateOfBirthParsed, null);
+            professorDetailsService.save(professorDetails);
+            return "redirect:/admin/professor?success=true";
 
 
-        return "redirect:/admin/professor";
+        }catch (EmailAlreadyExists e){
+            if(id!=null){
+                return "redirect:/admin/professor/"+id+"/edit?error="+ URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+
+            }
+            return "/admin/professor/add-professor?error="+ URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+        }catch (Exception e){
+            return "/admin/professor/add-professor?error="+ URLEncoder.encode("Internal server error", StandardCharsets.UTF_8);
+        }
+
     }
 
     @GetMapping("/{id}/delete")

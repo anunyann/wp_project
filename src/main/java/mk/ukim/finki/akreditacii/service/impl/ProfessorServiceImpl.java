@@ -1,11 +1,14 @@
 package mk.ukim.finki.akreditacii.service.impl;
 
+import mk.ukim.finki.akreditacii.model.exceptions.EmailAlreadyExists;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidId;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.professor.ProfessorTitle;
 import mk.ukim.finki.akreditacii.model.professor.dto.ProfessorNameAndCodeDTO;
 import mk.ukim.finki.akreditacii.repository.professor.ProfessorRepository;
 import mk.ukim.finki.akreditacii.service.ProfessorService;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,6 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +31,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public Page<Professor> findAllWithPagination(int pageNum, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize);
-        return professorRepository.findAll(pageRequest);
+        return professorRepository.findAllByOrderByNameAsc(pageRequest);
     }
 
     @Override
@@ -60,6 +62,8 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Professor save(String id, String name, String email, ProfessorTitle title, Short orderingRank) {
+        if(professorRepository.findByIdIsNotAndEmail(id,email).isPresent())
+            throw new EmailAlreadyExists("Email is already used.");
         Professor professor = new Professor(id, name, email, title, orderingRank);
         return professorRepository.save(professor);
     }
