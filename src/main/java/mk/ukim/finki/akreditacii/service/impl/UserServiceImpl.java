@@ -48,13 +48,25 @@ public class UserServiceImpl implements UserService {
 
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
 
-        Specification<User> spec = Specification.where(
-                FieldFilterSpecification.filterEquals(User.class, "id", id)
-                        .and(FieldFilterSpecification.filterEquals(User.class, "email", email))
-                        .and(FieldFilterSpecification.filterContainsText(User.class, "name", name))
-                        .and(FieldFilterSpecification.filterContainsText(User.class, "email", email))
-                        .and(FieldFilterSpecification.filterEquals(User.class, "role", role))
-        );
+        Specification<User> spec = Specification.where(null);
+        if (id != null) {
+            spec = spec.and(FieldFilterSpecification.filterEquals(User.class, "id", id));
+        }
+        if (email != null) {
+            spec = spec.and(FieldFilterSpecification.filterEquals(User.class, "email", email));
+        }
+        if (name != null) {
+            spec = spec.and(FieldFilterSpecification.filterContainsText(User.class, "name", name));
+        }
+        if (role != null) {
+            try {
+                UserRole userRole = UserRole.valueOf(role); // Convert String to Enum
+                spec = spec.and(FieldFilterSpecification.filterEqualsV(User.class, "role", userRole));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid role value: " + role);
+
+            }
+        }
 
         return userRepository.findAll(spec, pageRequest);
     }

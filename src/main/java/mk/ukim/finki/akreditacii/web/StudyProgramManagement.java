@@ -4,7 +4,6 @@ import mk.ukim.finki.akreditacii.model.StudyCycle;
 import mk.ukim.finki.akreditacii.model.professor.Professor;
 import mk.ukim.finki.akreditacii.model.study_program.StudyProgramDetails;
 
-import mk.ukim.finki.akreditacii.service.ProfessorService;
 import mk.ukim.finki.akreditacii.service.*;
 
 import org.springframework.data.domain.Page;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.Optional;
-
 
 @RequestMapping("admin/study-programs")
 @Controller
@@ -24,12 +21,10 @@ public class StudyProgramManagement {
     private final AccreditationService accreditationService;
     private final ProfessorService professorService;
 
-
-    public StudyProgramManagement( StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
+    public StudyProgramManagement(StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
         this.studyProgramDetailsService = studyProgramDetailsService;
         this.accreditationService = accreditationService;
         this.professorService = professorService;
-
     }
 
     @GetMapping
@@ -42,25 +37,30 @@ public class StudyProgramManagement {
                                                    @RequestParam(required = false) String filteredDurationInYears,
                                                    @RequestParam(required = false) String filteredOnEnglish) {
 
-
         Page<StudyProgramDetails> studyProgramDetailsPage;
-        if (nameSearch == null && filteredAccreditation == null && filteredStudyCycle == null &&
-                filteredDurationInYears == null && filteredOnEnglish == null) {
-            studyProgramDetailsPage = studyProgramDetailsService
-                    .findAllWithPagination(pageNum, results);
-        } else {
+        String selectedAccreditationYear;
+        if (filteredAccreditation == null) {
+            selectedAccreditationYear = this.accreditationService.findActiveAccreditation().getYear();
+            nameSearch = "";
+            filteredStudyCycle = "";
+            filteredDurationInYears = "";
             studyProgramDetailsPage = studyProgramDetailsService
                     .findAllWithPaginationFiltered(pageNum, results,
-                            nameSearch, filteredAccreditation, filteredStudyCycle,
+                            nameSearch, selectedAccreditationYear, filteredStudyCycle,
                             filteredDurationInYears, filteredOnEnglish);
-
-            model.addAttribute("text", nameSearch);
-            model.addAttribute("accreditation", filteredAccreditation);
-            model.addAttribute("studyCycle", filteredStudyCycle);
-            model.addAttribute("durationInYears", filteredDurationInYears);
-            model.addAttribute("onEnglish", filteredOnEnglish != null);
-
+        } else {
+            selectedAccreditationYear = filteredAccreditation;
+            studyProgramDetailsPage = studyProgramDetailsService
+                    .findAllWithPaginationFiltered(pageNum, results,
+                            nameSearch, selectedAccreditationYear, filteredStudyCycle,
+                            filteredDurationInYears, filteredOnEnglish);
         }
+        model.addAttribute("text", nameSearch);
+        model.addAttribute("accreditation", selectedAccreditationYear);
+        model.addAttribute("studyCycle", filteredStudyCycle);
+        model.addAttribute("durationInYears", filteredDurationInYears);
+        model.addAttribute("onEnglish", filteredOnEnglish != null);
+
         model.addAttribute("studyProgramDetailsPage", studyProgramDetailsPage);
         model.addAttribute("accreditations", accreditationService.findAll());
         model.addAttribute("studyCycles", StudyCycle.values());
@@ -120,12 +120,10 @@ public class StudyProgramManagement {
         return "redirect:/admin/study-programs";
     }
 
-
     @GetMapping("/delete/{id}")
     public String deleteStudyProgram(@PathVariable String id) {
         this.studyProgramDetailsService.deleteById(id);
         return "redirect:/admin/study-programs";
     }
-
 
 }

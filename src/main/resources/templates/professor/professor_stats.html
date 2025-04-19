@@ -94,7 +94,7 @@
                         <option th:text="#{SELECT}" value=""></option>
                         <option th:each="accreditation : ${accreditations}" th:text="${accreditation.getYear()}"
                                 th:value="${accreditation.getYear()}"
-                                th:selected="${selectedAccreditation != null && selectedAccreditation == accreditation.getYear()}">
+                                th:selected="${selectedAccreditation != null ? selectedAccreditation == accreditation.getYear() : accreditation.getYear() == '2023'}">
                         </option>
                     </select>
                 </div>

@@ -88,6 +88,11 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
     }
 
     @Override
+    public void deleteById(String id) {
+        subjectDetailsRepository.deleteById(id);
+    }
+
+    @Override
     public Page<SubjectDetails> findAllWithPagination(Integer pageNum, Integer results) {
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
         return subjectDetailsRepository.findAll(pageRequest);
@@ -99,8 +104,14 @@ public class SubjectDetailsServiceImpl implements SubjectDetailsService {
                                                               String filteredAccreditation) {
         PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
 
-        Specification<SubjectDetails> spec = Specification.where(filterContainsText(SubjectDetails.class, "name", nameSearch))
-                .and(filterEqualsV(SubjectDetails.class, "accreditation.year", filteredAccreditation));
+        Specification<SubjectDetails> spec = Specification.where(null);
+        if (nameSearch != null && !nameSearch.isEmpty()) {
+            spec = spec.and(filterContainsText(SubjectDetails.class, "name", nameSearch));
+        }
+
+        if (filteredAccreditation != null && !filteredAccreditation.isEmpty()) {
+            spec = spec.and(filterEqualsV(SubjectDetails.class, "accreditation.year", filteredAccreditation));
+        }
 
         return subjectDetailsRepository.findAll(spec, pageRequest);
     }
