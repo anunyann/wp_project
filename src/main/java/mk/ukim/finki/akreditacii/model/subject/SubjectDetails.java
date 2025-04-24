@@ -85,7 +85,7 @@ public class SubjectDetails {
     private SubjectObligationDuration obligationDuration;
 
     @Embedded
-    private SubjectDependencies dependencies;
+    private SubjectDependenciess dependencies;
 
     @Embedded
     private SubjectGrading grading;

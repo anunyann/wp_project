@@ -121,6 +121,9 @@
                        onclick="return confirmDelete(this);">
                         <i class="fas fa-trash-alt mr-1"></i>
                     </a>
+                    <a th:href="@{/admin/subject/{id}/edit-dependencies(id=${subject.id})}" class="btn btn-sm btn-info">
+                        Manage Dependencies
+                    </a>
                 </div>
             </td>
         </tr>

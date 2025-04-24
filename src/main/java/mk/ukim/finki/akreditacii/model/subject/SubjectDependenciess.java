@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubjectDependencies {
+public class SubjectDependenciess {
 
     @Column(length = 5000)
     private String dependencies;
