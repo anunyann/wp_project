@@ -29,19 +29,16 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
             throw new SubjectValidationException("BOOLEAN_EXPRESSION dependency cannot be empty");
         }
 
-        // Format validation: Should be in the format "BOOLEAN_EXPRESSION:expression"
         if (!dependency.startsWith("BOOLEAN_EXPRESSION:")) {
             throw new SubjectValidationException("Invalid BOOLEAN_EXPRESSION format: " + dependency);
         }
 
         String expression = dependency.substring("BOOLEAN_EXPRESSION:".length());
 
-        // Basic validation for balanced parentheses
         if (!hasBalancedParentheses(expression)) {
             throw new SubjectValidationException("Unbalanced parentheses in expression: " + expression);
         }
 
-        // Extract all subject codes from the expression
         Pattern codePattern = Pattern.compile("[A-Z0-9]{3,9}");
         Matcher matcher = codePattern.matcher(expression);
 
@@ -59,18 +56,15 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
             throw new SubjectValidationException("No valid subject codes found in expression: " + expression);
         }
 
-        // Additional validation could be added here to ensure the expression is syntactically correct
     }
 
     @Override
     public boolean isSatisfied(String dependency, List<String> subjectCodesPassedByStudent)
             throws InvalidDependencyException {
         if (dependency == null || dependency.trim().isEmpty()) {
-            return true; // No BOOLEAN_EXPRESSION requirement
+            return true;
         }
-
         String expression = dependency.substring("BOOLEAN_EXPRESSION:".length());
-
         try {
             boolean result = evaluateExpression(expression, subjectCodesPassedByStudent);
 
@@ -89,7 +83,6 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
             );
         }
     }
-
     private boolean hasBalancedParentheses(String expression) {
         Stack<Character> stack = new Stack<>();
 
@@ -111,7 +104,6 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
             return true;
         }
 
-        // Step 1: Replace subject codes with their pass status (true/false)
         Pattern codePattern = Pattern.compile("[A-Z0-9]{3,9}");
         Matcher matcher = codePattern.matcher(expression);
         StringBuffer sb = new StringBuffer();
@@ -125,16 +117,13 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
 
         String boolExpression = sb.toString();
 
-        // Step 2: Replace operators with Java-compatible ones
         boolExpression = boolExpression.replace("&&", " && ");
         boolExpression = boolExpression.replace("||", " || ");
         boolExpression = boolExpression.replace("~", "!");
 
-        // Step 3: Parse and evaluate the expression
         try {
             return evaluateBooleanExpression(boolExpression);
         } catch (Exception e) {
-            // Log the error and return false if there was a problem evaluating the expression
             System.err.println("Error evaluating boolean expression: " + e.getMessage());
             return false;
         }
@@ -148,21 +137,17 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
      * @return The result of the evaluation
      */
     private boolean evaluateBooleanExpression(String expression) {
-        // Strip any leading/trailing whitespace
         expression = expression.trim();
 
-        // Handle simple true/false cases
         if (expression.equals("true")) return true;
         if (expression.equals("false")) return false;
 
-        // Handle NOT operator
         if (expression.startsWith("!")) {
             return !evaluateBooleanExpression(expression.substring(1).trim());
         }
 
-        // Handle parentheses
+
         if (expression.startsWith("(")) {
-            // Find the matching closing parenthesis
             int depth = 1;
             int closeIndex = 1;
             while (depth > 0 && closeIndex < expression.length()) {
@@ -172,31 +157,24 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
                 closeIndex++;
             }
 
-            // Extract and evaluate the inner expression
             String innerExpr = expression.substring(1, closeIndex - 1).trim();
             boolean innerResult = evaluateBooleanExpression(innerExpr);
 
-            // If there's nothing after the closing parenthesis
             if (closeIndex >= expression.length()) {
                 return innerResult;
             }
 
-            // Get the rest of the expression after the closing parenthesis
             String rest = expression.substring(closeIndex).trim();
 
-            // Handle operators
             if (rest.startsWith("&&")) {
                 return innerResult && evaluateBooleanExpression(rest.substring(2).trim());
             } else if (rest.startsWith("||")) {
                 return innerResult || evaluateBooleanExpression(rest.substring(2).trim());
             } else {
-                // If there's something after the parenthesis but it's not an operator
                 throw new IllegalArgumentException("Invalid expression syntax: " + expression);
             }
         }
 
-        // Handle AND and OR operators
-        // Find the first occurrence of && or || (not inside parentheses)
         int andIndex = findOperatorOutsideParentheses(expression, "&&");
         int orIndex = findOperatorOutsideParentheses(expression, "||");
 
@@ -212,7 +190,6 @@ public class BooleanExpressionSubjectDependencyProcessorImpl implements SubjectD
             return evaluateBooleanExpression(left) || evaluateBooleanExpression(right);
         }
 
-        // If we reach here, the expression is invalid
         throw new IllegalArgumentException("Invalid boolean expression: " + expression);
     }
 

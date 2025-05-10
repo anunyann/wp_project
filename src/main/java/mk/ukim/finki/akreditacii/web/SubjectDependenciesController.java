@@ -33,23 +33,18 @@ public class SubjectDependenciesController {
 
     @GetMapping("/{subjectId}/edit-dependencies")
     public String editDependencies(@PathVariable String subjectId, Model model) {
-        // Get subject by ID
         Subject subject = subjectService.findById(subjectId);
 
         if (subject == null) {
             throw new RuntimeException("Subject not found with ID: " + subjectId);
         }
 
-        // Get existing dependencies
         List<SubjectDependencies> dependencies = dependenciesService.findBySubjectCode(subject.getId());
 
-        // Get study programs where this subject is included
         List<String> studyProgramCodes = dependenciesService.getStudyProgramsForSubject(subject.getId());
 
-        // Get all study programs for the dropdown
         List<StudyProgram> allStudyPrograms = studyProgramService.findAll();
 
-        // Create a filtered list of study programs that include this subject
         List<StudyProgram> subjectStudyPrograms = allStudyPrograms.stream()
                 .filter(program -> studyProgramCodes.contains(program.getCode()))
                 .collect(Collectors.toList());
@@ -59,8 +54,8 @@ public class SubjectDependenciesController {
         model.addAttribute("subject", subject);
         model.addAttribute("dependencies", dependencies);
         model.addAttribute("dependencyTypes", dependencyTypes);
-        model.addAttribute("studyPrograms", allStudyPrograms); // All programs for the dropdown
-        model.addAttribute("subjectStudyPrograms", subjectStudyPrograms); // Programs that include this subject
+        model.addAttribute("studyPrograms", allStudyPrograms);
+        model.addAttribute("subjectStudyPrograms", subjectStudyPrograms);
         model.addAttribute("newDependency", new SubjectDependencies());
 
         return "subject/edit-dependencies";

@@ -30,12 +30,10 @@ public class AnyOfSelectedSubjectDependencyProcessorImpl implements SubjectDepen
             throw new SubjectValidationException("ANY_OF_SELECTED dependency cannot be empty");
         }
 
-        // Format validation: Should be in the format "ANY_OF_SELECTED:F23L1S001;F23L1S002"
         if (!dependency.startsWith("ANY_OF_SELECTED:")) {
             throw new SubjectValidationException("Invalid ANY_OF_SELECTED format: " + dependency);
         }
 
-        // Extract subject codes and validate they exist
         String subjectCodesStr = dependency.substring("ANY_OF_SELECTED:".length());
         List<String> subjectCodes = Arrays.stream(subjectCodesStr.split(";"))
                 .map(String::trim)
@@ -60,16 +58,16 @@ public class AnyOfSelectedSubjectDependencyProcessorImpl implements SubjectDepen
     public boolean isSatisfied(String dependency, List<String> subjectCodesPassedByStudent)
             throws InvalidDependencyException {
         if (dependency == null || dependency.trim().isEmpty()) {
-            return true; // No ANY_OF_SELECTED requirement
+            return true; //
         }
 
-        // Extract subject codes
+
         String subjectCodesStr = dependency.substring("ANY_OF_SELECTED:".length());
         List<String> requiredCodes = Arrays.stream(subjectCodesStr.split(";"))
                 .map(String::trim)
                 .collect(Collectors.toList());
 
-        // Check if any of the required subjects have been passed
+
         boolean anyPassed = false;
         for (String code : requiredCodes) {
             if (subjectCodesPassedByStudent.contains(code)) {

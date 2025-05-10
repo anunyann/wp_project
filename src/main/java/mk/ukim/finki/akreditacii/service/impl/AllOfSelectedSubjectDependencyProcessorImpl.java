@@ -30,12 +30,10 @@ public class AllOfSelectedSubjectDependencyProcessorImpl implements SubjectDepen
             throw new SubjectValidationException("ALL_OF_SELECTED dependency cannot be empty");
         }
 
-        // Format validation: Should be in the format "ALL_OF_SELECTED:F23L1S001;F23L1S002"
         if (!dependency.startsWith("ALL_OF_SELECTED:")) {
             throw new SubjectValidationException("Invalid ALL_OF_SELECTED format: " + dependency);
         }
 
-        // Extract subject codes and validate they exist
         String subjectCodesStr = dependency.substring("ALL_OF_SELECTED:".length());
         List<String> subjectCodes = Arrays.stream(subjectCodesStr.split(";"))
                 .map(String::trim)
@@ -60,16 +58,15 @@ public class AllOfSelectedSubjectDependencyProcessorImpl implements SubjectDepen
     public boolean isSatisfied(String dependency, List<String> subjectCodesPassedByStudent)
             throws InvalidDependencyException {
         if (dependency == null || dependency.trim().isEmpty()) {
-            return true; // No ALL_OF_SELECTED requirement
+            return true;
         }
 
-        // Extract subject codes
         String subjectCodesStr = dependency.substring("ALL_OF_SELECTED:".length());
         List<String> requiredCodes = Arrays.stream(subjectCodesStr.split(";"))
                 .map(String::trim)
                 .collect(Collectors.toList());
 
-        // Check if all of the required subjects have been passed
+
         List<String> missingCodes = requiredCodes.stream()
                 .filter(code -> !subjectCodesPassedByStudent.contains(code))
                 .collect(Collectors.toList());
