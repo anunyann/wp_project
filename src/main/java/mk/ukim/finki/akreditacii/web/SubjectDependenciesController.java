@@ -1,8 +1,10 @@
 package mk.ukim.finki.akreditacii.web;
 
+import mk.ukim.finki.akreditacii.model.study_program.StudyProgram;
 import mk.ukim.finki.akreditacii.model.subject.Subject;
 import mk.ukim.finki.akreditacii.model.SubjectDependencies;
 import mk.ukim.finki.akreditacii.model.SubjectDependencyType;
+import mk.ukim.finki.akreditacii.service.StudyProgramService;
 import mk.ukim.finki.akreditacii.service.SubjectDependenciesService;
 import mk.ukim.finki.akreditacii.service.SubjectService;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/subject")
@@ -19,16 +22,18 @@ public class SubjectDependenciesController {
 
     private final SubjectDependenciesService dependenciesService;
     private final SubjectService subjectService;
+    private final StudyProgramService studyProgramService;
 
     public SubjectDependenciesController(SubjectDependenciesService dependenciesService,
-                                         SubjectService subjectService) {
+                                         SubjectService subjectService, StudyProgramService studyProgramService) {
         this.dependenciesService = dependenciesService;
         this.subjectService = subjectService;
+        this.studyProgramService = studyProgramService;
     }
 
     @GetMapping("/{subjectId}/edit-dependencies")
     public String editDependencies(@PathVariable String subjectId, Model model) {
-        // If findById returns null when subject doesn't exist, add a null check
+        // Get subject by ID
         Subject subject = subjectService.findById(subjectId);
 
         if (subject == null) {
@@ -38,12 +43,24 @@ public class SubjectDependenciesController {
         // Get existing dependencies
         List<SubjectDependencies> dependencies = dependenciesService.findBySubjectCode(subject.getId());
 
-        // Rest of your code remains the same
+        // Get study programs where this subject is included
+        List<String> studyProgramCodes = dependenciesService.getStudyProgramsForSubject(subject.getId());
+
+        // Get all study programs for the dropdown
+        List<StudyProgram> allStudyPrograms = studyProgramService.findAll();
+
+        // Create a filtered list of study programs that include this subject
+        List<StudyProgram> subjectStudyPrograms = allStudyPrograms.stream()
+                .filter(program -> studyProgramCodes.contains(program.getCode()))
+                .collect(Collectors.toList());
+
         List<SubjectDependencyType> dependencyTypes = Arrays.asList(SubjectDependencyType.values());
 
         model.addAttribute("subject", subject);
         model.addAttribute("dependencies", dependencies);
         model.addAttribute("dependencyTypes", dependencyTypes);
+        model.addAttribute("studyPrograms", allStudyPrograms); // All programs for the dropdown
+        model.addAttribute("subjectStudyPrograms", subjectStudyPrograms); // Programs that include this subject
         model.addAttribute("newDependency", new SubjectDependencies());
 
         return "subject/edit-dependencies";

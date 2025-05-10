@@ -109,11 +109,14 @@
             <td th:text="${subjectDetail.accreditation?.year}">Acreditation</td>
             <td>
                 <div>
-                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id}} + '/edit'" class="btn btn-primary btn-sm mb-2">
+                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id} + '/edit'}" class="btn btn-primary btn-sm mb-2">
                         <i class="fas fa-edit mr-1"></i>
                     </a>
-                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id}} + '/details'" class="btn btn-success btn-sm mb-2">
-                        <i class="fas fa-info-circle mr-1" ></i>
+                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id} + '/details'}" class="btn btn-success btn-sm mb-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                    </a>
+                    <a th:href="@{'/admin/subject/' + ${subjectDetail.id} + '/edit-dependencies'}" class="btn btn-warning btn-sm mb-2">
+                        <i class="fas fa-link mr-1"></i>
                     </a>
                     <a href="#"
                        th:attr="data-delete-url=@{'/admin/subject/' + ${subjectDetail.id} + '/delete'}"
@@ -121,15 +124,12 @@
                        onclick="return confirmDelete(this);">
                         <i class="fas fa-trash-alt mr-1"></i>
                     </a>
-                    <a th:href="@{/admin/subject/{id}/edit-dependencies(id=${subject.id})}" class="btn btn-sm btn-info">
-                        Manage Dependencies
-                    </a>
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
-       <div th:include="fragments/paging :: pageSection(${subjectDetailsListPage})"></div>
+    <div th:include="fragments/paging :: pageSection(${subjectDetailsListPage})"></div>
 </div>
 
 <!-- Add Bootstrap JavaScript and jQuery scripts (optional) -->

@@ -32,7 +32,6 @@ public class Subject {
 
     private Integer weeklyLabClasses;
 
-    // todo: credits, nameEn
 
     @Override
     public boolean equals(Object o) {

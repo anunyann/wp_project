@@ -14,30 +14,39 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public class PrerequisiteProcessor implements SubjectDependencyProcessor {
+public class AllOfSelectedSubjectDependencyProcessorImpl implements SubjectDependencyProcessor {
 
     @Autowired
     private SubjectRepository subjectRepository;
 
     @Override
     public boolean applicableTo(SubjectDependencyType type) {
-        return SubjectDependencyType.PREREQUISITE.equals(type);
+        return SubjectDependencyType.ALL_OF_SELECTED.equals(type);
     }
 
     @Override
     public void validate(String dependency) throws SubjectValidationException {
-        // Format validation: Should be comma-separated subject codes
         if (dependency == null || dependency.trim().isEmpty()) {
-            throw new SubjectValidationException("Prerequisite dependency cannot be empty");
+            throw new SubjectValidationException("ALL_OF_SELECTED dependency cannot be empty");
+        }
+
+        // Format validation: Should be in the format "ALL_OF_SELECTED:F23L1S001;F23L1S002"
+        if (!dependency.startsWith("ALL_OF_SELECTED:")) {
+            throw new SubjectValidationException("Invalid ALL_OF_SELECTED format: " + dependency);
         }
 
         // Extract subject codes and validate they exist
-        List<String> subjectCodes = Arrays.stream(dependency.split(","))
+        String subjectCodesStr = dependency.substring("ALL_OF_SELECTED:".length());
+        List<String> subjectCodes = Arrays.stream(subjectCodesStr.split(";"))
                 .map(String::trim)
                 .collect(Collectors.toList());
 
+        if (subjectCodes.isEmpty()) {
+            throw new SubjectValidationException("ALL_OF_SELECTED must include at least one subject code");
+        }
+
         for (String code : subjectCodes) {
-            if (!Pattern.matches("[A-Z0-9]{6,8}", code)) {
+            if (!Pattern.matches("[A-Z0-9]{3,9}", code)) {
                 throw new SubjectValidationException("Invalid subject code format: " + code);
             }
 
@@ -51,20 +60,25 @@ public class PrerequisiteProcessor implements SubjectDependencyProcessor {
     public boolean isSatisfied(String dependency, List<String> subjectCodesPassedByStudent)
             throws InvalidDependencyException {
         if (dependency == null || dependency.trim().isEmpty()) {
-            return true; // No prerequisites
+            return true; // No ALL_OF_SELECTED requirement
         }
 
-        List<String> requiredCodes = Arrays.stream(dependency.split(","))
+        // Extract subject codes
+        String subjectCodesStr = dependency.substring("ALL_OF_SELECTED:".length());
+        List<String> requiredCodes = Arrays.stream(subjectCodesStr.split(";"))
                 .map(String::trim)
                 .collect(Collectors.toList());
 
-        // Check if all prerequisite subjects have been passed
-        for (String code : requiredCodes) {
-            if (!subjectCodesPassedByStudent.contains(code)) {
-                throw new InvalidDependencyException(
-                        "Prerequisite not satisfied",
-                        "Missing prerequisite subject: " + code);
-            }
+        // Check if all of the required subjects have been passed
+        List<String> missingCodes = requiredCodes.stream()
+                .filter(code -> !subjectCodesPassedByStudent.contains(code))
+                .collect(Collectors.toList());
+
+        if (!missingCodes.isEmpty()) {
+            throw new InvalidDependencyException(
+                    "ALL_OF_SELECTED not satisfied",
+                    "You need to pass all of these subjects but are missing: " + String.join(", ", missingCodes)
+            );
         }
 
         return true;

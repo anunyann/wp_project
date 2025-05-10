@@ -4,11 +4,11 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Subject Dependencies</title>
+    <title>Промени условни предмети</title>
 </head>
 <body>
 <div class="container" layout:fragment="content">
-    <h2>Edit Dependencies for Subject: <span th:text="${subject.name}"></span></h2>
+    <h2>Промени условни предмети за: <span th:text="${subject.name}"></span></h2>
 
     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${success}"></span>
@@ -23,7 +23,7 @@
     <!-- Add New Dependency Form -->
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="mb-0">Add New Dependency</h5>
+            <h5 class="mb-0">Додади нов услов</h5>
         </div>
         <div class="card-body">
             <form th:action="@{/admin/subject/{subjectId}/add-dependency(subjectId=${subject.id})}" method="post">
@@ -33,9 +33,9 @@
                         <input type="text" id="studyProgramCode" name="studyProgramCode" class="form-control">
                     </div>
                     <div class="col-md-6">
-                        <label for="dependencyType" class="form-label">Dependency Type</label>
+                        <label for="dependencyType" class="form-label">Вид на услов</label>
                         <select id="dependencyType" name="dependencyType" class="form-select" required>
-                            <option value="">Select Dependency Type</option>
+                            <option value=""></option>
                             <option th:each="type : ${dependencyTypes}"
                                     th:value="${type}"
                                     th:text="${type}"></option>
@@ -44,12 +44,12 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-12">
-                        <label for="dependency" class="form-label">Dependency</label>
+                        <label for="dependency" class="form-label">Услов</label>
                         <input type="text" id="dependency" name="dependency" class="form-control" required
-                               placeholder="Subject code or description">
+                               placeholder="Код на предметот">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Dependency</button>
+                <button type="submit" class="btn btn-primary">Додај услов</button>
             </form>
         </div>
     </div>
@@ -57,7 +57,7 @@
     <!-- Existing Dependencies Table -->
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">Existing Dependencies</h5>
+            <h5 class="mb-0">Постоечки услови</h5>
         </div>
         <div class="card-body">
             <table class="table table-striped">
@@ -65,8 +65,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Study Program Code</th>
-                    <th>Dependency Type</th>
-                    <th>Dependency</th>
+                    <th>Вид на услов</th>
+                    <th>Услов</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -92,7 +92,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editModalLabel">Edit Dependency</h5>
+                                        <h5 class="modal-title" id="editModalLabel">Промени услов</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -103,7 +103,7 @@
                                                        th:value="${dep.studyProgramCode}">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="editDependencyType" class="form-label">Dependency Type</label>
+                                                <label for="editDependencyType" class="form-label">Вид на услов</label>
                                                 <select class="form-select" id="editDependencyType" name="dependencyType" required>
                                                     <option th:each="type : ${dependencyTypes}"
                                                             th:value="${type}"
@@ -112,7 +112,7 @@
                                                 </select>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="editDependency" class="form-label">Dependency</label>
+                                                <label for="editDependency" class="form-label">Услов</label>
                                                 <input type="text" class="form-control" id="editDependency" name="dependency"
                                                        th:value="${dep.dependency}" required>
                                             </div>
@@ -125,7 +125,7 @@
                     </td>
                 </tr>
                 <tr th:if="${dependencies.isEmpty()}">
-                    <td colspan="5" class="text-center">No dependencies found</td>
+                    <td colspan="5" class="text-center">Нема тековни услови</td>
                 </tr>
                 </tbody>
             </table>

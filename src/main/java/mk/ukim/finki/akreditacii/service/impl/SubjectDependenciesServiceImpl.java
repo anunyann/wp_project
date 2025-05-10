@@ -6,6 +6,7 @@ import mk.ukim.finki.akreditacii.model.SubjectDependencyType;
 import mk.ukim.finki.akreditacii.model.exceptions.InvalidDependencyException;
 import mk.ukim.finki.akreditacii.model.exceptions.SubjectValidationException;
 import mk.ukim.finki.akreditacii.repository.StudyProgramRepository;
+import mk.ukim.finki.akreditacii.repository.StudyProgramSubjectRepository;
 import mk.ukim.finki.akreditacii.repository.SubjectDependenciesRepository;
 import mk.ukim.finki.akreditacii.service.SubjectDependenciesService;
 import mk.ukim.finki.akreditacii.service.specifications.SubjectDependencyProcessor;
@@ -20,13 +21,16 @@ public class SubjectDependenciesServiceImpl implements SubjectDependenciesServic
     private final SubjectDependenciesRepository dependenciesRepository;
     private final List<SubjectDependencyProcessor> dependencyProcessors;
     private final StudyProgramRepository studyProgramRepository;
+    private final StudyProgramSubjectRepository studyProgramSubjectRepository;
 
     public SubjectDependenciesServiceImpl(SubjectDependenciesRepository dependenciesRepository,
                                           List<SubjectDependencyProcessor> dependencyProcessors,
-                                          StudyProgramRepository studyProgramRepository) {
+                                          StudyProgramRepository studyProgramRepository,
+                                          StudyProgramSubjectRepository studyProgramSubjectRepository) {
         this.dependenciesRepository = dependenciesRepository;
         this.dependencyProcessors = dependencyProcessors;
         this.studyProgramRepository = studyProgramRepository;
+        this.studyProgramSubjectRepository = studyProgramSubjectRepository;
     }
 
     @Override
@@ -143,11 +147,8 @@ public class SubjectDependenciesServiceImpl implements SubjectDependenciesServic
             for (SubjectDependencies dependency : dependencies) {
                 SubjectDependencyProcessor processor = findProcessor(dependency.getDependencyType());
 
-                // Check prerequisites against passed subjects
-                if (dependency.getDependencyType() == SubjectDependencyType.PREREQUISITE) {
-                    processor.isSatisfied(dependency.getDependency(), passedSubjects);
-                }
-                // Recommended subjects are always satisfied
+                // Call isSatisfied for all types of dependencies using passedSubjects
+                processor.isSatisfied(dependency.getDependency(), passedSubjects);
             }
             return true;
         } catch (InvalidDependencyException e) {
@@ -172,10 +173,12 @@ public class SubjectDependenciesServiceImpl implements SubjectDependenciesServic
 
     // Helper method to check if a study program contains a specific subject
     private boolean hasSubject(StudyProgram program, String subjectCode) {
-        // This is a placeholder implementation
-        // You'll need to implement the actual logic based on your data model
-        // For example, you might need to check StudyProgramSubject entities
-        return true; // Replace with actual implementation
+        // The ID format for StudyProgramSubject is [programCode]-[subjectCode]
+        // So we can check if such an entry exists in the StudyProgramSubject repository
+        String studyProgramSubjectId = program.getCode() + "-" + subjectCode;
+
+        // Check if a StudyProgramSubject with this ID exists
+        return studyProgramSubjectRepository.existsById(studyProgramSubjectId);
     }
 
     private SubjectDependencyProcessor findProcessor(SubjectDependencyType type) {
